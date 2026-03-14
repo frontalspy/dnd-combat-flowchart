@@ -1,0 +1,64 @@
+.startNode {
+  background: linear-gradient(135deg, #1a1408, #0c0a07);
+  border: 1px solid var(--gold);
+  border-radius: 40px;
+  padding: 0;
+  box-shadow:
+    0 0 0 1px var(--gold-dim),
+    0 4px 16px rgba(200, 144, 28, 0.25);
+  transition: box-shadow 0.2s;
+}
+
+.selected {
+  box-shadow:
+    0 0 0 1px var(--gold-light),
+    0 6px 24px rgba(200, 144, 28, 0.45),
+    0 0 16px rgba(200, 144, 28, 0.18);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+}
+
+.icon {
+  font-size: 15px;
+}
+
+.label {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold-light);
+  letter-spacing: 1.5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.labelInput {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--gold);
+  color: var(--gold-light);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0;
+  width: 120px;
+  letter-spacing: 1px;
+}
+
+.labelInput:focus {
+  outline: none;
+}
+
+.handle {
+  width: 10px;
+  height: 10px;
+  background: var(--gold);
+  border: 2px solid var(--bg-deep);
+}

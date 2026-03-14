@@ -1,9 +1,9 @@
 {
-  "name": "ts-react-boilerplate",
+  "name": "dnd-combat-flowchart",
   "version": "1.0.0",
-  "description": "Another basic Typescript, React boilerplate",
+  "description": "A static site for generating DND combat flowcharts",
   "main": "src/index.tsx",
-  "author": "Brendon <frontalspy@gmail.com>",
+  "author": "frontalspy",
   "license": "MIT",
   "scripts": {
     "start": "concurrently \"npm run start:app\" \"npm run start:server\"",
@@ -13,7 +13,11 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "@xyflow/react": "^12.10.1",
     "express": "^5.2.1",
+    "html-to-image": "^1.11.13",
+    "jspdf": "^4.2.0",
+    "lucide-react": "^0.577.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

@@ -1,0 +1,328 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-deep);
+  position: relative;
+  overflow: hidden;
+}
+
+.bgDecor {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 60% 40% at 20% 20%,
+      rgba(200, 144, 28, 0.07) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 50% 50% at 80% 80%,
+      rgba(138, 46, 30, 0.05) 0%,
+      transparent 60%
+    );
+  pointer-events: none;
+}
+
+.container {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.logo {
+  font-size: 48px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 20px rgba(212, 160, 23, 0.4));
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin: 0 0 12px;
+  letter-spacing: 3px;
+  text-shadow: 0 0 40px rgba(200, 144, 28, 0.35);
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--text-mid);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.8;
+  letter-spacing: 0.3px;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.setupCard,
+.savedSection {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-mid);
+  border-radius: 3px;
+  padding: 24px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-mid);
+  margin: 0 0 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.fieldGroup {
+  margin-bottom: 20px;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.levelValue {
+  color: var(--gold);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Class grid */
+.classGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 600px) {
+  .classGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.classBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+  font-family: inherit;
+}
+
+.classBtn:hover {
+  background: var(--bg-surface);
+  border-color: var(--border-accent);
+}
+
+.classBtnActive {
+  background: rgba(200, 144, 28, 0.1);
+  border-color: var(--gold);
+}
+
+.classBtnIcon {
+  font-size: 20px;
+}
+
+.classBtnName {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-mid);
+  text-align: center;
+  line-height: 1.2;
+  letter-spacing: 0.3px;
+}
+
+/* Subclass select */
+.select {
+  width: 100%;
+  background: var(--bg-base);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text);
+  font-size: 13px;
+  padding: 10px 12px;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238a7a60' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color 0.15s;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* Level slider */
+.levelSlider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    var(--gold) 0%,
+    var(--gold) calc((var(--val, 0) - 1) / 19 * 100%),
+    var(--border-mid) calc((var(--val, 0) - 1) / 19 * 100%)
+  );
+  border-radius: 1px;
+  outline: none;
+  margin-bottom: 8px;
+}
+
+.levelSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--gold);
+  border-radius: 50%;
+  border: 2px solid var(--bg-deep);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(200, 144, 28, 0.5);
+}
+
+.levelPips {
+  display: flex;
+  justify-content: space-between;
+}
+
+.levelPip {
+  font-size: 10px;
+  color: var(--text-faint);
+}
+
+/* Start button */
+.startBtn {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #c8901c, #e0a828);
+  border: none;
+  border-radius: 2px;
+  color: #0c0a07;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    opacity 0.15s,
+    transform 0.15s,
+    box-shadow 0.15s;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-top: 4px;
+  box-shadow: 0 2px 12px rgba(200, 144, 28, 0.3);
+}
+
+.startBtn:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(200, 144, 28, 0.45);
+}
+
+.startBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Saved flowcharts */
+.savedList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.savedCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+  text-align: left;
+  font-family: inherit;
+  width: 100%;
+}
+
+.savedCard:hover {
+  background: var(--bg-surface);
+  border-color: var(--gold);
+}
+
+.savedCardLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.savedCardIcon {
+  font-size: 24px;
+}
+
+.savedCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.savedCardName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.savedCardMeta {
+  font-size: 11px;
+  color: var(--text-mid);
+}
+
+.deleteSavedBtn {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--text-faint);
+  border-radius: 2px;
+  padding: 4px 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.deleteSavedBtn:hover {
+  color: var(--red-light);
+  border-color: var(--red-light);
+}

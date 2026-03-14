@@ -1,0 +1,165 @@
+.actionNode {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-mid);
+  border-radius: 3px;
+  width: 220px;
+  font-family: inherit;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+
+.actionNode:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+}
+
+.selected {
+  box-shadow:
+    0 0 0 1px var(--gold),
+    0 6px 20px rgba(200, 144, 28, 0.25);
+  transform: translateY(-1px);
+}
+
+.handle {
+  width: 10px;
+  height: 10px;
+  background: var(--gold);
+  border: 2px solid var(--bg-deep);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--border-dim);
+  opacity: 0.9;
+}
+
+.badges {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.schoolBadge {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 2px 5px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.levelBadge {
+  font-size: 9px;
+  color: var(--text-mid);
+  padding: 2px 4px;
+  background: rgba(138, 122, 96, 0.12);
+  border-radius: 2px;
+}
+
+.actionTypeBadge {
+  font-size: 11px;
+  font-weight: 800;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.body {
+  padding: 8px;
+}
+
+.name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.damagePill {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.infoPill {
+  font-size: 10px;
+  color: var(--text-mid);
+  padding: 2px 6px;
+  background: rgba(138, 122, 96, 0.1);
+  border-radius: 10px;
+}
+
+.notesSection {
+  border-top: 1px solid var(--border-dim);
+  padding-top: 6px;
+  margin-top: 2px;
+}
+
+.notesDisplay {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 1px dashed transparent;
+  border-radius: 2px;
+  padding: 4px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.notesDisplay:hover {
+  border-color: var(--border-mid);
+}
+
+.notesText {
+  font-size: 11px;
+  color: var(--text-mid);
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.notesPlaceholder {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+.notesInput {
+  width: 100%;
+  background: var(--bg-base);
+  border: 1px solid var(--gold-dim);
+  border-radius: 2px;
+  color: var(--text-mid);
+  font-size: 11px;
+  padding: 4px;
+  resize: none;
+  font-family: inherit;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
+.notesInput:focus {
+  outline: none;
+}

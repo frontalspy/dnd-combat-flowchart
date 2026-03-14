@@ -1,0 +1,226 @@
+.panel {
+  width: 260px;
+  min-width: 260px;
+  height: 100%;
+  background: var(--bg-base);
+  border-left: 1px solid var(--border-mid);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid var(--border-dim);
+  background: var(--bg-raised);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nodeTypeLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.actionTypeBadge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: var(--bg-deep);
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.closeBtn:hover {
+  color: var(--text-mid);
+  background: var(--bg-surface);
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.body::-webkit-scrollbar-thumb {
+  background: var(--border-mid);
+  border-radius: 1px;
+}
+
+.infoRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.schoolChip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border: 1px solid currentColor;
+  border-radius: 10px;
+}
+
+.damageChip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.fieldRow {
+  display: flex;
+  gap: 6px;
+}
+
+.fieldInput {
+  flex: 1;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 8px;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.fieldInput:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.pillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.infoPill {
+  font-size: 11px;
+  color: var(--text-mid);
+  padding: 3px 8px;
+  background: rgba(138, 122, 96, 0.1);
+  border-radius: 10px;
+}
+
+.descText {
+  font-size: 11px;
+  color: var(--text-mid);
+  line-height: 1.65;
+  margin: 0;
+  max-height: 120px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.descText::-webkit-scrollbar {
+  width: 3px;
+}
+
+.descText::-webkit-scrollbar-thumb {
+  background: var(--border-mid);
+}
+
+.notesTextarea {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 8px;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.notesTextarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.notesTextarea::placeholder {
+  color: var(--text-faint);
+}
+
+.footer {
+  padding: 12px;
+  border-top: 1px solid var(--border-dim);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.deleteBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 7px;
+  background: rgba(138, 46, 30, 0.1);
+  border: 1px solid var(--red);
+  border-radius: 2px;
+  color: var(--red-light);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+
+.deleteBtn:hover {
+  background: rgba(138, 46, 30, 0.2);
+}
+
+.hint {
+  font-size: 10px;
+  color: var(--text-faint);
+  text-align: center;
+}

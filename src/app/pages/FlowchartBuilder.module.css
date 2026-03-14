@@ -1,0 +1,233 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-deep);
+}
+
+/* Top bar */
+.topBar {
+  height: 52px;
+  min-height: 52px;
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--border-mid);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+  z-index: 10;
+}
+
+.topLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.topCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.topRight {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: none;
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+  flex-shrink: 0;
+}
+
+.backBtn:hover {
+  background: var(--bg-surface);
+  color: var(--text);
+}
+
+.characterChip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  padding: 4px 12px 4px 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.classIcon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.charInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.charClass {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.charSubclass {
+  font-size: 10px;
+  color: var(--text-mid);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Chart name */
+.nameDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  padding: 4px 8px;
+  cursor: pointer;
+  color: var(--text);
+  font-family: inherit;
+  transition: border-color 0.15s;
+  max-width: 280px;
+}
+
+.nameDisplay:hover {
+  border-color: var(--border-mid);
+}
+
+.nameText {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.5px;
+}
+
+.editIcon {
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+.nameEditRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nameInput {
+  background: var(--bg-base);
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 10px;
+  font-family: inherit;
+  width: 220px;
+}
+
+.nameInput:focus {
+  outline: none;
+}
+
+.nameConfirmBtn {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background: rgba(200, 144, 28, 0.12);
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  color: var(--gold);
+  cursor: pointer;
+}
+
+/* Action buttons */
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.actionBtn:hover {
+  background: var(--bg-lift);
+  border-color: var(--border-accent);
+}
+
+.savedBtn {
+  background: rgba(74, 112, 64, 0.15);
+  border-color: var(--green);
+  color: var(--green-light);
+}
+
+/* Main workspace */
+.workspace {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Bottom hint bar */
+.hint {
+  height: 26px;
+  min-height: 26px;
+  background: var(--bg-base);
+  border-top: 1px solid var(--border-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 16px;
+  font-size: 10px;
+  color: var(--text-faint);
+  letter-spacing: 0.3px;
+}
+
+.hint span {
+  white-space: nowrap;
+}

@@ -1,6 +1,103 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap");
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+/* ==========================================================================
+   D&D Flowchart — Fantasy Minimal Theme
+   Aesthetic: Minimalism meets Middle-earth
+   ========================================================================== */
 
+:root {
+  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Cinzel", "Palatino Linotype", "Book Antiqua", serif;
+
+  /* Depths — warm volcanic stone */
+  --bg-deep: #0c0a07;
+  --bg-base: #141009;
+  --bg-raised: #1c1710;
+  --bg-surface: #241e12;
+  --bg-lift: #2d2618;
+
+  /* Aged Metal Borders */
+  --border-shadow: #1e1810;
+  --border-dim: #2e2620;
+  --border-mid: #3e3226;
+  --border-accent: #52422e;
+
+  /* Antique Gold */
+  --gold: #c8901c;
+  --gold-light: #e0aa2e;
+  --gold-dim: #7a550e;
+  --gold-glow: rgba(200, 144, 28, 0.22);
+
+  /* Parchment Text */
+  --text: #e2d5bc;
+  --text-mid: #8a7a60;
+  --text-faint: #4e4030;
+
+  /* Elemental Accents */
+  --green: #4a7040;
+  --green-light: #5a9048;
+  --green-dim: #2a4224;
+  --red: #8a2e1e;
+  --red-light: #c04030;
+  --amber: #b07018;
+
+  --scrollbar-bg: var(--bg-deep);
+  --scrollbar-thumb: var(--border-mid);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: var(--font-ui);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-accent);
+}
+
+/* React Flow overrides */
+.react-flow__edge-path {
+  stroke-width: 2;
+}
+.react-flow__edge-text {
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--text);
+}
+.react-flow__edge-textbg {
+  fill: var(--bg-base);
+}
+.react-flow__controls-button {
+  background: var(--bg-raised) !important;
+  border-color: var(--border-mid) !important;
+  color: var(--text-mid) !important;
+}
+.react-flow__controls-button:hover {
+  background: var(--bg-surface) !important;
+  color: var(--text) !important;
+}
+.react-flow__controls-button svg {
+  fill: currentColor !important;
+}
 /* Document
    ========================================================================== */
 
