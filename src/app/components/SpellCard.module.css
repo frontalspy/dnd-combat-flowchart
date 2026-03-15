@@ -15,7 +15,7 @@
 
 .card:hover {
   background: var(--bg-surface);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
 }
 
 .card:active {
@@ -36,23 +36,23 @@
 }
 
 .schoolBadge {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.5px;
 }
 
 .levelBadge {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-mid);
 }
 
 .sourceBadge {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
 }
 
 .actionBadge {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   width: 18px;
   height: 18px;
@@ -65,7 +65,7 @@
 }
 
 .cardName {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text);
   line-height: 1.3;
@@ -76,7 +76,7 @@
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 8px;
@@ -95,7 +95,7 @@
   border-radius: 2px;
   padding: 12px;
   pointer-events: none;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 .tooltipHeader {
@@ -108,15 +108,15 @@
 
 .tooltipName {
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
-  color: var(--gold-light);
+  color: var(--gold);
   flex: 1;
   letter-spacing: 0.5px;
 }
 
 .tooltipType {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-mid);
   flex-shrink: 0;
   text-align: right;
@@ -132,7 +132,7 @@
 }
 
 .tooltipMeta span {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-mid);
 }
 
@@ -141,7 +141,7 @@
 }
 
 .tooltipDesc {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text);
   line-height: 1.65;
   margin: 0 0 6px;
@@ -149,7 +149,7 @@
 }
 
 .tooltipHigher {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-mid);
   line-height: 1.5;
   margin: 6px 0 0;
@@ -163,7 +163,7 @@
 
 .ritualBadge {
   display: inline-block;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--gold);
   border: 1px solid var(--gold-dim);
   border-radius: 2px;

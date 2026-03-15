@@ -11,12 +11,12 @@
   background:
     radial-gradient(
       ellipse 60% 40% at 20% 20%,
-      rgba(200, 144, 28, 0.07) 0%,
+      rgba(184, 144, 26, 0.1) 0%,
       transparent 60%
     ),
     radial-gradient(
       ellipse 50% 50% at 80% 80%,
-      rgba(138, 46, 30, 0.05) 0%,
+      rgba(106, 26, 16, 0.08) 0%,
       transparent 60%
     );
   pointer-events: none;
@@ -35,23 +35,23 @@
 }
 
 .logo {
-  font-size: 48px;
+  font-size: 50px;
   margin-bottom: 12px;
-  filter: drop-shadow(0 0 20px rgba(212, 160, 23, 0.4));
+  filter: drop-shadow(0 0 20px rgba(184, 144, 26, 0.35));
 }
 
 .title {
   font-family: var(--font-display);
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 700;
   color: var(--gold-light);
   margin: 0 0 12px;
   letter-spacing: 3px;
-  text-shadow: 0 0 40px rgba(200, 144, 28, 0.35);
+  text-shadow: 0 0 40px rgba(184, 144, 26, 0.3);
 }
 
 .subtitle {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-mid);
   max-width: 520px;
   margin: 0 auto;
@@ -71,12 +71,12 @@
   border: 1px solid var(--border-mid);
   border-radius: 3px;
   padding: 24px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
 }
 
 .sectionTitle {
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-mid);
   margin: 0 0 20px;
@@ -92,7 +92,7 @@
 
 .fieldLabel {
   display: block;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-mid);
   text-transform: uppercase;
@@ -102,7 +102,7 @@
 
 .levelValue {
   color: var(--gold);
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
 }
 
@@ -141,16 +141,16 @@
 }
 
 .classBtnActive {
-  background: rgba(200, 144, 28, 0.1);
+  background: rgba(184, 144, 26, 0.12);
   border-color: var(--gold);
 }
 
 .classBtnIcon {
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .classBtnName {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-mid);
   text-align: center;
@@ -165,12 +165,12 @@
   border: 1px solid var(--border-mid);
   border-radius: 2px;
   color: var(--text);
-  font-size: 13px;
+  font-size: 15px;
   padding: 10px 12px;
   font-family: inherit;
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238a7a60' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236b4c2a' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   transition: border-color 0.15s;
@@ -206,7 +206,7 @@
   border-radius: 50%;
   border: 2px solid var(--bg-deep);
   cursor: pointer;
-  box-shadow: 0 0 8px rgba(200, 144, 28, 0.5);
+  box-shadow: 0 0 8px rgba(184, 144, 26, 0.45);
 }
 
 .levelPips {
@@ -215,7 +215,7 @@
 }
 
 .levelPip {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-faint);
 }
 
@@ -228,7 +228,7 @@
   border-radius: 2px;
   color: #0c0a07;
   font-family: var(--font-display);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   transition:
@@ -238,13 +238,13 @@
   letter-spacing: 2.5px;
   text-transform: uppercase;
   margin-top: 4px;
-  box-shadow: 0 2px 12px rgba(200, 144, 28, 0.3);
+  box-shadow: 0 2px 12px rgba(184, 144, 26, 0.25);
 }
 
 .startBtn:hover:not(:disabled) {
   opacity: 0.92;
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(200, 144, 28, 0.45);
+  box-shadow: 0 4px 20px rgba(184, 144, 26, 0.4);
 }
 
 .startBtn:disabled {
@@ -288,7 +288,7 @@
 }
 
 .savedCardIcon {
-  font-size: 24px;
+  font-size: 26px;
 }
 
 .savedCardInfo {
@@ -298,13 +298,13 @@
 }
 
 .savedCardName {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text);
 }
 
 .savedCardMeta {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-mid);
 }
 
@@ -314,7 +314,7 @@
   color: var(--text-faint);
   border-radius: 2px;
   padding: 4px 6px;
-  font-size: 12px;
+  font-size: 14px;
   cursor: pointer;
   transition:
     color 0.15s,

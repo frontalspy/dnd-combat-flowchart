@@ -3,14 +3,14 @@
   border: 2px solid #c8781c;
   border-radius: 3px;
   width: 200px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
   transition: box-shadow 0.2s;
 }
 
 .selected {
   box-shadow:
     0 0 0 1px var(--gold),
-    0 6px 20px rgba(200, 144, 28, 0.25);
+    0 6px 20px rgba(184, 144, 26, 0.25);
 }
 
 .inner {
@@ -22,7 +22,7 @@
 }
 
 .icon {
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .labelDisplay {
@@ -31,7 +31,7 @@
   border: 1px dashed transparent;
   border-radius: 2px;
   color: var(--text);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   text-align: center;
   cursor: pointer;
@@ -51,7 +51,7 @@
   border: 1px solid #c8781c;
   border-radius: 2px;
   color: var(--text);
-  font-size: 12px;
+  font-size: 14px;
   padding: 4px;
   text-align: center;
   font-family: inherit;
@@ -70,14 +70,14 @@
 }
 
 .yesLabel {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--green-light);
   letter-spacing: 0.5px;
 }
 
 .noLabel {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--red-light);
   letter-spacing: 0.5px;

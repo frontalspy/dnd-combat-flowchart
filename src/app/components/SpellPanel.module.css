@@ -23,7 +23,7 @@
 }
 
 .classIcon {
-  font-size: 24px;
+  font-size: 26px;
 }
 
 .characterInfo {
@@ -33,14 +33,14 @@
 
 .characterClass {
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text);
   letter-spacing: 0.5px;
 }
 
 .characterLevel {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-mid);
 }
 
@@ -51,7 +51,7 @@
 }
 
 .templatesLabel {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-faint);
   text-transform: uppercase;
@@ -90,11 +90,11 @@
 }
 
 .templateIcon {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .templateLabel {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-mid);
 }
@@ -121,7 +121,7 @@
   border: 1px solid var(--border-dim);
   border-radius: 2px;
   color: var(--text);
-  font-size: 12px;
+  font-size: 14px;
   padding: 6px 26px 6px 30px;
   font-family: inherit;
   box-sizing: border-box;
@@ -164,7 +164,7 @@
 .tab {
   flex: 1;
   padding: 8px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-mid);
   background: none;
@@ -198,7 +198,7 @@
 }
 
 .levelChip {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   padding: 3px 7px;
   background: var(--bg-raised);
@@ -250,7 +250,7 @@
 .emptyState {
   padding: 24px 12px;
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-faint);
   line-height: 1.7;
 }
@@ -272,7 +272,7 @@
   border: 1px dashed var(--gold-dim);
   border-radius: 2px;
   color: var(--gold);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
@@ -289,7 +289,7 @@
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.78);
+  background: rgba(42, 26, 10, 0.65);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -302,7 +302,7 @@
   border-radius: 3px;
   width: 360px;
   max-width: 90vw;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
 }
 
 .modalHeader {
@@ -315,7 +315,7 @@
 
 .modalTitle {
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--gold);
   margin: 0;
@@ -349,7 +349,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-mid);
   letter-spacing: 0.5px;
@@ -363,7 +363,7 @@
   border: 1px solid var(--border-mid);
   border-radius: 2px;
   color: var(--text);
-  font-size: 13px;
+  font-size: 15px;
   padding: 7px 10px;
   font-family: inherit;
   transition: border-color 0.15s;
@@ -393,7 +393,7 @@
   border: 1px solid var(--border-mid);
   border-radius: 2px;
   color: var(--text-mid);
-  font-size: 13px;
+  font-size: 15px;
   cursor: pointer;
   font-family: inherit;
 }
@@ -409,7 +409,7 @@
   border: none;
   border-radius: 2px;
   color: var(--bg-deep);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;

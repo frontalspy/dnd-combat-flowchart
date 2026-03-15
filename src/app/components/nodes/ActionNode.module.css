@@ -4,20 +4,20 @@
   border-radius: 3px;
   width: 220px;
   font-family: inherit;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
   transition:
     box-shadow 0.2s,
     transform 0.2s;
 }
 
 .actionNode:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
 }
 
 .selected {
   box-shadow:
     0 0 0 1px var(--gold),
-    0 6px 20px rgba(200, 144, 28, 0.25);
+    0 6px 20px rgba(184, 144, 26, 0.25);
   transform: translateY(-1px);
 }
 
@@ -44,7 +44,7 @@
 }
 
 .schoolBadge {
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 1px;
   padding: 2px 5px;
@@ -54,15 +54,15 @@
 }
 
 .levelBadge {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--text-mid);
   padding: 2px 4px;
-  background: rgba(138, 122, 96, 0.12);
+  background: rgba(107, 76, 42, 0.1);
   border-radius: 2px;
 }
 
 .actionTypeBadge {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   width: 20px;
   height: 20px;
@@ -78,7 +78,7 @@
 }
 
 .name {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text);
   margin-bottom: 6px;
@@ -93,7 +93,7 @@
 }
 
 .damagePill {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   padding: 2px 6px;
   border-radius: 10px;
@@ -103,10 +103,10 @@
 }
 
 .infoPill {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-mid);
   padding: 2px 6px;
-  background: rgba(138, 122, 96, 0.1);
+  background: rgba(107, 76, 42, 0.08);
   border-radius: 10px;
 }
 
@@ -133,7 +133,7 @@
 }
 
 .notesText {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-mid);
   line-height: 1.4;
   white-space: pre-wrap;
@@ -141,7 +141,7 @@
 }
 
 .notesPlaceholder {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-faint);
   font-style: italic;
 }
@@ -152,7 +152,7 @@
   border: 1px solid var(--gold-dim);
   border-radius: 2px;
   color: var(--text-mid);
-  font-size: 11px;
+  font-size: 13px;
   padding: 4px;
   resize: none;
   font-family: inherit;

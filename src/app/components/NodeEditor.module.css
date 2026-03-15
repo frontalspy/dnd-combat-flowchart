@@ -26,7 +26,7 @@
 }
 
 .nodeTypeLabel {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--text-mid);
   text-transform: uppercase;
@@ -34,7 +34,7 @@
 }
 
 .actionTypeBadge {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   padding: 2px 8px;
   border-radius: 10px;
@@ -82,7 +82,7 @@
 }
 
 .schoolChip {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   padding: 2px 8px;
   border: 1px solid currentColor;
@@ -90,7 +90,7 @@
 }
 
 .damageChip {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 10px;
@@ -106,7 +106,7 @@
 }
 
 .fieldLabel {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--text-faint);
   text-transform: uppercase;
@@ -124,7 +124,7 @@
   border: 1px solid var(--border-mid);
   border-radius: 2px;
   color: var(--text);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   padding: 6px 8px;
   font-family: inherit;
@@ -143,15 +143,15 @@
 }
 
 .infoPill {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-mid);
   padding: 3px 8px;
-  background: rgba(138, 122, 96, 0.1);
+  background: rgba(107, 76, 42, 0.08);
   border-radius: 10px;
 }
 
 .descText {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-mid);
   line-height: 1.65;
   margin: 0;
@@ -173,7 +173,7 @@
   border: 1px solid var(--border-mid);
   border-radius: 2px;
   color: var(--text);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.5;
   padding: 8px;
   resize: vertical;
@@ -204,11 +204,11 @@
   gap: 6px;
   width: 100%;
   padding: 7px;
-  background: rgba(138, 46, 30, 0.1);
+  background: rgba(106, 26, 16, 0.08);
   border: 1px solid var(--red);
   border-radius: 2px;
   color: var(--red-light);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
@@ -216,11 +216,11 @@
 }
 
 .deleteBtn:hover {
-  background: rgba(138, 46, 30, 0.2);
+  background: rgba(106, 26, 16, 0.16);
 }
 
 .hint {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-faint);
   text-align: center;
 }

@@ -1,29 +1,91 @@
+/* Torn scrap of paper — clip-path creates jagged top + bottom edges.
+   NoteNode has no React Flow handles so clip-path is safe here. */
 .noteNode {
-  background: linear-gradient(160deg, #2a2206 0%, #1e1a06 100%);
-  border: 1px solid #4a3c12;
-  border-left: 3px solid var(--gold);
-  border-radius: 1px;
+  background: #fef9e4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='0.04'/%3E%3C/svg%3E");
   width: 200px;
   position: relative;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
-  transition: box-shadow 0.2s;
+  /* padding keeps content clear of the torn-edge clip zone (~top/bottom 6-7%) */
+  padding-top: 10px;
+  padding-bottom: 10px;
+  transform: rotate(-1.2deg);
+  filter: drop-shadow(1px 3px 7px rgba(80, 50, 10, 0.26));
+  transition:
+    filter 0.2s,
+    transform 0.2s;
+  clip-path: polygon(
+    /* torn top edge */
+    0% 5%,
+    3% 1%,
+    6% 5%,
+    9% 0%,
+    13% 4%,
+    17% 1%,
+    21% 5%,
+    25% 0%,
+    29% 3%,
+    33% 0%,
+    37% 5%,
+    41% 1%,
+    45% 4%,
+    49% 0%,
+    53% 5%,
+    57% 1%,
+    61% 4%,
+    65% 0%,
+    69% 5%,
+    73% 1%,
+    77% 4%,
+    81% 0%,
+    85% 5%,
+    89% 1%,
+    92% 4%,
+    96% 0%,
+    100% 3%,
+    /* right side */
+    100% 94%,
+    /* torn bottom edge */
+    98% 100%,
+    94% 95%,
+    90% 100%,
+    86% 95%,
+    82% 100%,
+    78% 95%,
+    74% 100%,
+    70% 95%,
+    66% 100%,
+    62% 95%,
+    58% 100%,
+    54% 95%,
+    50% 100%,
+    46% 95%,
+    42% 100%,
+    38% 95%,
+    34% 100%,
+    30% 95%,
+    26% 100%,
+    22% 95%,
+    17% 100%,
+    13% 95%,
+    9% 100%,
+    5% 95%,
+    1% 100%,
+    0% 95%
+  );
+}
+
+.noteNode:hover {
+  filter: drop-shadow(2px 4px 10px rgba(80, 50, 10, 0.35));
 }
 
 .selected {
-  box-shadow:
-    0 0 0 1px var(--gold),
-    0 6px 20px rgba(200, 144, 28, 0.3);
+  filter: drop-shadow(0 0 6px rgba(184, 144, 26, 0.7))
+    drop-shadow(1px 3px 7px rgba(80, 50, 10, 0.26));
 }
 
+/* corner fold removed — torn silhouette provides organic shape */
 .corner {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 15px 15px 0;
-  border-color: transparent #4a3c12 transparent transparent;
+  display: none;
 }
 
 .header {
@@ -31,15 +93,15 @@
   align-items: center;
   gap: 6px;
   padding: 6px 10px 4px;
-  border-bottom: 1px solid #3a3010;
+  border-bottom: 1px solid var(--border-dim);
 }
 
 .icon {
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .title {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--gold);
   text-transform: uppercase;
@@ -51,8 +113,8 @@
   width: 100%;
   background: transparent;
   border: none;
-  color: #d8c880;
-  font-size: 12px;
+  color: var(--text);
+  font-size: 14px;
   line-height: 1.55;
   padding: 8px 10px;
   resize: none;
@@ -65,5 +127,5 @@
 }
 
 .textarea::placeholder {
-  color: #5a4a20;
+  color: var(--text-faint);
 }
