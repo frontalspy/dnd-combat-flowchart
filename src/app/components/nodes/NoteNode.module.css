@@ -75,12 +75,16 @@
 }
 
 .noteNode:hover {
-  filter: drop-shadow(2px 4px 10px rgba(80, 50, 10, 0.35));
+  filter: drop-shadow(0 0 2px #9a7010)
+    drop-shadow(0 0 6px rgba(154, 112, 16, 0.65))
+    drop-shadow(1px 3px 7px rgba(80, 50, 10, 0.26));
 }
 
 .selected {
-  filter: drop-shadow(0 0 6px rgba(184, 144, 26, 0.7))
+  filter: drop-shadow(0 0 2px #9a7010)
+    drop-shadow(0 0 6px rgba(154, 112, 16, 0.65))
     drop-shadow(1px 3px 7px rgba(80, 50, 10, 0.26));
+  transform: rotate(-1.2deg);
 }
 
 /* corner fold removed — torn silhouette provides organic shape */

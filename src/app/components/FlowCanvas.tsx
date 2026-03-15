@@ -27,6 +27,7 @@ import React, {
 import "@xyflow/react/dist/style.css";
 import { toJpeg, toPng } from "html-to-image";
 import jsPDF from "jspdf";
+import { useClipboard } from "../hooks/useClipboard";
 import type {
   ActionNodeData,
   ConditionNodeData,
@@ -42,6 +43,11 @@ export interface FlowCanvasExports {
   exportPdf: (name: string) => Promise<void>;
   getFlowObject: () => { nodes: Node[]; edges: Edge[] };
   loadFlowObject: (nodes: Node[], edges: Edge[]) => void;
+  copy: (nodes: Node[]) => void;
+  paste: () => void;
+  undo: () => void;
+  redo: () => void;
+  selectAll: () => void;
 }
 
 interface FlowCanvasInnerProps {
@@ -72,7 +78,8 @@ function FlowCanvasInner({
   onFlowChange,
 }: FlowCanvasInnerProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  const { fitView, getNodes, getEdges, screenToFlowPosition } = useReactFlow();
+  const { fitView, getNodes, getEdges, screenToFlowPosition, addNodes } =
+    useReactFlow();
 
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>(
     initialNodes ?? [DEFAULT_START_NODE]
@@ -80,6 +87,101 @@ function FlowCanvasInner({
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(
     initialEdges ?? []
   );
+
+  // History for undo/redo
+  const historyRef = useRef<Array<{ nodes: Node[]; edges: Edge[] }>>([
+    {
+      nodes: initialNodes ?? [DEFAULT_START_NODE],
+      edges: initialEdges ?? [],
+    },
+  ]);
+  const historyCursorRef = useRef(0);
+  const isHistoryActionRef = useRef(false);
+  const snapshotTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clipboard for copy/paste
+  const { copy: clipCopy, paste: clipPaste } = useClipboard();
+
+  const scheduleSnapshot = useCallback(() => {
+    if (isHistoryActionRef.current) return;
+    if (snapshotTimerRef.current) clearTimeout(snapshotTimerRef.current);
+    snapshotTimerRef.current = setTimeout(() => {
+      const snap = { nodes: getNodes(), edges: getEdges() };
+      historyRef.current = historyRef.current.slice(
+        0,
+        historyCursorRef.current + 1
+      );
+      historyRef.current.push(snap);
+      if (historyRef.current.length > 50) historyRef.current.shift();
+      historyCursorRef.current = historyRef.current.length - 1;
+    }, 300);
+  }, [getNodes, getEdges]);
+
+  const handleUndo = useCallback(() => {
+    if (historyCursorRef.current <= 0) return;
+    isHistoryActionRef.current = true;
+    historyCursorRef.current--;
+    const snap = historyRef.current[historyCursorRef.current];
+    setNodes(snap.nodes);
+    setEdges(snap.edges);
+    setTimeout(() => {
+      isHistoryActionRef.current = false;
+    }, 0);
+  }, [setNodes, setEdges]);
+
+  const handleRedo = useCallback(() => {
+    if (historyCursorRef.current >= historyRef.current.length - 1) return;
+    isHistoryActionRef.current = true;
+    historyCursorRef.current++;
+    const snap = historyRef.current[historyCursorRef.current];
+    setNodes(snap.nodes);
+    setEdges(snap.edges);
+    setTimeout(() => {
+      isHistoryActionRef.current = false;
+    }, 0);
+  }, [setNodes, setEdges]);
+
+  const handleSelectAll = useCallback(() => {
+    setNodes((nds) => nds.map((n) => ({ ...n, selected: true })));
+  }, [setNodes]);
+
+  const handlePaste = useCallback(() => {
+    setNodes((nds) => nds.map((n) => ({ ...n, selected: false })));
+    clipPaste(addNodes);
+  }, [clipPaste, addNodes, setNodes]);
+
+  const wrappedOnNodesChange: OnNodesChange = useCallback(
+    (changes) => {
+      (onNodesChange as OnNodesChange)(changes);
+      const hasStructural = changes.some(
+        (c) =>
+          c.type === "add" ||
+          c.type === "remove" ||
+          c.type === "reset" ||
+          (c.type === "position" && c.dragging !== true)
+      );
+      if (hasStructural) scheduleSnapshot();
+    },
+    [onNodesChange, scheduleSnapshot]
+  );
+
+  const wrappedOnEdgesChange: OnEdgesChange = useCallback(
+    (changes) => {
+      (onEdgesChange as OnEdgesChange)(changes);
+      const hasStructural = changes.some(
+        (c) => c.type === "add" || c.type === "remove" || c.type === "reset"
+      );
+      if (hasStructural) scheduleSnapshot();
+    },
+    [onEdgesChange, scheduleSnapshot]
+  );
+
+  // Cleanup snapshot timer on unmount
+  useEffect(() => {
+    return () => {
+      if (snapshotTimerRef.current) clearTimeout(snapshotTimerRef.current);
+    };
+  }, []);
 
   // Report changes upward
   useEffect(() => {
@@ -171,8 +273,30 @@ function FlowCanvasInner({
       setTimeout(() => fitView({ padding: 0.1 }), 100);
     };
 
-    onExportReady({ exportJpg, exportPdf, getFlowObject, loadFlowObject });
-  }, [fitView, getNodes, getEdges, onExportReady, setNodes, setEdges]);
+    onExportReady({
+      exportJpg,
+      exportPdf,
+      getFlowObject,
+      loadFlowObject,
+      copy: clipCopy,
+      paste: handlePaste,
+      undo: handleUndo,
+      redo: handleRedo,
+      selectAll: handleSelectAll,
+    });
+  }, [
+    fitView,
+    getNodes,
+    getEdges,
+    onExportReady,
+    setNodes,
+    setEdges,
+    clipCopy,
+    handlePaste,
+    handleUndo,
+    handleRedo,
+    handleSelectAll,
+  ]);
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -199,8 +323,9 @@ function FlowCanvasInner({
         markerEnd: { type: "arrow" as const, color: "#8b949e" },
       } as Edge;
       setEdges((eds) => addEdge(newEdge, eds));
+      scheduleSnapshot();
     },
-    [setEdges]
+    [setEdges, scheduleSnapshot]
   );
 
   const onDragOver = useCallback((event: React.DragEvent) => {
@@ -268,8 +393,9 @@ function FlowCanvasInner({
       }
 
       setNodes((nds) => [...nds, newNode]);
+      scheduleSnapshot();
     },
-    [screenToFlowPosition, setNodes]
+    [screenToFlowPosition, setNodes, scheduleSnapshot]
   );
 
   const handleSelectionChange = useCallback(
@@ -284,15 +410,15 @@ function FlowCanvasInner({
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange as OnNodesChange}
-        onEdgesChange={onEdgesChange as OnEdgesChange}
+        onNodesChange={wrappedOnNodesChange}
+        onEdgesChange={wrappedOnEdgesChange}
         onConnect={onConnect}
         onDrop={onDrop}
         onDragOver={onDragOver}
         onSelectionChange={handleSelectionChange}
         nodeTypes={nodeTypes}
         fitView
-        deleteKeyCode="Delete"
+        deleteKeyCode={["Delete", "Backspace"]}
         multiSelectionKeyCode="Control"
         defaultEdgeOptions={{
           type: "smoothstep",

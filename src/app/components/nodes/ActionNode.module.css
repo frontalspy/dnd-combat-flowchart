@@ -11,13 +11,18 @@
 }
 
 .actionNode:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  border-color: var(--gold-dim);
+  box-shadow:
+    0 0 0 2px var(--gold-dim),
+    0 8px 24px rgba(154, 112, 16, 0.4);
+  transform: translateY(-1px);
 }
 
 .selected {
+  border-color: var(--gold-dim);
   box-shadow:
-    0 0 0 1px var(--gold),
-    0 6px 20px rgba(184, 144, 26, 0.25);
+    0 0 0 2px var(--gold-dim),
+    0 8px 24px rgba(154, 112, 16, 0.4);
   transform: translateY(-1px);
 }
 

@@ -55,6 +55,12 @@ export function FlowchartBuilder() {
     };
   }, [activeChart?.nodes, activeChart?.edges]);
 
+  // Keep a ref to selectedNodes for use inside keyboard handler closure
+  const selectedNodesRef = useRef<Node[]>([]);
+  useEffect(() => {
+    selectedNodesRef.current = selectedNodes;
+  }, [selectedNodes]);
+
   const handleDragStart = useCallback((e: React.DragEvent, data: unknown) => {
     e.dataTransfer.setData("application/reactflow", JSON.stringify(data));
     e.dataTransfer.effectAllowed = "move";
@@ -85,6 +91,39 @@ export function FlowchartBuilder() {
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
   }, [activeChart, activeTabId, character, chartName, saveFlowchart]);
+
+  // Keyboard shortcuts — placed after handleSave so the closure captures it correctly
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const mod = e.ctrlKey || e.metaKey;
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      )
+        return;
+      if (mod && e.key === "c") {
+        exportFnsRef.current?.copy(selectedNodesRef.current);
+      } else if (mod && e.key === "v") {
+        exportFnsRef.current?.paste();
+      } else if (mod && e.key === "z" && !e.shiftKey) {
+        e.preventDefault();
+        exportFnsRef.current?.undo();
+      } else if (mod && (e.key === "y" || (e.key === "z" && e.shiftKey))) {
+        e.preventDefault();
+        exportFnsRef.current?.redo();
+      } else if (mod && e.key === "s") {
+        e.preventDefault();
+        handleSave();
+      } else if (mod && e.key === "a") {
+        e.preventDefault();
+        exportFnsRef.current?.selectAll();
+      } else if (e.key === "Escape") {
+        setSelectedNodes([]);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [handleSave]);
 
   const handleExportJpg = useCallback(async () => {
     await exportFnsRef.current?.exportJpg(chartName);
@@ -218,7 +257,11 @@ export function FlowchartBuilder() {
         <span>·</span>
         <span>Connect nodes by dragging from their handles</span>
         <span>·</span>
-        <span>Delete key removes selected nodes/edges</span>
+        <span>Delete / Backspace removes selected nodes</span>
+        <span>·</span>
+        <span>
+          Ctrl+C/V copy·paste · Ctrl+Z/Y undo·redo · Ctrl+A select all
+        </span>
         <span>·</span>
         <span>Hover spell cards for full descriptions</span>
       </div>

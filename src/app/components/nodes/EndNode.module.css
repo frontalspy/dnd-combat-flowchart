@@ -9,11 +9,16 @@
   transition: box-shadow 0.2s;
 }
 
+.endNode:hover {
+  box-shadow:
+    0 0 0 2px var(--red),
+    0 8px 24px rgba(106, 26, 16, 0.45);
+}
+
 .selected {
   box-shadow:
-    0 0 0 1px var(--red-light),
-    0 6px 24px rgba(154, 42, 26, 0.45),
-    0 0 16px rgba(106, 26, 16, 0.2);
+    0 0 0 2px var(--red),
+    0 8px 24px rgba(106, 26, 16, 0.45);
 }
 
 .inner {

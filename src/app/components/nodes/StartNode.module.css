@@ -9,11 +9,16 @@
   transition: box-shadow 0.2s;
 }
 
+.startNode:hover {
+  box-shadow:
+    0 0 0 3px var(--gold-dim),
+    0 8px 28px rgba(154, 112, 16, 0.55);
+}
+
 .selected {
   box-shadow:
-    0 0 0 1px var(--gold-light),
-    0 6px 24px rgba(184, 144, 26, 0.45),
-    0 0 16px rgba(184, 144, 26, 0.18);
+    0 0 0 3px var(--gold-dim),
+    0 8px 28px rgba(154, 112, 16, 0.55);
 }
 
 .inner {
