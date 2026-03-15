@@ -103,6 +103,10 @@ export interface StartNodeData extends Record<string, unknown> {
   label: string;
 }
 
+export interface EndNodeData extends Record<string, unknown> {
+  label: string;
+}
+
 export interface NoteNodeData extends Record<string, unknown> {
   content: string;
 }

@@ -5,6 +5,8 @@ import {
   type Connection,
   Controls,
   type Edge,
+  getNodesBounds,
+  getViewportForBounds,
   MiniMap,
   type Node,
   type OnEdgesChange,
@@ -28,6 +30,7 @@ import jsPDF from "jspdf";
 import type {
   ActionNodeData,
   ConditionNodeData,
+  EndNodeData,
   NoteNodeData,
   StartNodeData,
 } from "../types";
@@ -90,14 +93,28 @@ function FlowCanvasInner({
         ".react-flow__viewport"
       ) as HTMLElement | null;
 
+    const getExportViewport = (width: number, height: number) => {
+      const nodesBounds = getNodesBounds(getNodes());
+      return getViewportForBounds(nodesBounds, width, height, 0.5, 2, 0.15);
+    };
+
     const exportJpg = async (name: string) => {
-      await fitView({ padding: 0.15, duration: 200 });
-      await new Promise((r) => setTimeout(r, 300));
       const el = captureElement();
-      if (!el) return;
+      if (!el || !reactFlowWrapper.current) return;
+      const width = reactFlowWrapper.current.offsetWidth;
+      const height = reactFlowWrapper.current.offsetHeight;
+      const { x, y, zoom } = getExportViewport(width, height);
       const dataUrl = await toJpeg(el, {
         quality: 0.95,
         backgroundColor: "#0d1117",
+        skipFonts: true,
+        width,
+        height,
+        style: {
+          width: `${width}px`,
+          height: `${height}px`,
+          transform: `translate(${x}px, ${y}px) scale(${zoom})`,
+        },
       });
       const link = document.createElement("a");
       link.download = `${name}.jpg`;
@@ -106,11 +123,22 @@ function FlowCanvasInner({
     };
 
     const exportPdf = async (name: string) => {
-      await fitView({ padding: 0.15, duration: 200 });
-      await new Promise((r) => setTimeout(r, 300));
       const el = captureElement();
-      if (!el) return;
-      const dataUrl = await toPng(el, { backgroundColor: "#0d1117" });
+      if (!el || !reactFlowWrapper.current) return;
+      const width = reactFlowWrapper.current.offsetWidth;
+      const height = reactFlowWrapper.current.offsetHeight;
+      const { x, y, zoom } = getExportViewport(width, height);
+      const dataUrl = await toPng(el, {
+        backgroundColor: "#0d1117",
+        skipFonts: true,
+        width,
+        height,
+        style: {
+          width: `${width}px`,
+          height: `${height}px`,
+          transform: `translate(${x}px, ${y}px) scale(${zoom})`,
+        },
+      });
       const img = new Image();
       img.src = dataUrl;
       await new Promise((r) => {
@@ -216,6 +244,11 @@ function FlowCanvasInner({
           label: (item.label as string) ?? "Start",
         };
         newNode = { id: newId(), type: "startNode", position, data };
+      } else if (nodeType === "endNode") {
+        const data: EndNodeData = {
+          label: (item.label as string) ?? "End of Round",
+        };
+        newNode = { id: newId(), type: "endNode", position, data };
       } else {
         // ActionNode (spell or action)
         const data: ActionNodeData = {

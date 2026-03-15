@@ -32,6 +32,7 @@ export function CharacterSetup() {
       subclass: selectedSubclass,
       level,
     };
+    setActiveFlowchart(null);
     setCharacter(character);
     goToBuilder();
   };

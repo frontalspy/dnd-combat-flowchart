@@ -324,8 +324,8 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
             label="End"
             description="Add a round end node"
             onDragStart={(e) =>
-              handleTemplateDrag(e, "startNode", {
-                type: "startNode",
+              handleTemplateDrag(e, "endNode", {
+                type: "endNode",
                 label: "End of Round",
               })
             }
