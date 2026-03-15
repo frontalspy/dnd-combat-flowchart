@@ -1,0 +1,277 @@
+.tabBar {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  gap: 6px;
+  padding: 0 6px;
+}
+
+.tabBar::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px 4px 8px;
+  min-width: 0;
+  max-width: 220px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-mid);
+  border-radius: 20px;
+  color: var(--text-mid);
+  font-family: var(--font-ui);
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    border-color 0.12s,
+    color 0.12s,
+    box-shadow 0.12s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tab:hover {
+  background: var(--bg-surface);
+  border-color: var(--border-accent);
+  color: var(--text);
+}
+
+.tabActive {
+  background: var(--bg-surface);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold-glow);
+  color: var(--text);
+}
+
+.tabIcon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.tabInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.tabName {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tabMeta {
+  font-size: 10px;
+  color: var(--text-mid);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tabClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  font-size: 10px;
+  flex-shrink: 0;
+  transition:
+    background 0.12s,
+    color 0.12s;
+  padding: 0;
+  line-height: 1;
+}
+
+.tabClose:hover {
+  background: var(--bg-lift);
+  color: var(--text);
+}
+
+.addTabBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-mid);
+  border-radius: 20px;
+  color: var(--text-mid);
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background 0.12s,
+    border-color 0.12s,
+    color 0.12s;
+}
+
+.addTabBtn:hover {
+  background: var(--bg-surface);
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+/* Modal overlay */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-accent);
+  border-radius: 3px;
+  padding: 20px;
+  width: 380px;
+  max-width: calc(100vw - 40px);
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalTitle {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+  margin: 0;
+}
+
+.modalList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.modalItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background 0.12s,
+    border-color 0.12s;
+}
+
+.modalItem:hover {
+  background: var(--bg-surface);
+  border-color: var(--gold-dim);
+}
+
+.modalItemIcon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.modalItemInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.modalItemName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modalItemMeta {
+  font-size: 11px;
+  color: var(--text-mid);
+}
+
+.modalEmpty {
+  font-size: 13px;
+  color: var(--text-mid);
+  text-align: center;
+  padding: 16px 0;
+}
+
+.modalClose {
+  align-self: flex-end;
+  padding: 5px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text-mid);
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.modalClose:hover {
+  background: var(--bg-lift);
+  color: var(--text);
+}
+
+/* "New Flowchart" entry — gold-tinted */
+.modalItemNew {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: rgba(200, 144, 28, 0.06);
+  border: 1px solid var(--gold-dim);
+  border-radius: 2px;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background 0.12s,
+    border-color 0.12s;
+}
+
+.modalItemNew:hover {
+  background: rgba(200, 144, 28, 0.14);
+  border-color: var(--gold);
+}
+
+.modalItemNew .modalItemIcon {
+  color: var(--gold);
+}
+
+.modalItemNew .modalItemName {
+  color: var(--gold-light);
+}
+
+/* Section divider label */
+.modalDivider {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding: 4px 2px 0;
+}

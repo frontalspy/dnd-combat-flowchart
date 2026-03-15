@@ -8,11 +8,12 @@ import {
   FileText,
   Save,
 } from "lucide-react";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import type { FlowCanvasExports } from "../components/FlowCanvas";
 import { FlowCanvas } from "../components/FlowCanvas";
 import { NodeEditor } from "../components/NodeEditor";
 import { SpellPanel } from "../components/SpellPanel";
+import { TabBar } from "../components/TabBar";
 import { useApp } from "../context/AppContext";
 import { CLASSES } from "../data/classes";
 import type { SavedFlowchart } from "../types";
@@ -20,9 +21,11 @@ import styles from "./FlowchartBuilder.module.css";
 
 export function FlowchartBuilder() {
   const { state, goToSetup, saveFlowchart, getActiveFlowchart } = useApp();
-  const { character } = state;
+  const { character, activeTabId } = state;
 
   const activeChart = getActiveFlowchart();
+
+  // Per-tab state: name, saved flash, editing name
   const [chartName, setChartName] = useState(
     activeChart?.name ?? "My Combat Flow"
   );
@@ -30,11 +33,27 @@ export function FlowchartBuilder() {
   const [selectedNodes, setSelectedNodes] = useState<Node[]>([]);
   const [isSaved, setIsSaved] = useState(false);
 
+  // Keep chart name in sync when active tab changes
+  useEffect(() => {
+    setChartName(activeChart?.name ?? "My Combat Flow");
+    setEditingName(false);
+    setSelectedNodes([]);
+    setIsSaved(false);
+  }, [activeChart?.name]);
+
   const exportFnsRef = useRef<FlowCanvasExports | null>(null);
   const flowDataRef = useRef<{ nodes: Node[]; edges: unknown[] }>({
     nodes: (activeChart?.nodes ?? []) as Node[],
     edges: activeChart?.edges ?? [],
   });
+
+  // Reset flowDataRef when active tab changes so the latest chart data is used
+  useEffect(() => {
+    flowDataRef.current = {
+      nodes: (activeChart?.nodes ?? []) as Node[],
+      edges: activeChart?.edges ?? [],
+    };
+  }, [activeChart?.nodes, activeChart?.edges]);
 
   const handleDragStart = useCallback((e: React.DragEvent, data: unknown) => {
     e.dataTransfer.setData("application/reactflow", JSON.stringify(data));
@@ -52,7 +71,7 @@ export function FlowchartBuilder() {
 
   const handleSave = useCallback(() => {
     if (!character) return;
-    const id = activeChart?.id ?? `chart-${Date.now()}`;
+    const id = activeChart?.id ?? activeTabId ?? `chart-${Date.now()}`;
     const chart: SavedFlowchart = {
       id,
       name: chartName,
@@ -65,7 +84,7 @@ export function FlowchartBuilder() {
     saveFlowchart(chart);
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
-  }, [activeChart, character, chartName, saveFlowchart]);
+  }, [activeChart, activeTabId, character, chartName, saveFlowchart]);
 
   const handleExportJpg = useCallback(async () => {
     await exportFnsRef.current?.exportJpg(chartName);
@@ -100,15 +119,7 @@ export function FlowchartBuilder() {
           >
             <ChevronLeft size={16} />
           </button>
-          <div className={styles.characterChip}>
-            <span className={styles.classIcon}>{classDef?.icon ?? "⚔️"}</span>
-            <div className={styles.charInfo}>
-              <span className={styles.charClass}>{classDef?.name}</span>
-              <span className={styles.charSubclass}>
-                {subclassDef?.name} · Level {character.level}
-              </span>
-            </div>
-          </div>
+          <TabBar />
         </div>
 
         <div className={styles.topCenter}>
@@ -182,6 +193,7 @@ export function FlowchartBuilder() {
           <SpellPanel character={character} onDragStart={handleDragStart} />
 
           <FlowCanvas
+            key={activeTabId ?? "draft"}
             initialNodes={activeChart?.nodes as Node[] | undefined}
             initialEdges={
               activeChart?.edges as import("@xyflow/react").Edge[] | undefined

@@ -11,6 +11,7 @@ export function CharacterSetup() {
     state,
     setActiveFlowchart,
     deleteFlowchart,
+    openTab,
   } = useApp();
   const [selectedClass, setSelectedClass] = useState<DndClass | null>(null);
   const [selectedSubclass, setSelectedSubclass] = useState("");
@@ -32,8 +33,10 @@ export function CharacterSetup() {
       subclass: selectedSubclass,
       level,
     };
+    const draftId = `draft-${Date.now()}`;
     setActiveFlowchart(null);
     setCharacter(character);
+    openTab(draftId);
     goToBuilder();
   };
 
@@ -42,6 +45,7 @@ export function CharacterSetup() {
     if (!chart) return;
     setCharacter(chart.character);
     setActiveFlowchart(chartId);
+    openTab(chartId);
     goToBuilder();
   };
 
