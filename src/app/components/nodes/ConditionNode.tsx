@@ -1,7 +1,9 @@
 import type { Node, NodeProps } from "@xyflow/react";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
 import React, { useCallback, useState } from "react";
+import puzzleIcon from "../../icons/game/puzzle.svg";
 import type { ConditionNodeData } from "../../types";
+import { Icon } from "../Icon";
 import styles from "./ConditionNode.module.css";
 
 type ConditionNodeType = Node<ConditionNodeData, "conditionNode">;
@@ -32,7 +34,9 @@ export function ConditionNode({
       />
 
       <div className={styles.inner}>
-        <div className={styles.icon}>❓</div>
+        <div className={styles.icon}>
+          <Icon src={puzzleIcon} size={22} />
+        </div>
 
         {editing ? (
           <input

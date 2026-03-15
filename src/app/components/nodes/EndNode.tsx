@@ -1,7 +1,9 @@
 import type { Node, NodeProps } from "@xyflow/react";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
 import React, { useCallback, useState } from "react";
+import roundIcon from "../../icons/combat/round.svg";
 import type { EndNodeData } from "../../types";
+import { Icon } from "../Icon";
 import styles from "./EndNode.module.css";
 
 type EndNodeType = Node<EndNodeData, "endNode">;
@@ -20,7 +22,9 @@ export function EndNode({ id, data, selected }: NodeProps<EndNodeType>) {
     <div className={`${styles.endNode} ${selected ? styles.selected : ""}`}>
       <Handle type="target" position={Position.Top} className={styles.handle} />
       <div className={styles.inner}>
-        <span className={styles.icon}>🏁</span>
+        <span className={styles.icon}>
+          <Icon src={roundIcon} size={17} />
+        </span>
         {editing ? (
           <input
             className={styles.labelInput}

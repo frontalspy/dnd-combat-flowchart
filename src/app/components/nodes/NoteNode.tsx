@@ -1,7 +1,9 @@
 import type { Node, NodeProps } from "@xyflow/react";
 import { useReactFlow } from "@xyflow/react";
 import React, { useCallback, useState } from "react";
+import scrollIcon from "../../icons/entity/scroll.svg";
 import type { NoteNodeData } from "../../types";
+import { Icon } from "../Icon";
 import styles from "./NoteNode.module.css";
 
 type NoteNodeType = Node<NoteNodeData, "noteNode">;
@@ -18,7 +20,9 @@ export function NoteNode({ id, data, selected }: NodeProps<NoteNodeType>) {
     <div className={`${styles.noteNode} ${selected ? styles.selected : ""}`}>
       <div className={styles.corner} />
       <div className={styles.header}>
-        <span className={styles.icon}>📝</span>
+        <span className={styles.icon}>
+          <Icon src={scrollIcon} size={13} />
+        </span>
         <span className={styles.title}>Note</span>
       </div>
       <textarea

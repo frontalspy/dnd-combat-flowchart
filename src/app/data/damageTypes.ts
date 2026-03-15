@@ -1,3 +1,17 @@
+import acidIcon from "../icons/damage/acid.svg";
+import bludgeoningIcon from "../icons/damage/bludgeoning.svg";
+import coldIcon from "../icons/damage/cold.svg";
+import fireIcon from "../icons/damage/fire.svg";
+import forceIcon from "../icons/damage/force.svg";
+import lightningIcon from "../icons/damage/lightning.svg";
+import necroticIcon from "../icons/damage/necrotic.svg";
+import piercingIcon from "../icons/damage/piercing.svg";
+import poisonIcon from "../icons/damage/poison.svg";
+import psychicIcon from "../icons/damage/psychic.svg";
+import radiantIcon from "../icons/damage/radiant.svg";
+import slashingIcon from "../icons/damage/slashing.svg";
+import thunderIcon from "../icons/damage/thunder.svg";
+import healingIcon from "../icons/hp/full.svg";
 import type { DamageType } from "../types";
 
 export interface DamageTypeMeta {
@@ -13,98 +27,98 @@ export const DAMAGE_TYPES: Record<DamageType, DamageTypeMeta> = {
     label: "Acid",
     color: "#a8e063",
     bgColor: "rgba(168,224,99,0.15)",
-    icon: "🧪",
+    icon: acidIcon,
     keywords: ["acid"],
   },
   bludgeoning: {
     label: "Bludgeoning",
     color: "#c8a87a",
     bgColor: "rgba(200,168,122,0.15)",
-    icon: "🔨",
+    icon: bludgeoningIcon,
     keywords: ["bludgeoning"],
   },
   cold: {
     label: "Cold",
     color: "#67d5f5",
     bgColor: "rgba(103,213,245,0.15)",
-    icon: "❄️",
+    icon: coldIcon,
     keywords: ["cold", "ice", "frost", "freezing"],
   },
   fire: {
     label: "Fire",
     color: "#ff7043",
     bgColor: "rgba(255,112,67,0.15)",
-    icon: "🔥",
+    icon: fireIcon,
     keywords: ["fire", "flame", "burning", "burn"],
   },
   force: {
     label: "Force",
     color: "#9fa8da",
     bgColor: "rgba(159,168,218,0.15)",
-    icon: "💫",
+    icon: forceIcon,
     keywords: ["force damage", "magical force"],
   },
   lightning: {
     label: "Lightning",
     color: "#fff176",
     bgColor: "rgba(255,241,118,0.15)",
-    icon: "⚡",
+    icon: lightningIcon,
     keywords: ["lightning"],
   },
   necrotic: {
     label: "Necrotic",
     color: "#ba68c8",
     bgColor: "rgba(186,104,200,0.15)",
-    icon: "💀",
+    icon: necroticIcon,
     keywords: ["necrotic"],
   },
   piercing: {
     label: "Piercing",
     color: "#90a4ae",
     bgColor: "rgba(144,164,174,0.15)",
-    icon: "🗡️",
+    icon: piercingIcon,
     keywords: ["piercing"],
   },
   poison: {
     label: "Poison",
     color: "#aed581",
     bgColor: "rgba(174,213,129,0.15)",
-    icon: "☠️",
+    icon: poisonIcon,
     keywords: ["poison", "poisoned", "venomous"],
   },
   psychic: {
     label: "Psychic",
     color: "#f48fb1",
     bgColor: "rgba(244,143,177,0.15)",
-    icon: "🔮",
+    icon: psychicIcon,
     keywords: ["psychic"],
   },
   radiant: {
     label: "Radiant",
     color: "#fff59d",
     bgColor: "rgba(255,245,157,0.15)",
-    icon: "✨",
+    icon: radiantIcon,
     keywords: ["radiant"],
   },
   slashing: {
     label: "Slashing",
     color: "#ef9a9a",
     bgColor: "rgba(239,154,154,0.15)",
-    icon: "⚔️",
+    icon: slashingIcon,
     keywords: ["slashing"],
   },
   thunder: {
     label: "Thunder",
     color: "#80cbc4",
     bgColor: "rgba(128,203,196,0.15)",
-    icon: "💥",
+    icon: thunderIcon,
     keywords: ["thunder", "thunderous", "sonic"],
   },
   healing: {
     label: "Healing",
     color: "#66bb6a",
     bgColor: "rgba(102,187,106,0.15)",
-    icon: "💚",
+    icon: healingIcon,
     keywords: ["heal", "healing", "restore hit", "regain hit"],
   },
 };

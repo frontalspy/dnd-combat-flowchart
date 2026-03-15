@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { Icon } from "../components/Icon";
 import { useApp } from "../context/AppContext";
 import { CLASSES } from "../data/classes";
+import combatIcon from "../icons/game/combat.svg";
+import dndIcon from "../icons/logo/dnd.svg";
+import crossIcon from "../icons/util/cross.svg";
 import type { Character, DndClass } from "../types";
 import styles from "./CharacterSetup.module.css";
 
@@ -27,7 +31,7 @@ export function CharacterSetup() {
   };
 
   const handleStart = () => {
-    if (!selectedClass || !selectedSubclass) return;
+    if (!selectedClass) return;
     const character: Character = {
       class: selectedClass,
       subclass: selectedSubclass,
@@ -63,7 +67,9 @@ export function CharacterSetup() {
 
       <div className={styles.container}>
         <header className={styles.header}>
-          <div className={styles.logo}>⚔️</div>
+          <div className={styles.logo}>
+            <Icon src={dndIcon} size={50} alt="D&D" />
+          </div>
           <h1 className={styles.title}>D&D Combat Flowchart Builder</h1>
           <p className={styles.subtitle}>
             Build visual combat decision trees for your class. Drag spells and
@@ -96,7 +102,9 @@ export function CharacterSetup() {
                     }
                     onClick={() => handleClassSelect(cls.id)}
                   >
-                    <span className={styles.classBtnIcon}>{cls.icon}</span>
+                    <span className={styles.classBtnIcon}>
+                      <Icon src={cls.icon} size={22} />
+                    </span>
                     <span className={styles.classBtnName}>{cls.name}</span>
                   </button>
                 ))}
@@ -125,24 +133,38 @@ export function CharacterSetup() {
             {/* Level */}
             {classDef && (
               <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>
-                  Character Level:{" "}
-                  <span className={styles.levelValue}>{level}</span>
-                </label>
-                <input
-                  type="range"
-                  className={styles.levelSlider}
-                  min={1}
-                  max={20}
-                  value={level}
-                  onChange={(e) => setLevel(Number(e.target.value))}
-                />
-                <div className={styles.levelPips}>
-                  {[1, 5, 10, 15, 20].map((n) => (
-                    <span key={n} className={styles.levelPip}>
-                      {n}
-                    </span>
-                  ))}
+                <label className={styles.fieldLabel}>Character Level</label>
+                <div className={styles.levelStepper}>
+                  <button
+                    type="button"
+                    className={styles.stepBtn}
+                    onClick={() => setLevel((v) => Math.max(1, v - 1))}
+                    disabled={level <= 1}
+                    aria-label="Decrease level"
+                  >
+                    −
+                  </button>
+                  <input
+                    type="number"
+                    className={styles.levelInput}
+                    min={1}
+                    max={20}
+                    value={level}
+                    onChange={(e) =>
+                      setLevel(
+                        Math.min(20, Math.max(1, Number(e.target.value)))
+                      )
+                    }
+                  />
+                  <button
+                    type="button"
+                    className={styles.stepBtn}
+                    onClick={() => setLevel((v) => Math.min(20, v + 1))}
+                    disabled={level >= 20}
+                    aria-label="Increase level"
+                  >
+                    +
+                  </button>
                 </div>
               </div>
             )}
@@ -150,10 +172,10 @@ export function CharacterSetup() {
             <button
               type="button"
               className={styles.startBtn}
-              disabled={!selectedClass || !selectedSubclass}
+              disabled={!selectedClass}
               onClick={handleStart}
             >
-              ⚔️ Start Building
+              <Icon src={combatIcon} size={16} /> Start Building
             </button>
           </section>
 
@@ -175,7 +197,7 @@ export function CharacterSetup() {
                     >
                       <div className={styles.savedCardLeft}>
                         <span className={styles.savedCardIcon}>
-                          {cls?.icon ?? "⚔️"}
+                          <Icon src={cls?.icon ?? combatIcon} size={26} />
                         </span>
                         <div className={styles.savedCardInfo}>
                           <span className={styles.savedCardName}>
@@ -194,7 +216,7 @@ export function CharacterSetup() {
                         onClick={(e) => handleDeleteChart(e, chart.id)}
                         title="Delete flowchart"
                       >
-                        ✕
+                        <Icon src={crossIcon} size={12} />
                       </button>
                     </button>
                   );

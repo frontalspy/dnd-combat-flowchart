@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useApp } from "../context/AppContext";
 import { CLASSES } from "../data/classes";
+import combatIcon from "../icons/game/combat.svg";
+import buildIcon from "../icons/util/build.svg";
+import crossIcon from "../icons/util/cross.svg";
+import { Icon } from "./Icon";
 import styles from "./TabBar.module.css";
 
 export function TabBar() {
@@ -51,7 +55,9 @@ export function TabBar() {
               onClick={() => handleTabClick(id)}
               title={chart?.name ?? id}
             >
-              <span className={styles.tabIcon}>{cls?.icon ?? "⚔️"}</span>
+              <span className={styles.tabIcon}>
+                <Icon src={cls?.icon ?? combatIcon} size={18} />
+              </span>
               <div className={styles.tabInfo}>
                 <span className={styles.tabName}>
                   {chart?.name ?? "Unsaved Chart"}
@@ -69,7 +75,7 @@ export function TabBar() {
                 title="Close tab"
                 aria-label={`Close ${chart?.name ?? "tab"}`}
               >
-                ✕
+                <Icon src={crossIcon} size={10} />
               </button>
             </button>
           );
@@ -82,7 +88,7 @@ export function TabBar() {
           title="Open a saved chart in a new tab"
           aria-label="Open chart in new tab"
         >
-          +
+          <Icon src={buildIcon} size={16} />
         </button>
       </div>
 
@@ -100,7 +106,9 @@ export function TabBar() {
               className={styles.modalItemNew}
               onClick={handleNewChart}
             >
-              <span className={styles.modalItemIcon}>✦</span>
+              <span className={styles.modalItemIcon}>
+                <Icon src={buildIcon} size={18} />
+              </span>
               <div className={styles.modalItemInfo}>
                 <span className={styles.modalItemName}>New Flowchart…</span>
                 <span className={styles.modalItemMeta}>
@@ -124,7 +132,7 @@ export function TabBar() {
                     onClick={() => handleOpenChart(chart.id)}
                   >
                     <span className={styles.modalItemIcon}>
-                      {cls?.icon ?? "⚔️"}
+                      <Icon src={cls?.icon ?? combatIcon} size={18} />
                     </span>
                     <div className={styles.modalItemInfo}>
                       <span className={styles.modalItemName}>{chart.name}</span>

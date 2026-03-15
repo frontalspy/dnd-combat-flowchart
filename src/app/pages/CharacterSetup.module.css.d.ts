@@ -19,16 +19,15 @@ declare const savedSection: string;
 declare const sectionTitle: string;
 declare const fieldGroup: string;
 declare const fieldLabel: string;
-declare const levelValue: string;
 declare const classGrid: string;
 declare const classBtn: string;
 declare const classBtnActive: string;
 declare const classBtnIcon: string;
 declare const classBtnName: string;
 declare const select: string;
-declare const levelSlider: string;
-declare const levelPips: string;
-declare const levelPip: string;
+declare const levelStepper: string;
+declare const stepBtn: string;
+declare const levelInput: string;
 declare const startBtn: string;
 declare const savedList: string;
 declare const savedCard: string;
@@ -53,16 +52,15 @@ export {
 	sectionTitle,
 	fieldGroup,
 	fieldLabel,
-	levelValue,
 	classGrid,
 	classBtn,
 	classBtnActive,
 	classBtnIcon,
 	classBtnName,
 	select,
-	levelSlider,
-	levelPips,
-	levelPip,
+	levelStepper,
+	stepBtn,
+	levelInput,
 	startBtn,
 	savedList,
 	savedCard,
@@ -88,16 +86,15 @@ declare const __default_export__: {
 	sectionTitle: typeof sectionTitle;
 	fieldGroup: typeof fieldGroup;
 	fieldLabel: typeof fieldLabel;
-	levelValue: typeof levelValue;
 	classGrid: typeof classGrid;
 	classBtn: typeof classBtn;
 	classBtnActive: typeof classBtnActive;
 	classBtnIcon: typeof classBtnIcon;
 	classBtnName: typeof classBtnName;
 	select: typeof select;
-	levelSlider: typeof levelSlider;
-	levelPips: typeof levelPips;
-	levelPip: typeof levelPip;
+	levelStepper: typeof levelStepper;
+	stepBtn: typeof stepBtn;
+	levelInput: typeof levelInput;
 	startBtn: typeof startBtn;
 	savedList: typeof savedList;
 	savedCard: typeof savedCard;

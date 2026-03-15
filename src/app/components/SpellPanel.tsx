@@ -5,6 +5,12 @@ import type { ClassAction } from "../data/classes";
 import { getClassDefinition, getMaxSpellLevel } from "../data/classes";
 import { SPELL_SCHOOLS } from "../data/damageTypes";
 import spellsData from "../data/spells.json";
+import combatActionIcon from "../icons/combat/action.svg";
+import roundIcon from "../icons/combat/round.svg";
+import scrollIcon from "../icons/entity/scroll.svg";
+import combatIcon from "../icons/game/combat.svg";
+import puzzleIcon from "../icons/game/puzzle.svg";
+import spellIcon from "../icons/game/spell.svg";
 import type {
   ActionItem,
   ActionType,
@@ -12,6 +18,7 @@ import type {
   DamageType,
   Spell,
 } from "../types";
+import { Icon } from "./Icon";
 import { ActionCard, SpellCard } from "./SpellCard";
 import styles from "./SpellPanel.module.css";
 
@@ -51,7 +58,9 @@ function DragTemplate({
       onDragStart={onDragStart}
       title={description}
     >
-      <span className={styles.templateIcon}>{icon}</span>
+      <span className={styles.templateIcon}>
+        <Icon src={icon} size={16} />
+      </span>
       <span className={styles.templateLabel}>{label}</span>
     </div>
   );
@@ -270,7 +279,9 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
       {/* Header */}
       <div className={styles.panelHeader}>
         <div className={styles.characterChip}>
-          <span className={styles.classIcon}>{classDef?.icon ?? "⚔️"}</span>
+          <span className={styles.classIcon}>
+            <Icon src={classDef?.icon ?? combatIcon} size={26} />
+          </span>
           <div className={styles.characterInfo}>
             <span className={styles.characterClass}>
               {classDef?.name ?? character.class}
@@ -287,7 +298,7 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
         <div className={styles.templatesLabel}>Drag to Canvas</div>
         <div className={styles.templateGrid}>
           <DragTemplate
-            icon="❓"
+            icon={puzzleIcon}
             label="Condition"
             description="Add a decision/condition node"
             onDragStart={(e) =>
@@ -298,7 +309,7 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
             }
           />
           <DragTemplate
-            icon="📝"
+            icon={scrollIcon}
             label="Note"
             description="Add a sticky note"
             onDragStart={(e) =>
@@ -309,7 +320,7 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
             }
           />
           <DragTemplate
-            icon="⚔️"
+            icon={combatIcon}
             label="Start"
             description="Add a combat start node"
             onDragStart={(e) =>
@@ -320,7 +331,7 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
             }
           />
           <DragTemplate
-            icon="🏁"
+            icon={roundIcon}
             label="End"
             description="Add a round end node"
             onDragStart={(e) =>
@@ -361,7 +372,7 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
           className={`${styles.tab} ${activeTab === "actions" ? styles.activeTab : ""}`}
           onClick={() => setActiveTab("actions")}
         >
-          ⚔️ Actions
+          <Icon src={combatActionIcon} size={14} /> Actions
         </button>
         {maxSpellLevel > 0 && (
           <button
@@ -369,7 +380,7 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
             className={`${styles.tab} ${activeTab === "spells" ? styles.activeTab : ""}`}
             onClick={() => setActiveTab("spells")}
           >
-            ✨ Spells
+            <Icon src={spellIcon} size={14} /> Spells
           </button>
         )}
       </div>

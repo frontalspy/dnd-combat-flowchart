@@ -100,12 +100,6 @@
   margin-bottom: 10px;
 }
 
-.levelValue {
-  color: var(--gold);
-  font-size: 18px;
-  font-weight: 700;
-}
-
 /* Class grid */
 .classGrid {
   display: grid;
@@ -181,42 +175,68 @@
   border-color: var(--gold);
 }
 
-/* Level slider */
-.levelSlider {
-  width: 100%;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 3px;
-  background: linear-gradient(
-    to right,
-    var(--gold) 0%,
-    var(--gold) calc((var(--val, 0) - 1) / 19 * 100%),
-    var(--border-mid) calc((var(--val, 0) - 1) / 19 * 100%)
-  );
-  border-radius: 1px;
-  outline: none;
-  margin-bottom: 8px;
+/* Level stepper */
+.levelStepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: border-color 0.15s;
 }
 
-.levelSlider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
-  background: var(--gold);
-  border-radius: 50%;
-  border: 2px solid var(--bg-deep);
+.levelStepper:focus-within {
+  border-color: var(--gold);
+}
+
+.stepBtn {
+  width: 36px;
+  height: 40px;
+  background: var(--bg-base);
+  border: none;
+  color: var(--text-mid);
+  font-size: 18px;
+  line-height: 1;
   cursor: pointer;
-  box-shadow: 0 0 8px rgba(184, 144, 26, 0.45);
+  transition:
+    background 0.12s,
+    color 0.12s;
+  flex-shrink: 0;
 }
 
-.levelPips {
-  display: flex;
-  justify-content: space-between;
+.stepBtn:hover:not(:disabled) {
+  background: var(--bg-raised);
+  color: var(--gold);
 }
 
-.levelPip {
-  font-size: 12px;
-  color: var(--text-faint);
+.stepBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.levelInput {
+  width: 52px;
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--border-mid);
+  border-right: 1px solid var(--border-mid);
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+  text-align: center;
+  padding: 10px 4px;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.levelInput:focus {
+  outline: none;
+}
+
+.levelInput::-webkit-outer-spin-button,
+.levelInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* Start button */

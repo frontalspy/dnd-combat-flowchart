@@ -1,13 +1,5 @@
-# Another Typescript React boilerplate
+# dnd-combat-flowchart
 
-Another one of these things, but its a bit more strict.
+A static site for generating DND combat flowcharts
 
-Includes `React`, `Typescript`, `vite` and `bioms`, and a basic `express` server for any backend action.
-
-Also comes with `vitest` for unit testing.
-
-| Command      | Description                   |
-| ------------ | ----------------------------- |
-| `npm run start` | Starts the development server |
-| `npm run test`  | Runs your unit tests          |
-| `npm run format`  | Format using biome          |
+DND icons from https://github.com/intrinsical/tw-dnd/

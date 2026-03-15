@@ -6,7 +6,10 @@ import {
   DAMAGE_TYPES,
   SPELL_SCHOOLS,
 } from "../../data/damageTypes";
+import reachIcon from "../../icons/combat/reach.svg";
+import timeIcon from "../../icons/entity/time.svg";
 import type { ActionNodeData } from "../../types";
+import { Icon } from "../Icon";
 import styles from "./ActionNode.module.css";
 
 type ActionNodeType = Node<ActionNodeData, "actionNode">;
@@ -84,17 +87,25 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
                 backgroundColor: damageInfo.bgColor,
               }}
             >
-              {damageInfo.icon} {damageInfo.label}
+              <img
+                src={damageInfo.icon}
+                width={12}
+                height={12}
+                alt=""
+                aria-hidden="true"
+                style={{ verticalAlign: "middle" }}
+              />{" "}
+              {damageInfo.label}
             </span>
           )}
           {data.range && (
             <span className={styles.infoPill} title="Range">
-              📏 {data.range}
+              <Icon src={reachIcon} size={12} /> {data.range}
             </span>
           )}
           {data.duration && data.duration !== "Instantaneous" && (
             <span className={styles.infoPill} title="Duration">
-              ⏱ {data.duration}
+              <Icon src={timeIcon} size={12} /> {data.duration}
             </span>
           )}
         </div>

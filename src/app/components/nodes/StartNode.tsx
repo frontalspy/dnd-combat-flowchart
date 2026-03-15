@@ -1,7 +1,9 @@
 import type { Node, NodeProps } from "@xyflow/react";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
 import React, { useCallback, useState } from "react";
+import combatIcon from "../../icons/game/combat.svg";
 import type { StartNodeData } from "../../types";
+import { Icon } from "../Icon";
 import styles from "./StartNode.module.css";
 
 type StartNodeType = Node<StartNodeData, "startNode">;
@@ -19,7 +21,9 @@ export function StartNode({ id, data, selected }: NodeProps<StartNodeType>) {
   return (
     <div className={`${styles.startNode} ${selected ? styles.selected : ""}`}>
       <div className={styles.inner}>
-        <span className={styles.icon}>⚔️</span>
+        <span className={styles.icon}>
+          <Icon src={combatIcon} size={17} />
+        </span>
         {editing ? (
           <input
             className={styles.labelInput}

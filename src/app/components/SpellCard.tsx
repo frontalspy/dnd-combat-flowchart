@@ -6,7 +6,10 @@ import {
   getActionTypeFromCastingTime,
   SPELL_SCHOOLS,
 } from "../data/damageTypes";
+import buildIcon from "../icons/util/build.svg";
+import starIcon from "../icons/util/star.svg";
 import type { ActionItem, Spell } from "../types";
+import { Icon } from "./Icon";
 import styles from "./SpellCard.module.css";
 
 interface SpellTooltipProps {
@@ -145,7 +148,15 @@ export function SpellCard({ spell, onDragStart }: SpellCardProps) {
             backgroundColor: damageInfo.bgColor,
           }}
         >
-          {damageInfo.icon} {damageInfo.label}
+          <img
+            src={damageInfo.icon}
+            width={12}
+            height={12}
+            alt=""
+            aria-hidden="true"
+            style={{ verticalAlign: "middle" }}
+          />{" "}
+          {damageInfo.label}
         </span>
       )}
 
@@ -200,11 +211,17 @@ export function ActionCard({ action, onDragStart }: ActionCardProps) {
             className={styles.sourceBadge}
             style={{ color: action.source === "class" ? "#d4a017" : "#8b949e" }}
           >
-            {action.source === "class"
-              ? "★ Class"
-              : action.source === "custom"
-                ? "✏ Custom"
-                : "Standard"}
+            {action.source === "class" ? (
+              <>
+                <Icon src={starIcon} size={11} /> Class
+              </>
+            ) : action.source === "custom" ? (
+              <>
+                <Icon src={buildIcon} size={11} /> Custom
+              </>
+            ) : (
+              "Standard"
+            )}
           </span>
         </div>
         <span
@@ -226,7 +243,15 @@ export function ActionCard({ action, onDragStart }: ActionCardProps) {
             backgroundColor: damageInfo.bgColor,
           }}
         >
-          {damageInfo.icon} {damageInfo.label}
+          <img
+            src={damageInfo.icon}
+            width={12}
+            height={12}
+            alt=""
+            aria-hidden="true"
+            style={{ verticalAlign: "middle" }}
+          />{" "}
+          {damageInfo.label}
         </span>
       )}
 

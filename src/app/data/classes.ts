@@ -1,3 +1,15 @@
+import barbarianIcon from "../icons/class/barbarian.svg";
+import bardIcon from "../icons/class/bard.svg";
+import clericIcon from "../icons/class/cleric.svg";
+import druidIcon from "../icons/class/druid.svg";
+import fighterIcon from "../icons/class/fighter.svg";
+import monkIcon from "../icons/class/monk.svg";
+import paladinIcon from "../icons/class/paladin.svg";
+import rangerIcon from "../icons/class/ranger.svg";
+import rogueIcon from "../icons/class/rogue.svg";
+import sorcererIcon from "../icons/class/sorcerer.svg";
+import warlockIcon from "../icons/class/warlock.svg";
+import wizardIcon from "../icons/class/wizard.svg";
 import type { ActionType, DamageType, DndClass } from "../types";
 
 export type SpellcastingType = "full" | "half" | "third" | "warlock" | "none";
@@ -32,7 +44,7 @@ export const CLASSES: ClassDefinition[] = [
     id: "barbarian",
     name: "Barbarian",
     color: "#c62828",
-    icon: "🪓",
+    icon: barbarianIcon,
     spellcastingType: "none",
     subclasses: [
       { id: "berserker", name: "Path of the Berserker" },
@@ -82,7 +94,7 @@ export const CLASSES: ClassDefinition[] = [
     id: "bard",
     name: "Bard",
     color: "#7b1fa2",
-    icon: "🎵",
+    icon: bardIcon,
     spellcastingType: "full",
     subclasses: [
       { id: "lore", name: "College of Lore" },
@@ -125,7 +137,7 @@ export const CLASSES: ClassDefinition[] = [
     id: "cleric",
     name: "Cleric",
     color: "#f57f17",
-    icon: "⚕️",
+    icon: clericIcon,
     spellcastingType: "full",
     subclasses: [
       { id: "life", name: "Life Domain" },
@@ -174,7 +186,7 @@ export const CLASSES: ClassDefinition[] = [
     id: "druid",
     name: "Druid",
     color: "#2e7d32",
-    icon: "🌿",
+    icon: druidIcon,
     spellcastingType: "full",
     subclasses: [
       { id: "land", name: "Circle of the Land" },
@@ -208,7 +220,7 @@ export const CLASSES: ClassDefinition[] = [
     id: "fighter",
     name: "Fighter",
     color: "#e64a19",
-    icon: "⚔️",
+    icon: fighterIcon,
     spellcastingType: "none",
     subclasses: [
       { id: "champion", name: "Champion" },
@@ -265,7 +277,7 @@ export const CLASSES: ClassDefinition[] = [
     id: "monk",
     name: "Monk",
     color: "#00838f",
-    icon: "🥋",
+    icon: monkIcon,
     spellcastingType: "none",
     subclasses: [
       { id: "open-hand", name: "Way of the Open Hand" },
@@ -325,7 +337,7 @@ export const CLASSES: ClassDefinition[] = [
     id: "paladin",
     name: "Paladin",
     color: "#f9a825",
-    icon: "🛡️",
+    icon: paladinIcon,
     spellcastingType: "half",
     subclasses: [
       { id: "devotion", name: "Oath of Devotion" },
@@ -386,7 +398,7 @@ export const CLASSES: ClassDefinition[] = [
     id: "ranger",
     name: "Ranger",
     color: "#388e3c",
-    icon: "🏹",
+    icon: rangerIcon,
     spellcastingType: "half",
     subclasses: [
       { id: "hunter", name: "Hunter" },
@@ -428,7 +440,7 @@ export const CLASSES: ClassDefinition[] = [
     id: "rogue",
     name: "Rogue",
     color: "#546e7a",
-    icon: "🗡️",
+    icon: rogueIcon,
     spellcastingType: "none",
     subclasses: [
       { id: "thief", name: "Thief" },
@@ -498,7 +510,7 @@ export const CLASSES: ClassDefinition[] = [
     id: "sorcerer",
     name: "Sorcerer",
     color: "#b71c1c",
-    icon: "🔮",
+    icon: sorcererIcon,
     spellcastingType: "full",
     subclasses: [
       { id: "draconic", name: "Draconic Bloodline" },
@@ -557,7 +569,7 @@ export const CLASSES: ClassDefinition[] = [
     id: "warlock",
     name: "Warlock",
     color: "#4a148c",
-    icon: "👁️",
+    icon: warlockIcon,
     spellcastingType: "warlock",
     subclasses: [
       { id: "fiend", name: "The Fiend" },
@@ -603,7 +615,7 @@ export const CLASSES: ClassDefinition[] = [
     id: "wizard",
     name: "Wizard",
     color: "#1565c0",
-    icon: "🧙",
+    icon: wizardIcon,
     spellcastingType: "full",
     subclasses: [
       { id: "abjuration", name: "School of Abjuration" },
