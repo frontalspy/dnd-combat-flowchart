@@ -1,0 +1,84 @@
+.panel {
+  width: 260px;
+  min-width: 260px;
+  height: auto;
+  background: var(--bg-base);
+  border-left: 1px solid var(--border-mid);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid var(--border-dim);
+  background: var(--bg-raised);
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.closeBtn:hover {
+  color: var(--text-mid);
+  background: var(--bg-surface);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+}
+
+.deleteBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(239, 83, 80, 0.12);
+  border: 1px solid rgba(239, 83, 80, 0.4);
+  color: #ef5350;
+  border-radius: 3px;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  justify-content: center;
+}
+
+.deleteBtn:hover {
+  background: rgba(239, 83, 80, 0.22);
+}
+
+.deselectBtn {
+  background: none;
+  border: 1px solid var(--border-mid);
+  color: var(--text-mid);
+  border-radius: 3px;
+  padding: 7px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.deselectBtn:hover {
+  background: var(--bg-surface);
+  color: var(--text-high);
+}

@@ -11,6 +11,7 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import type { FlowCanvasExports } from "../components/FlowCanvas";
 import { FlowCanvas } from "../components/FlowCanvas";
+import { MultiSelectBar } from "../components/MultiSelectBar";
 import { NodeEditor } from "../components/NodeEditor";
 import { SpellPanel } from "../components/SpellPanel";
 import { TabBar } from "../components/TabBar";
@@ -133,8 +134,6 @@ export function FlowchartBuilder() {
     await exportFnsRef.current?.exportPdf(chartName);
   }, [chartName]);
 
-  const selectedNode = selectedNodes[0] ?? null;
-
   if (!character) {
     goToSetup();
     return null;
@@ -242,10 +241,16 @@ export function FlowchartBuilder() {
             onFlowChange={handleFlowChange}
           />
 
-          {selectedNode && (
+          {selectedNodes.length === 1 && (
             <NodeEditor
-              selectedNode={selectedNode}
+              selectedNode={selectedNodes[0]}
               onClose={() => setSelectedNodes([])}
+            />
+          )}
+          {selectedNodes.length > 1 && (
+            <MultiSelectBar
+              selectedNodes={selectedNodes}
+              onDeselect={() => setSelectedNodes([])}
             />
           )}
         </div>

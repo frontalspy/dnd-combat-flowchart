@@ -17,22 +17,30 @@ export function NoteNode({ id, data, selected }: NodeProps<NoteNodeType>) {
   }, [id, content, updateNodeData]);
 
   return (
-    <div className={`${styles.noteNode} ${selected ? styles.selected : ""}`}>
-      <div className={styles.corner} />
-      <div className={styles.header}>
-        <span className={styles.icon}>
-          <Icon src={scrollIcon} size={13} />
-        </span>
-        <span className={styles.title}>Note</span>
+    <div className={`${styles.wrapper} ${selected ? styles.selected : ""}`}>
+      <div className={styles.noteNode}>
+        <div className={styles.corner} />
+        <div className={styles.header}>
+          <span className={styles.icon}>
+            <Icon src={scrollIcon} size={13} />
+          </span>
+          <span className={styles.title}>Note</span>
+        </div>
+        <textarea
+          className={styles.textarea}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          onBlur={handleBlur}
+          onMouseDown={(e) => {
+            // Let React Flow handle modifier+clicks for multi-select.
+            // Without this, the textarea consumes Shift/Ctrl mousedown events
+            // and the node never gets added to the selection.
+            if (e.shiftKey || e.ctrlKey || e.metaKey) e.preventDefault();
+          }}
+          placeholder="Type your note here..."
+          rows={4}
+        />
       </div>
-      <textarea
-        className={styles.textarea}
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        onBlur={handleBlur}
-        placeholder="Type your note here..."
-        rows={4}
-      />
     </div>
   );
 }

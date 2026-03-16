@@ -110,6 +110,16 @@ body,
 .react-flow__minimap-node {
   fill: var(--border-mid) !important;
 }
+.react-flow__selection {
+  background: rgba(200, 144, 28, 0.08);
+  border: 1px solid var(--gold);
+}
+/* Suppress the rectangular wrapper outline React Flow adds to selected nodes —
+   NoteNode uses filter:drop-shadow instead so the wrapper ring is not needed */
+.react-flow__node-noteNode.selected {
+  outline: none !important;
+  box-shadow: none !important;
+}
 /* Document
    ========================================================================== */
 

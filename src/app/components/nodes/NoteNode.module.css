@@ -1,3 +1,39 @@
+/* Outer wrapper carries filter + transform. clip-path lives on the inner
+   .noteNode div so that drop-shadow on the wrapper is applied to the already-
+   clipped shape — this lets the gold ring follow the torn-paper silhouette.
+   (clip-path is applied after filter on the same element, which would clip
+   the shadows away if both were on a single element.) */
+.wrapper {
+  display: block;
+  width: 200px;
+  transform: rotate(-1.2deg);
+  filter: drop-shadow(1px 3px 7px rgba(80, 50, 10, 0.26));
+  transition:
+    filter 0.2s,
+    transform 0.2s;
+}
+
+.wrapper:hover {
+  filter: drop-shadow(0 0 2px var(--gold-dim))
+    drop-shadow(0 0 8px rgba(154, 112, 16, 0.65))
+    drop-shadow(1px 3px 7px rgba(80, 50, 10, 0.26));
+}
+
+.selected {
+  /* 8-directional solid shadows produce a crisp ~1px gold ring that traces
+     the torn-paper silhouette — same visual weight as other nodes' box-shadow
+     ring but following the irregular clip-path shape */
+  filter: drop-shadow(0 -1px 0 var(--gold-dim))
+    drop-shadow(0 1px 0 var(--gold-dim)) drop-shadow(-1px 0 0 var(--gold-dim))
+    drop-shadow(1px 0 0 var(--gold-dim))
+    drop-shadow(-0.75px -0.75px 0 var(--gold-dim))
+    drop-shadow(0.75px -0.75px 0 var(--gold-dim))
+    drop-shadow(-0.75px 0.75px 0 var(--gold-dim))
+    drop-shadow(0.75px 0.75px 0 var(--gold-dim))
+    drop-shadow(1px 3px 7px rgba(80, 50, 10, 0.26));
+}
+
+/* Inner div carries the torn-paper clip-path — no filter or transform here */
 /* Torn scrap of paper — clip-path creates jagged top + bottom edges.
    NoteNode has no React Flow handles so clip-path is safe here. */
 .noteNode {
@@ -8,11 +44,6 @@
   /* padding keeps content clear of the torn-edge clip zone (~top/bottom 6-7%) */
   padding-top: 10px;
   padding-bottom: 10px;
-  transform: rotate(-1.2deg);
-  filter: drop-shadow(1px 3px 7px rgba(80, 50, 10, 0.26));
-  transition:
-    filter 0.2s,
-    transform 0.2s;
   clip-path: polygon(
     /* torn top edge */
     0% 5%,
@@ -75,16 +106,7 @@
 }
 
 .noteNode:hover {
-  filter: drop-shadow(0 0 2px #9a7010)
-    drop-shadow(0 0 6px rgba(154, 112, 16, 0.65))
-    drop-shadow(1px 3px 7px rgba(80, 50, 10, 0.26));
-}
-
-.selected {
-  filter: drop-shadow(0 0 2px #9a7010)
-    drop-shadow(0 0 6px rgba(154, 112, 16, 0.65))
-    drop-shadow(1px 3px 7px rgba(80, 50, 10, 0.26));
-  transform: rotate(-1.2deg);
+  /* hover is handled on .wrapper — this rule intentionally empty */
 }
 
 /* corner fold removed — torn silhouette provides organic shape */

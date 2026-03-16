@@ -13,6 +13,7 @@ import {
   type OnNodesChange,
   ReactFlow,
   ReactFlowProvider,
+  SelectionMode,
   useEdgesState,
   useNodesState,
   useReactFlow,
@@ -419,7 +420,10 @@ function FlowCanvasInner({
         nodeTypes={nodeTypes}
         fitView
         deleteKeyCode={["Delete", "Backspace"]}
-        multiSelectionKeyCode="Control"
+        multiSelectionKeyCode={["Control", "Shift"]}
+        selectionOnDrag={true}
+        panOnDrag={[1, 2]}
+        selectionMode={SelectionMode.Partial}
         defaultEdgeOptions={{
           type: "smoothstep",
           style: { stroke: "#8b949e", strokeWidth: 2 },

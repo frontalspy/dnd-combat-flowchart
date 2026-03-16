@@ -6,8 +6,9 @@
  * https://npmjs.com/vite-css-modules
  */
 
-declare const noteNode: string;
+declare const wrapper: string;
 declare const selected: string;
+declare const noteNode: string;
 declare const corner: string;
 declare const header: string;
 declare const icon: string;
@@ -15,8 +16,9 @@ declare const title: string;
 declare const textarea: string;
 
 export {
-	noteNode,
+	wrapper,
 	selected,
+	noteNode,
 	corner,
 	header,
 	icon,
@@ -25,8 +27,9 @@ export {
 };
 
 declare const __default_export__: {
-	noteNode: typeof noteNode;
+	wrapper: typeof wrapper;
 	selected: typeof selected;
+	noteNode: typeof noteNode;
 	corner: typeof corner;
 	header: typeof header;
 	icon: typeof icon;
