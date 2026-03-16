@@ -1,29 +1,47 @@
 import type { Node } from "@xyflow/react";
 import { useReactFlow } from "@xyflow/react";
-import { Trash2, X } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import { Plus, Trash2, X } from "lucide-react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { STANDARD_ACTIONS } from "../data/actions";
+import type { ClassAction } from "../data/classes";
+import { getClassDefinition, getMaxSpellLevel } from "../data/classes";
 import {
   ACTION_TYPE_LABELS,
   DAMAGE_TYPES,
+  detectDamageType,
+  getActionTypeFromCastingTime,
   SPELL_SCHOOLS,
 } from "../data/damageTypes";
+import spellsData from "../data/spells.json";
+import type { Character, GroupNodeData, GroupVariant, Spell } from "../types";
 import styles from "./NodeEditor.module.css";
+
+const allSpells = spellsData as Spell[];
 
 interface NodeEditorProps {
   selectedNode: Node | null;
   onClose: () => void;
+  character?: Character;
 }
 
-export function NodeEditor({ selectedNode, onClose }: NodeEditorProps) {
+export function NodeEditor({
+  selectedNode,
+  onClose,
+  character,
+}: NodeEditorProps) {
   const { updateNodeData, deleteElements } = useReactFlow();
   const [notes, setNotes] = useState("");
   const [label, setLabel] = useState("");
+  const [variantSearch, setVariantSearch] = useState("");
+  const [showVariantAdd, setShowVariantAdd] = useState(false);
 
   useEffect(() => {
     if (!selectedNode) return;
     const d = selectedNode.data as Record<string, unknown>;
     setNotes(typeof d.notes === "string" ? d.notes : "");
     setLabel(typeof d.label === "string" ? d.label : "");
+    setVariantSearch("");
+    setShowVariantAdd(false);
   }, [selectedNode]);
 
   const handleSaveNotes = useCallback(() => {
@@ -41,6 +59,102 @@ export function NodeEditor({ selectedNode, onClose }: NodeEditorProps) {
     deleteElements({ nodes: [selectedNode] });
     onClose();
   }, [selectedNode, deleteElements, onClose]);
+
+  // ── Variant management (groupNode only) ──────────────────────────
+
+  const groupData =
+    selectedNode?.type === "groupNode"
+      ? (selectedNode.data as GroupNodeData)
+      : null;
+
+  const handleRemoveVariant = useCallback(
+    (variantId: string) => {
+      if (!selectedNode || !groupData) return;
+      updateNodeData(selectedNode.id, {
+        variants: groupData.variants.filter((v) => v.id !== variantId),
+      });
+    },
+    [selectedNode, groupData, updateNodeData]
+  );
+
+  const handleAddVariant = useCallback(
+    (variant: GroupVariant) => {
+      if (!selectedNode || !groupData) return;
+      if (groupData.variants.some((v) => v.label === variant.label)) return;
+      updateNodeData(selectedNode.id, {
+        variants: [...groupData.variants, variant],
+      });
+      setVariantSearch("");
+    },
+    [selectedNode, groupData, updateNodeData]
+  );
+
+  const variantPool = useMemo(() => {
+    if (!groupData || !character) return [];
+
+    const classDef = getClassDefinition(character.class);
+    const maxSpellLevel = getMaxSpellLevel(
+      character.class,
+      character.subclass,
+      character.level
+    );
+
+    const classActionItems = classDef
+      ? classDef.classActions
+          .filter((a: ClassAction) => a.minLevel <= character.level)
+          .map((a: ClassAction) => ({
+            id: a.id,
+            label: a.name,
+            actionType: a.actionType,
+            damageType: a.damageType,
+            school: undefined as string | undefined,
+            spellLevel: undefined as string | undefined,
+            description: a.description,
+          }))
+      : [];
+
+    const standardItems = STANDARD_ACTIONS.map((a) => ({
+      id: a.id,
+      label: a.name,
+      actionType: a.actionType,
+      damageType: a.damageType,
+      school: a.school,
+      spellLevel: a.level,
+      description: a.description,
+    }));
+
+    const spellItems =
+      maxSpellLevel > 0
+        ? allSpells
+            .filter((spell) => {
+              if (!spell.classes.includes(character.class)) return false;
+              if (spell.level === "cantrip") return true;
+              const lvl = parseInt(spell.level, 10);
+              return !isNaN(lvl) && lvl <= maxSpellLevel;
+            })
+            .map((spell) => ({
+              id: `spell-${spell.name}`,
+              label: spell.name,
+              actionType: getActionTypeFromCastingTime(spell.casting_time),
+              damageType: detectDamageType(spell.description),
+              school: spell.school,
+              spellLevel: spell.level,
+              description: spell.description,
+            }))
+        : [];
+
+    return [...classActionItems, ...standardItems, ...spellItems];
+  }, [groupData, character]);
+
+  const filteredPool = useMemo(() => {
+    if (!variantSearch.trim()) return variantPool.slice(0, 20);
+    const q = variantSearch.toLowerCase();
+    return variantPool
+      .filter((item) => item.label.toLowerCase().includes(q))
+      .slice(0, 20);
+  }, [variantPool, variantSearch]);
+
+  // ─────────────────────────────────────────────────────────────────
 
   if (!selectedNode) return null;
 
@@ -67,7 +181,9 @@ export function NodeEditor({ selectedNode, onClose }: NodeEditorProps) {
         ? "Condition"
         : nodeType === "startNode"
           ? "Start Node"
-          : "Note";
+          : nodeType === "groupNode"
+            ? "Group Node"
+            : "Note";
 
   const descriptionText =
     typeof data.description === "string" ? data.description : null;
@@ -125,7 +241,8 @@ export function NodeEditor({ selectedNode, onClose }: NodeEditorProps) {
         {/* Name / label editing */}
         {(nodeType === "actionNode" ||
           nodeType === "conditionNode" ||
-          nodeType === "startNode") && (
+          nodeType === "startNode" ||
+          nodeType === "groupNode") && (
           <div className={styles.field}>
             <label className={styles.fieldLabel}>Name</label>
             <div className={styles.fieldRow}>
@@ -163,17 +280,166 @@ export function NodeEditor({ selectedNode, onClose }: NodeEditorProps) {
         )}
 
         {/* Notes */}
-        {nodeType !== "noteNode" && nodeType !== "startNode" && (
+        {nodeType !== "noteNode" &&
+          nodeType !== "startNode" &&
+          nodeType !== "groupNode" && (
+            <div className={styles.field}>
+              <label className={styles.fieldLabel}>Notes</label>
+              <textarea
+                className={styles.notesTextarea}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                onBlur={handleSaveNotes}
+                placeholder="Add personal notes, reminders, or conditions..."
+                rows={4}
+              />
+            </div>
+          )}
+
+        {/* ── Variant management (groupNode only) ── */}
+        {nodeType === "groupNode" && groupData && (
           <div className={styles.field}>
-            <label className={styles.fieldLabel}>Notes</label>
-            <textarea
-              className={styles.notesTextarea}
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              onBlur={handleSaveNotes}
-              placeholder="Add personal notes, reminders, or conditions..."
-              rows={4}
-            />
+            <div className={styles.variantsHeader}>
+              <label className={styles.fieldLabel}>
+                Variants ({groupData.variants.length})
+              </label>
+              <button
+                type="button"
+                className={styles.addVariantBtn}
+                onClick={() => setShowVariantAdd((v) => !v)}
+                title="Add a variant"
+              >
+                <Plus size={12} />
+                Add
+              </button>
+            </div>
+
+            {/* Existing variants list */}
+            {groupData.variants.length > 0 && (
+              <div className={styles.variantsList}>
+                {groupData.variants.map((variant) => {
+                  const vDamage = variant.damageType
+                    ? DAMAGE_TYPES[variant.damageType]
+                    : null;
+                  const vAction =
+                    ACTION_TYPE_LABELS[variant.actionType] ??
+                    ACTION_TYPE_LABELS.action;
+                  return (
+                    <div key={variant.id} className={styles.variantItem}>
+                      <span className={styles.variantItemLabel}>
+                        {variant.label}
+                      </span>
+                      <div className={styles.variantItemBadges}>
+                        {variant.spellLevel !== undefined && (
+                          <span className={styles.variantLevelBadge}>
+                            {variant.spellLevel === "cantrip"
+                              ? "✦"
+                              : `Lv${variant.spellLevel}`}
+                          </span>
+                        )}
+                        <span
+                          className={styles.variantActionBadge}
+                          style={{ backgroundColor: vAction.color }}
+                          title={vAction.label}
+                        >
+                          {vAction.short}
+                        </span>
+                        {vDamage && (
+                          <span
+                            className={styles.variantDamageBadge}
+                            style={{
+                              color: vDamage.color,
+                              backgroundColor: vDamage.bgColor,
+                            }}
+                          >
+                            {vDamage.label}
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        className={styles.removeVariantBtn}
+                        onClick={() => handleRemoveVariant(variant.id)}
+                        title={`Remove ${variant.label}`}
+                        aria-label={`Remove variant ${variant.label}`}
+                      >
+                        <X size={11} />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Add variant search panel */}
+            {showVariantAdd && (
+              <div className={styles.variantSearch}>
+                <input
+                  className={styles.variantSearchInput}
+                  value={variantSearch}
+                  onChange={(e) => setVariantSearch(e.target.value)}
+                  placeholder="Search spells & actions…"
+                  autoFocus
+                />
+                <div className={styles.variantSearchResults}>
+                  {filteredPool.length === 0 ? (
+                    <div className={styles.variantSearchEmpty}>
+                      {character
+                        ? "No matches found."
+                        : "Character data unavailable."}
+                    </div>
+                  ) : (
+                    filteredPool.map((item) => {
+                      const alreadyAdded = groupData.variants.some(
+                        (v) => v.label === item.label
+                      );
+                      const iAction =
+                        ACTION_TYPE_LABELS[item.actionType] ??
+                        ACTION_TYPE_LABELS.action;
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          className={`${styles.variantResultRow} ${
+                            alreadyAdded ? styles.variantResultAdded : ""
+                          }`}
+                          onClick={() => {
+                            if (!alreadyAdded) {
+                              handleAddVariant({
+                                id: `variant-${item.id}-${Date.now()}`,
+                                label: item.label,
+                                actionType: item.actionType,
+                                damageType: item.damageType,
+                                school: item.school,
+                                spellLevel: item.spellLevel,
+                                description: item.description,
+                              });
+                            }
+                          }}
+                          disabled={alreadyAdded}
+                          title={
+                            alreadyAdded
+                              ? "Already in group"
+                              : `Add ${item.label}`
+                          }
+                        >
+                          <span className={styles.variantResultLabel}>
+                            {item.label}
+                          </span>
+                          <span
+                            className={styles.variantResultBadge}
+                            style={{ backgroundColor: iAction.color }}
+                            title={iAction.label}
+                          >
+                            {iAction.short}
+                          </span>
+                        </button>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

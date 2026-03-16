@@ -33,6 +33,7 @@ import type {
   ActionNodeData,
   ConditionNodeData,
   EndNodeData,
+  GroupNodeData,
   NoteNodeData,
   StartNodeData,
 } from "../types";
@@ -375,6 +376,13 @@ function FlowCanvasInner({
           label: (item.label as string) ?? "End of Round",
         };
         newNode = { id: newId(), type: "endNode", position, data };
+      } else if (nodeType === "groupNode") {
+        const data: GroupNodeData = {
+          label: (item.label as string) ?? "Action Group",
+          variants: [],
+          collapsed: false,
+        };
+        newNode = { id: newId(), type: "groupNode", position, data };
       } else {
         // ActionNode (spell or action)
         const data: ActionNodeData = {

@@ -11,6 +11,7 @@ import scrollIcon from "../icons/entity/scroll.svg";
 import combatIcon from "../icons/game/combat.svg";
 import puzzleIcon from "../icons/game/puzzle.svg";
 import spellIcon from "../icons/game/spell.svg";
+import buildIcon from "../icons/util/build.svg";
 import type {
   ActionItem,
   ActionType,
@@ -338,6 +339,17 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
               handleTemplateDrag(e, "endNode", {
                 type: "endNode",
                 label: "End of Round",
+              })
+            }
+          />
+          <DragTemplate
+            icon={buildIcon}
+            label="Group"
+            description="Add a variant group node (e.g. smite options)"
+            onDragStart={(e) =>
+              handleTemplateDrag(e, "groupNode", {
+                type: "groupNode",
+                label: "Action Group",
               })
             }
           />

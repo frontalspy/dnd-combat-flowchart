@@ -224,3 +224,225 @@
   color: var(--text-faint);
   text-align: center;
 }
+
+/* ── Variant management (groupNode) ─────────────────── */
+
+.variantsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.addVariantBtn {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text-mid);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 7px;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.addVariantBtn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.variantsList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.variantItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.variantItem:last-child {
+  border-bottom: none;
+}
+
+.variantItemLabel {
+  font-size: 13px;
+  color: var(--text);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.variantItemBadges {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.variantLevelBadge {
+  font-size: 10px;
+  color: var(--text-mid);
+  padding: 1px 3px;
+  background: rgba(107, 76, 42, 0.1);
+  border-radius: 2px;
+}
+
+.variantActionBadge {
+  font-size: 10px;
+  font-weight: 800;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #0d1117;
+  flex-shrink: 0;
+}
+
+.variantDamageBadge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 8px;
+}
+
+.removeVariantBtn {
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.removeVariantBtn:hover {
+  color: var(--red-light);
+  background: rgba(106, 26, 16, 0.08);
+}
+
+.variantSearch {
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--bg-raised);
+}
+
+.variantSearchInput {
+  display: block;
+  width: 100%;
+  background: var(--bg-lift);
+  border: none;
+  border-bottom: 1px solid var(--border-dim);
+  color: var(--text);
+  font-size: 13px;
+  padding: 6px 8px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.variantSearchInput:focus {
+  outline: none;
+  border-bottom-color: var(--gold);
+}
+
+.variantSearchInput::placeholder {
+  color: var(--text-faint);
+}
+
+.variantSearchResults {
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.variantSearchResults::-webkit-scrollbar {
+  width: 3px;
+}
+
+.variantSearchResults::-webkit-scrollbar-thumb {
+  background: var(--border-mid);
+}
+
+.variantResultRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  padding: 5px 8px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border-dim);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.12s;
+}
+
+.variantResultRow:last-child {
+  border-bottom: none;
+}
+
+.variantResultRow:hover:not(:disabled) {
+  background: rgba(184, 144, 26, 0.08);
+}
+
+.variantResultAdded {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.variantResultLabel {
+  font-size: 13px;
+  color: var(--text);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.variantResultBadge {
+  font-size: 10px;
+  font-weight: 800;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #0d1117;
+  flex-shrink: 0;
+}
+
+.variantSearchEmpty {
+  padding: 10px 8px;
+  font-size: 12px;
+  color: var(--text-faint);
+  font-style: italic;
+  text-align: center;
+}

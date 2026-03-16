@@ -296,6 +296,7 @@ export function FlowchartBuilder() {
             <NodeEditor
               selectedNode={selectedNodes[0]}
               onClose={() => setSelectedNodes([])}
+              character={character}
             />
           )}
           {selectedNodes.length > 1 && (

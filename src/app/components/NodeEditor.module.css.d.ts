@@ -27,6 +27,24 @@ declare const notesTextarea: string;
 declare const footer: string;
 declare const deleteBtn: string;
 declare const hint: string;
+declare const variantsHeader: string;
+declare const addVariantBtn: string;
+declare const variantsList: string;
+declare const variantItem: string;
+declare const variantItemLabel: string;
+declare const variantItemBadges: string;
+declare const variantLevelBadge: string;
+declare const variantActionBadge: string;
+declare const variantDamageBadge: string;
+declare const removeVariantBtn: string;
+declare const variantSearch: string;
+declare const variantSearchInput: string;
+declare const variantSearchResults: string;
+declare const variantResultRow: string;
+declare const variantResultAdded: string;
+declare const variantResultLabel: string;
+declare const variantResultBadge: string;
+declare const variantSearchEmpty: string;
 
 export {
 	panel,
@@ -49,7 +67,25 @@ export {
 	notesTextarea,
 	footer,
 	deleteBtn,
-	hint
+	hint,
+	variantsHeader,
+	addVariantBtn,
+	variantsList,
+	variantItem,
+	variantItemLabel,
+	variantItemBadges,
+	variantLevelBadge,
+	variantActionBadge,
+	variantDamageBadge,
+	removeVariantBtn,
+	variantSearch,
+	variantSearchInput,
+	variantSearchResults,
+	variantResultRow,
+	variantResultAdded,
+	variantResultLabel,
+	variantResultBadge,
+	variantSearchEmpty
 };
 
 declare const __default_export__: {
@@ -74,5 +110,23 @@ declare const __default_export__: {
 	footer: typeof footer;
 	deleteBtn: typeof deleteBtn;
 	hint: typeof hint;
+	variantsHeader: typeof variantsHeader;
+	addVariantBtn: typeof addVariantBtn;
+	variantsList: typeof variantsList;
+	variantItem: typeof variantItem;
+	variantItemLabel: typeof variantItemLabel;
+	variantItemBadges: typeof variantItemBadges;
+	variantLevelBadge: typeof variantLevelBadge;
+	variantActionBadge: typeof variantActionBadge;
+	variantDamageBadge: typeof variantDamageBadge;
+	removeVariantBtn: typeof removeVariantBtn;
+	variantSearch: typeof variantSearch;
+	variantSearchInput: typeof variantSearchInput;
+	variantSearchResults: typeof variantSearchResults;
+	variantResultRow: typeof variantResultRow;
+	variantResultAdded: typeof variantResultAdded;
+	variantResultLabel: typeof variantResultLabel;
+	variantResultBadge: typeof variantResultBadge;
+	variantSearchEmpty: typeof variantSearchEmpty;
 };
 export default __default_export__;
