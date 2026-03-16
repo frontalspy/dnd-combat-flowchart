@@ -25,6 +25,10 @@ declare const nameInput: string;
 declare const nameConfirmBtn: string;
 declare const actionBtn: string;
 declare const savedBtn: string;
+declare const edgeStyleGroup: string;
+declare const edgeStyleBtn: string;
+declare const edgeStyleBtnActive: string;
+declare const topDivider: string;
 declare const workspace: string;
 declare const hint: string;
 
@@ -48,6 +52,10 @@ export {
 	nameConfirmBtn,
 	actionBtn,
 	savedBtn,
+	edgeStyleGroup,
+	edgeStyleBtn,
+	edgeStyleBtnActive,
+	topDivider,
 	workspace,
 	hint
 };
@@ -72,6 +80,10 @@ declare const __default_export__: {
 	nameConfirmBtn: typeof nameConfirmBtn;
 	actionBtn: typeof actionBtn;
 	savedBtn: typeof savedBtn;
+	edgeStyleGroup: typeof edgeStyleGroup;
+	edgeStyleBtn: typeof edgeStyleBtn;
+	edgeStyleBtnActive: typeof edgeStyleBtnActive;
+	topDivider: typeof topDivider;
 	workspace: typeof workspace;
 	hint: typeof hint;
 };

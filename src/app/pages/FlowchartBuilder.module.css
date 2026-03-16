@@ -207,6 +207,72 @@
   color: var(--green-light);
 }
 
+/* Edge routing style toggle group */
+.edgeStyleGroup {
+  display: flex;
+  align-items: center;
+}
+
+.edgeStyleBtn {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-mid);
+  border-radius: 0;
+  color: var(--text-mid);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+  margin-left: -1px;
+}
+
+.edgeStyleBtn:first-child {
+  border-radius: 2px 0 0 2px;
+  margin-left: 0;
+}
+
+.edgeStyleBtn:last-child {
+  border-radius: 0 2px 2px 0;
+}
+
+.edgeStyleBtn:hover {
+  background: var(--bg-lift);
+  color: var(--text);
+  border-color: var(--border-accent);
+  z-index: 1;
+  position: relative;
+}
+
+.edgeStyleBtnActive {
+  background: rgba(184, 144, 26, 0.15);
+  border-color: var(--gold);
+  color: var(--gold);
+  z-index: 1;
+  position: relative;
+}
+
+.edgeStyleBtnActive:hover {
+  background: rgba(184, 144, 26, 0.22);
+  border-color: var(--gold-dim);
+  color: var(--gold-dim);
+}
+
+/* Vertical divider between button groups */
+.topDivider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--border-mid);
+  margin: 8px 2px;
+  flex-shrink: 0;
+}
+
 /* Main workspace */
 .workspace {
   flex: 1;

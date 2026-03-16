@@ -36,8 +36,12 @@ import type {
   NoteNodeData,
   StartNodeData,
 } from "../types";
+import { SnappedConnectionLine } from "./edges/SnappedConnectionLine";
+import { SnappedEdge } from "./edges/SnappedEdge";
 import styles from "./FlowCanvas.module.css";
 import { nodeTypes } from "./nodes/nodeTypes";
+
+const edgeTypes = { snappedEdge: SnappedEdge };
 
 export interface FlowCanvasExports {
   exportJpg: (name: string) => Promise<void>;
@@ -51,12 +55,15 @@ export interface FlowCanvasExports {
   selectAll: () => void;
 }
 
+export type EdgeStyleType = "smoothstep" | "step" | "straight";
+
 interface FlowCanvasInnerProps {
   initialNodes?: Node[];
   initialEdges?: Edge[];
   onSelectionChange?: (nodes: Node[]) => void;
   onExportReady: (fns: FlowCanvasExports) => void;
   onFlowChange: (nodes: Node[], edges: Edge[]) => void;
+  edgeStyle?: EdgeStyleType;
 }
 
 const DEFAULT_START_NODE: Node<StartNodeData, "startNode"> = {
@@ -77,6 +84,7 @@ function FlowCanvasInner({
   onSelectionChange,
   onExportReady,
   onFlowChange,
+  edgeStyle = "smoothstep",
 }: FlowCanvasInnerProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { fitView, getNodes, getEdges, screenToFlowPosition, addNodes } =
@@ -301,32 +309,24 @@ function FlowCanvasInner({
 
   const onConnect = useCallback(
     (connection: Connection) => {
+      const shiftHeld =
+        (window as Window & { __shiftHeld?: boolean }).__shiftHeld ?? false;
+      const isYes = connection.sourceHandle === "yes";
+      const isNo = connection.sourceHandle === "no";
+      const strokeColor = isYes ? "#66bb6a" : isNo ? "#ef5350" : "#8b949e";
       const newEdge: Edge = {
         ...connection,
         id: `edge-${Date.now()}`,
-        type: "smoothstep",
+        type: shiftHeld ? "snappedEdge" : edgeStyle,
         animated: false,
-        label:
-          connection.sourceHandle === "yes"
-            ? "Yes"
-            : connection.sourceHandle === "no"
-              ? "No"
-              : undefined,
-        style: {
-          stroke:
-            connection.sourceHandle === "yes"
-              ? "#66bb6a"
-              : connection.sourceHandle === "no"
-                ? "#ef5350"
-                : "#8b949e",
-          strokeWidth: 2,
-        },
-        markerEnd: { type: "arrow" as const, color: "#8b949e" },
+        label: isYes ? "Yes" : isNo ? "No" : undefined,
+        style: { stroke: strokeColor, strokeWidth: 2 },
+        markerEnd: { type: "arrow" as const, color: strokeColor },
       } as Edge;
       setEdges((eds) => addEdge(newEdge, eds));
       scheduleSnapshot();
     },
-    [setEdges, scheduleSnapshot]
+    [setEdges, scheduleSnapshot, edgeStyle]
   );
 
   const onDragOver = useCallback((event: React.DragEvent) => {
@@ -418,6 +418,8 @@ function FlowCanvasInner({
         onDragOver={onDragOver}
         onSelectionChange={handleSelectionChange}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        connectionLineComponent={SnappedConnectionLine}
         fitView
         deleteKeyCode={["Delete", "Backspace"]}
         multiSelectionKeyCode={["Control", "Shift"]}
@@ -425,7 +427,7 @@ function FlowCanvasInner({
         panOnDrag={[1, 2]}
         selectionMode={SelectionMode.Partial}
         defaultEdgeOptions={{
-          type: "smoothstep",
+          type: edgeStyle,
           style: { stroke: "#8b949e", strokeWidth: 2 },
           markerEnd: { type: "arrow" as const, color: "#8b949e" },
         }}
@@ -454,6 +456,7 @@ interface FlowCanvasProps {
   onSelectionChange?: (nodes: Node[]) => void;
   onExportReady: (fns: FlowCanvasExports) => void;
   onFlowChange: (nodes: Node[], edges: Edge[]) => void;
+  edgeStyle?: EdgeStyleType;
 }
 
 export function FlowCanvas(props: FlowCanvasProps) {

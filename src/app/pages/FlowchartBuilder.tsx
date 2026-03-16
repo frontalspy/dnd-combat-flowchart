@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import type { FlowCanvasExports } from "../components/FlowCanvas";
-import { FlowCanvas } from "../components/FlowCanvas";
+import { type EdgeStyleType, FlowCanvas } from "../components/FlowCanvas";
 import { MultiSelectBar } from "../components/MultiSelectBar";
 import { NodeEditor } from "../components/NodeEditor";
 import { SpellPanel } from "../components/SpellPanel";
@@ -33,6 +33,7 @@ export function FlowchartBuilder() {
   const [editingName, setEditingName] = useState(false);
   const [selectedNodes, setSelectedNodes] = useState<Node[]>([]);
   const [isSaved, setIsSaved] = useState(false);
+  const [edgeStyle, setEdgeStyle] = useState<EdgeStyleType>("smoothstep");
 
   // Keep chart name in sync when active tab changes
   useEffect(() => {
@@ -92,6 +93,24 @@ export function FlowchartBuilder() {
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
   }, [activeChart, activeTabId, character, chartName, saveFlowchart]);
+
+  // Track Shift key state for edge angle-snapping connection preview
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "Shift")
+        (window as Window & { __shiftHeld?: boolean }).__shiftHeld = true;
+    };
+    const up = (e: KeyboardEvent) => {
+      if (e.key === "Shift")
+        (window as Window & { __shiftHeld?: boolean }).__shiftHeld = false;
+    };
+    window.addEventListener("keydown", down);
+    window.addEventListener("keyup", up);
+    return () => {
+      window.removeEventListener("keydown", down);
+      window.removeEventListener("keyup", up);
+    };
+  }, []);
 
   // Keyboard shortcuts — placed after handleSave so the closure captures it correctly
   useEffect(() => {
@@ -195,6 +214,37 @@ export function FlowchartBuilder() {
         </div>
 
         <div className={styles.topRight}>
+          <div
+            className={styles.edgeStyleGroup}
+            role="group"
+            aria-label="Edge routing style"
+          >
+            <button
+              type="button"
+              className={`${styles.edgeStyleBtn} ${edgeStyle === "smoothstep" ? styles.edgeStyleBtnActive : ""}`}
+              onClick={() => setEdgeStyle("smoothstep")}
+              title="Curved edges (smooth step)"
+            >
+              Curved
+            </button>
+            <button
+              type="button"
+              className={`${styles.edgeStyleBtn} ${edgeStyle === "step" ? styles.edgeStyleBtnActive : ""}`}
+              onClick={() => setEdgeStyle("step")}
+              title="Orthogonal edges (step)"
+            >
+              Step
+            </button>
+            <button
+              type="button"
+              className={`${styles.edgeStyleBtn} ${edgeStyle === "straight" ? styles.edgeStyleBtnActive : ""}`}
+              onClick={() => setEdgeStyle("straight")}
+              title="Straight edges"
+            >
+              Straight
+            </button>
+          </div>
+          <span className={styles.topDivider} />
           <button
             type="button"
             className={`${styles.actionBtn} ${isSaved ? styles.savedBtn : ""}`}
@@ -239,6 +289,7 @@ export function FlowchartBuilder() {
             onSelectionChange={setSelectedNodes}
             onExportReady={handleExportReady}
             onFlowChange={handleFlowChange}
+            edgeStyle={edgeStyle}
           />
 
           {selectedNodes.length === 1 && (
@@ -267,6 +318,8 @@ export function FlowchartBuilder() {
         <span>
           Ctrl+C/V copy·paste · Ctrl+Z/Y undo·redo · Ctrl+A select all
         </span>
+        <span>·</span>
+        <span>Hold Shift while connecting to snap edges to 45° angles</span>
         <span>·</span>
         <span>Hover spell cards for full descriptions</span>
       </div>
