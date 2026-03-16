@@ -163,8 +163,12 @@
 
 .tab {
   flex: 1;
-  padding: 8px;
-  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 4px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-mid);
   background: none;
@@ -175,8 +179,10 @@
     color 0.15s,
     border-color 0.15s;
   font-family: inherit;
-  letter-spacing: 0.5px;
+  letter-spacing: 0;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .tab:hover {

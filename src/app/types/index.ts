@@ -91,7 +91,8 @@ export interface ActionNodeData extends Record<string, unknown> {
   range?: string;
   duration?: string;
   notes?: string;
-  source: "standard" | "class" | "spell" | "custom";
+  source: "standard" | "class" | "spell" | "custom" | "weapon";
+  damageDice?: string;
 }
 
 export interface ConditionNodeData extends Record<string, unknown> {

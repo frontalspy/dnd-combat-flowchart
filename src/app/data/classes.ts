@@ -11,6 +11,7 @@ import sorcererIcon from "../icons/class/sorcerer.svg";
 import warlockIcon from "../icons/class/warlock.svg";
 import wizardIcon from "../icons/class/wizard.svg";
 import type { ActionType, DamageType, DndClass } from "../types";
+import type { WeaponCategory } from "./weapons";
 
 export type SpellcastingType = "full" | "half" | "third" | "warlock" | "none";
 
@@ -37,6 +38,7 @@ export interface ClassDefinition {
   subclasses: SubclassDefinition[];
   spellcastingType: SpellcastingType;
   classActions: ClassAction[];
+  weaponProficiencies: WeaponCategory[];
 }
 
 export const CLASSES: ClassDefinition[] = [
@@ -46,6 +48,12 @@ export const CLASSES: ClassDefinition[] = [
     color: "#c62828",
     icon: barbarianIcon,
     spellcastingType: "none",
+    weaponProficiencies: [
+      "simple-melee",
+      "simple-ranged",
+      "martial-melee",
+      "martial-ranged",
+    ],
     subclasses: [
       { id: "berserker", name: "Path of the Berserker" },
       { id: "totem-warrior", name: "Path of the Totem Warrior" },
@@ -96,6 +104,7 @@ export const CLASSES: ClassDefinition[] = [
     color: "#7b1fa2",
     icon: bardIcon,
     spellcastingType: "full",
+    weaponProficiencies: ["simple-melee", "simple-ranged", "martial-melee"],
     subclasses: [
       { id: "lore", name: "College of Lore" },
       { id: "valor", name: "College of Valor" },
@@ -139,6 +148,7 @@ export const CLASSES: ClassDefinition[] = [
     color: "#f57f17",
     icon: clericIcon,
     spellcastingType: "full",
+    weaponProficiencies: ["simple-melee", "simple-ranged"],
     subclasses: [
       { id: "life", name: "Life Domain" },
       { id: "light", name: "Light Domain" },
@@ -188,6 +198,7 @@ export const CLASSES: ClassDefinition[] = [
     color: "#2e7d32",
     icon: druidIcon,
     spellcastingType: "full",
+    weaponProficiencies: ["simple-melee", "simple-ranged"],
     subclasses: [
       { id: "land", name: "Circle of the Land" },
       { id: "moon", name: "Circle of the Moon" },
@@ -222,6 +233,12 @@ export const CLASSES: ClassDefinition[] = [
     color: "#e64a19",
     icon: fighterIcon,
     spellcastingType: "none",
+    weaponProficiencies: [
+      "simple-melee",
+      "simple-ranged",
+      "martial-melee",
+      "martial-ranged",
+    ],
     subclasses: [
       { id: "champion", name: "Champion" },
       { id: "battle-master", name: "Battle Master" },
@@ -279,6 +296,7 @@ export const CLASSES: ClassDefinition[] = [
     color: "#00838f",
     icon: monkIcon,
     spellcastingType: "none",
+    weaponProficiencies: ["simple-melee", "simple-ranged"],
     subclasses: [
       { id: "open-hand", name: "Way of the Open Hand" },
       { id: "shadow", name: "Way of Shadow" },
@@ -339,6 +357,12 @@ export const CLASSES: ClassDefinition[] = [
     color: "#f9a825",
     icon: paladinIcon,
     spellcastingType: "half",
+    weaponProficiencies: [
+      "simple-melee",
+      "simple-ranged",
+      "martial-melee",
+      "martial-ranged",
+    ],
     subclasses: [
       { id: "devotion", name: "Oath of Devotion" },
       { id: "ancients", name: "Oath of the Ancients" },
@@ -400,6 +424,12 @@ export const CLASSES: ClassDefinition[] = [
     color: "#388e3c",
     icon: rangerIcon,
     spellcastingType: "half",
+    weaponProficiencies: [
+      "simple-melee",
+      "simple-ranged",
+      "martial-melee",
+      "martial-ranged",
+    ],
     subclasses: [
       { id: "hunter", name: "Hunter" },
       { id: "beast-master", name: "Beast Master" },
@@ -442,6 +472,7 @@ export const CLASSES: ClassDefinition[] = [
     color: "#546e7a",
     icon: rogueIcon,
     spellcastingType: "none",
+    weaponProficiencies: ["simple-melee", "simple-ranged", "martial-melee"],
     subclasses: [
       { id: "thief", name: "Thief" },
       { id: "assassin", name: "Assassin" },
@@ -512,6 +543,7 @@ export const CLASSES: ClassDefinition[] = [
     color: "#b71c1c",
     icon: sorcererIcon,
     spellcastingType: "full",
+    weaponProficiencies: ["simple-melee", "simple-ranged"],
     subclasses: [
       { id: "draconic", name: "Draconic Bloodline" },
       { id: "wild-magic", name: "Wild Magic Surge" },
@@ -571,6 +603,7 @@ export const CLASSES: ClassDefinition[] = [
     color: "#4a148c",
     icon: warlockIcon,
     spellcastingType: "warlock",
+    weaponProficiencies: ["simple-melee", "simple-ranged"],
     subclasses: [
       { id: "fiend", name: "The Fiend" },
       { id: "great-old-one", name: "The Great Old One" },
@@ -617,6 +650,7 @@ export const CLASSES: ClassDefinition[] = [
     color: "#1565c0",
     icon: wizardIcon,
     spellcastingType: "full",
+    weaponProficiencies: ["simple-melee", "simple-ranged"],
     subclasses: [
       { id: "abjuration", name: "School of Abjuration" },
       { id: "conjuration", name: "School of Conjuration" },

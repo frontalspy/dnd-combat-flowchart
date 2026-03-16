@@ -5,6 +5,7 @@ import type { ClassAction } from "../data/classes";
 import { getClassDefinition, getMaxSpellLevel } from "../data/classes";
 import { SPELL_SCHOOLS } from "../data/damageTypes";
 import spellsData from "../data/spells.json";
+import { WEAPONS } from "../data/weapons";
 import combatActionIcon from "../icons/combat/action.svg";
 import roundIcon from "../icons/combat/round.svg";
 import scrollIcon from "../icons/entity/scroll.svg";
@@ -12,6 +13,7 @@ import combatIcon from "../icons/game/combat.svg";
 import puzzleIcon from "../icons/game/puzzle.svg";
 import spellIcon from "../icons/game/spell.svg";
 import buildIcon from "../icons/util/build.svg";
+import swordIcon from "../icons/weapon/sword.svg";
 import type {
   ActionItem,
   ActionType,
@@ -22,10 +24,11 @@ import type {
 import { Icon } from "./Icon";
 import { ActionCard, SpellCard } from "./SpellCard";
 import styles from "./SpellPanel.module.css";
+import { WeaponCard } from "./WeaponCard";
 
 const allSpells = spellsData as Spell[];
 
-type PanelTab = "actions" | "spells";
+type PanelTab = "actions" | "spells" | "weapons";
 type SpellLevelFilter =
   | "all"
   | "cantrip"
@@ -197,6 +200,24 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
     character.subclass,
     character.level
   );
+
+  const availableWeapons = useMemo(() => {
+    if (!classDef?.weaponProficiencies) return [];
+    return WEAPONS.filter((w) =>
+      classDef.weaponProficiencies.includes(w.category)
+    );
+  }, [classDef]);
+
+  const filteredWeapons = useMemo(() => {
+    if (!search.trim()) return availableWeapons;
+    const q = search.toLowerCase();
+    return availableWeapons.filter(
+      (w) =>
+        w.name.toLowerCase().includes(q) ||
+        w.damageType.toLowerCase().includes(q) ||
+        w.properties.some((p) => p.toLowerCase().includes(q))
+    );
+  }, [availableWeapons, search]);
 
   const classActions: ActionItem[] = useMemo(() => {
     if (!classDef) return [];
@@ -384,7 +405,8 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
           className={`${styles.tab} ${activeTab === "actions" ? styles.activeTab : ""}`}
           onClick={() => setActiveTab("actions")}
         >
-          <Icon src={combatActionIcon} size={14} /> Actions
+          <Icon src={combatActionIcon} size={14} />
+          Actions
         </button>
         {maxSpellLevel > 0 && (
           <button
@@ -392,9 +414,18 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
             className={`${styles.tab} ${activeTab === "spells" ? styles.activeTab : ""}`}
             onClick={() => setActiveTab("spells")}
           >
-            <Icon src={spellIcon} size={14} /> Spells
+            <Icon src={spellIcon} size={14} />
+            Spells
           </button>
         )}
+        <button
+          type="button"
+          className={`${styles.tab} ${activeTab === "weapons" ? styles.activeTab : ""}`}
+          onClick={() => setActiveTab("weapons")}
+        >
+          <Icon src={swordIcon} size={14} />
+          Weapons
+        </button>
       </div>
 
       {/* Spell level filter */}
@@ -443,6 +474,19 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
             <SpellCard
               key={spell.name}
               spell={spell}
+              onDragStart={onDragStart}
+            />
+          ))}
+
+        {activeTab === "weapons" && filteredWeapons.length === 0 && (
+          <div className={styles.emptyState}>No weapons match your search.</div>
+        )}
+
+        {activeTab === "weapons" &&
+          filteredWeapons.map((weapon) => (
+            <WeaponCard
+              key={weapon.id}
+              weapon={weapon}
               onDragStart={onDragStart}
             />
           ))}

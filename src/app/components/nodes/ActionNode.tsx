@@ -107,6 +107,7 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
                 aria-hidden="true"
                 style={{ verticalAlign: "middle" }}
               />{" "}
+              {data.damageDice ? `${data.damageDice} ` : ""}
               {damageInfo.label}
             </span>
           )}

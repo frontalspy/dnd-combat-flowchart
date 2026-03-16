@@ -14,6 +14,7 @@ import {
 } from "../data/damageTypes";
 import spellsData from "../data/spells.json";
 import type { Character, GroupNodeData, GroupVariant, Spell } from "../types";
+import { Icon } from "./Icon";
 import styles from "./NodeEditor.module.css";
 
 const allSpells = spellsData as Spell[];
@@ -232,7 +233,8 @@ export function NodeEditor({
                   backgroundColor: damageInfo.bgColor,
                 }}
               >
-                {damageInfo.icon} {damageInfo.label}
+                <Icon src={damageInfo.icon} size={14} alt={damageInfo.label} />{" "}
+                {damageInfo.label}
               </span>
             )}
           </div>
