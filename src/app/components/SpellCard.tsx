@@ -1,8 +1,11 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
   ACTION_TYPE_LABELS,
   DAMAGE_TYPES,
   detectDamageType,
+  extractDamageDice,
+  extractRollType,
+  extractSaveDC,
   getActionTypeFromCastingTime,
   SPELL_SCHOOLS,
 } from "../data/damageTypes";
@@ -104,6 +107,10 @@ export function SpellCard({ spell, onDragStart }: SpellCardProps) {
     range: spell.range,
     duration: spell.duration,
     source: "spell" as const,
+    damageDice: extractDamageDice(spell.description) ?? undefined,
+    saveDC: extractSaveDC(spell.description) ?? undefined,
+    rollType: extractRollType(spell.description),
+    higherLevels: spell.higher_levels ?? undefined,
   };
 
   return (

@@ -70,6 +70,7 @@ export function WeaponCard({ weapon, hand, onDragStart }: WeaponCardProps) {
     actionType: hand === "off" ? "bonus" : "action",
     damageType: weapon.damageType,
     damageDice: weapon.damageDice,
+    rollType: "attack",
     range: weapon.range,
     description: [
       `${weapon.damageDice} ${damageInfo?.label ?? weapon.damageType}`,

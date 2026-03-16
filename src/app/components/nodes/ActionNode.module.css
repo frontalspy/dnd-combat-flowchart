@@ -197,3 +197,50 @@
 .notesInput:focus {
   outline: none;
 }
+
+.diceRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+  margin-bottom: 2px;
+}
+
+.dicePill {
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--bg-lift);
+  border: 1px solid var(--border-mid);
+  color: var(--text);
+  padding: 1px 6px;
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+}
+
+.savePill {
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(90, 144, 72, 0.15);
+  border: 1px solid var(--green);
+  color: var(--green-light);
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+
+.attackPill {
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(200, 144, 28, 0.15);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold-light);
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+
+.higherLevels {
+  font-size: 9px;
+  color: var(--text-faint);
+  margin-top: 2px;
+  margin-bottom: 4px;
+  font-style: italic;
+}

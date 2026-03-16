@@ -203,3 +203,25 @@ export function getActionTypeFromCastingTime(
   if (lower === "1 action") return "action";
   return "special";
 }
+
+export function extractDamageDice(description: string): string | null {
+  const match = description.match(/\b(\d+d\d+(?:\s*[+\-]\s*\d+)?)\b/i);
+  return match ? match[1].trim() : null;
+}
+
+export function extractSaveDC(description: string): string | null {
+  const match = description.match(
+    /DC\s*(\d+)\s*(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma)/i
+  );
+  if (match) return `DC ${match[1]} ${match[2].substring(0, 3)}`;
+  return null;
+}
+
+export function extractRollType(
+  description: string
+): "attack" | "save" | "auto" {
+  const lower = description.toLowerCase();
+  if (/saving throw|must succeed/.test(lower)) return "save";
+  if (/make a.*attack|attack roll|ranged.*attack/.test(lower)) return "attack";
+  return "auto";
+}

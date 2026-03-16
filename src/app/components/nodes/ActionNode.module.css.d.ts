@@ -26,6 +26,11 @@ declare const notesDisplay: string;
 declare const notesText: string;
 declare const notesPlaceholder: string;
 declare const notesInput: string;
+declare const diceRow: string;
+declare const dicePill: string;
+declare const savePill: string;
+declare const attackPill: string;
+declare const higherLevels: string;
 
 export {
 	actionNode,
@@ -47,7 +52,12 @@ export {
 	notesDisplay,
 	notesText,
 	notesPlaceholder,
-	notesInput
+	notesInput,
+	diceRow,
+	dicePill,
+	savePill,
+	attackPill,
+	higherLevels
 };
 
 declare const __default_export__: {
@@ -71,5 +81,10 @@ declare const __default_export__: {
 	notesText: typeof notesText;
 	notesPlaceholder: typeof notesPlaceholder;
 	notesInput: typeof notesInput;
+	diceRow: typeof diceRow;
+	dicePill: typeof dicePill;
+	savePill: typeof savePill;
+	attackPill: typeof attackPill;
+	higherLevels: typeof higherLevels;
 };
 export default __default_export__;

@@ -101,6 +101,9 @@ export interface ActionNodeData extends Record<string, unknown> {
   notes?: string;
   source: "standard" | "class" | "spell" | "custom" | "weapon";
   damageDice?: string;
+  saveDC?: string;
+  rollType?: "attack" | "save" | "auto";
+  higherLevels?: string;
   hand?: "main" | "off";
 }
 

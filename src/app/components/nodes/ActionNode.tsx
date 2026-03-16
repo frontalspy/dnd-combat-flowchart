@@ -7,6 +7,7 @@ import {
   SPELL_SCHOOLS,
 } from "../../data/damageTypes";
 import reachIcon from "../../icons/combat/reach.svg";
+import d20Icon from "../../icons/dice/d20.svg";
 import timeIcon from "../../icons/entity/time.svg";
 import type { ActionNodeData } from "../../types";
 import { Icon } from "../Icon";
@@ -135,6 +136,21 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
             </span>
           )}
         </div>
+
+        {/* Attack roll indicator — always visible for attack-roll nodes */}
+        {data.label === "Attack" && (
+          <div className={styles.diceRow}>
+            <span className={styles.attackPill} title="Attack roll required">
+              <Icon src={d20Icon} size={12} /> 1d20
+            </span>
+          </div>
+        )}
+
+        {data.higherLevels && (
+          <div className={styles.higherLevels} title="At higher levels">
+            ↑ {data.higherLevels}
+          </div>
+        )}
 
         <div className={styles.notesSection}>
           {editingNotes ? (
