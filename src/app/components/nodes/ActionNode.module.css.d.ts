@@ -13,6 +13,8 @@ declare const header: string;
 declare const badges: string;
 declare const schoolBadge: string;
 declare const levelBadge: string;
+declare const handBadgeMH: string;
+declare const handBadgeOH: string;
 declare const actionTypeBadge: string;
 declare const body: string;
 declare const name: string;
@@ -33,6 +35,8 @@ export {
 	badges,
 	schoolBadge,
 	levelBadge,
+	handBadgeMH as handBadgeMh,
+	handBadgeOH as handBadgeOh,
 	actionTypeBadge,
 	body,
 	name,
@@ -54,6 +58,8 @@ declare const __default_export__: {
 	badges: typeof badges;
 	schoolBadge: typeof schoolBadge;
 	levelBadge: typeof levelBadge;
+	handBadgeMh: typeof handBadgeMH;
+	handBadgeOh: typeof handBadgeOH;
 	actionTypeBadge: typeof actionTypeBadge;
 	body: typeof body;
 	name: typeof name;

@@ -1,0 +1,366 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 60px;
+}
+
+.panel {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-mid);
+  border-radius: 4px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--gold);
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  color: var(--text-mid);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: color 0.15s;
+}
+
+.closeBtn:hover {
+  color: var(--text);
+}
+
+.body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rowLabel {
+  font-size: 13px;
+  color: var(--text-mid);
+  white-space: nowrap;
+  min-width: 92px;
+  font-weight: 600;
+}
+
+.select {
+  flex: 1;
+  background: var(--bg-base);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text);
+  font-size: 13px;
+  padding: 5px 8px;
+  font-family: inherit;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 102px;
+}
+
+.checkbox {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--gold);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkLabel {
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.autoTag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  border: 1px solid var(--gold-dim);
+  border-radius: 2px;
+  padding: 0 4px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.offHandGroup {
+  display: flex;
+  gap: 4px;
+}
+
+.offHandBtn {
+  padding: 4px 10px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text-mid);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.offHandBtn:hover {
+  background: var(--bg-surface);
+  color: var(--text);
+}
+
+.offHandBtnActive {
+  background: rgba(200, 144, 28, 0.15);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.warning {
+  font-size: 12px;
+  color: #e8a030;
+  background: rgba(232, 160, 48, 0.08);
+  border: 1px solid rgba(232, 160, 48, 0.3);
+  border-radius: 2px;
+  padding: 6px 10px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--text-mid);
+  background: var(--bg-base);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  padding: 6px 10px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-top: 1px solid var(--border-dim);
+  gap: 8px;
+}
+
+.clearBtn {
+  padding: 5px 12px;
+  background: none;
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text-mid);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.clearBtn:hover {
+  color: var(--text);
+  border-color: var(--text-mid);
+}
+
+.saveBtn {
+  padding: 5px 18px;
+  background: rgba(200, 144, 28, 0.15);
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.saveBtn:hover {
+  background: rgba(200, 144, 28, 0.25);
+}
+
+/* ---- Custom Weapon Modal additions ---- */
+
+.widerPanel {
+  width: 460px;
+}
+
+.formBody {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.formLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.formInput {
+  background: var(--bg-base);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text);
+  font-size: 13px;
+  padding: 5px 8px;
+  font-family: inherit;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.formRow {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.formLabelFlex {
+  flex: 1;
+}
+
+.formLabelFlex2 {
+  flex: 2;
+}
+
+.propertiesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.propCheckLabel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.iconPickerGrid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 4px;
+  padding: 6px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  margin-top: 4px;
+}
+
+.iconPickerBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+  opacity: 0.6;
+}
+
+.iconPickerBtn:hover {
+  background: var(--bg-surface);
+  opacity: 1;
+}
+
+.iconPickerBtnSelected {
+  background: rgba(200, 144, 28, 0.15);
+  border-color: var(--gold);
+  opacity: 1;
+}
+
+.addWeaponRow {
+  padding-top: 4px;
+  border-top: 1px solid var(--border-dim);
+  margin-top: 2px;
+}
+
+.addWeaponBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: none;
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text-mid);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+  justify-content: center;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.addWeaponBtn:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}

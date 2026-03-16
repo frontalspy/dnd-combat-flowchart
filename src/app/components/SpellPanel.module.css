@@ -261,6 +261,40 @@
   line-height: 1.7;
 }
 
+.shieldCard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-dim);
+  border-left: 3px solid #6ea8d8;
+  border-radius: 2px;
+  padding: 8px 10px;
+  margin-bottom: 2px;
+}
+
+.shieldIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.shieldLabel {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+}
+
+.shieldAc {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6ea8d8;
+  background: rgba(110, 168, 216, 0.15);
+  border: 1px solid rgba(110, 168, 216, 0.5);
+  border-radius: 2px;
+  padding: 1px 6px;
+}
+
 /* Footer */
 .panelFooter {
   padding: 10px 12px;

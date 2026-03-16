@@ -10,6 +10,9 @@ declare const card: string;
 declare const cardTop: string;
 declare const categoryBadge: string;
 declare const martialTag: string;
+declare const handBadgeMH: string;
+declare const handBadgeOH: string;
+declare const weaponIconBadge: string;
 declare const cardName: string;
 declare const cardPills: string;
 declare const damagePill: string;
@@ -27,6 +30,9 @@ export {
 	cardTop,
 	categoryBadge,
 	martialTag,
+	handBadgeMH as handBadgeMh,
+	handBadgeOH as handBadgeOh,
+	weaponIconBadge,
 	cardName,
 	cardPills,
 	damagePill,
@@ -45,6 +51,9 @@ declare const __default_export__: {
 	cardTop: typeof cardTop;
 	categoryBadge: typeof categoryBadge;
 	martialTag: typeof martialTag;
+	handBadgeMh: typeof handBadgeMH;
+	handBadgeOh: typeof handBadgeOH;
+	weaponIconBadge: typeof weaponIconBadge;
 	cardName: typeof cardName;
 	cardPills: typeof cardPills;
 	damagePill: typeof damagePill;

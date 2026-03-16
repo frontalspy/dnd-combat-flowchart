@@ -31,6 +31,10 @@ declare const levelChip: string;
 declare const activeLevelChip: string;
 declare const cardList: string;
 declare const emptyState: string;
+declare const shieldCard: string;
+declare const shieldIcon: string;
+declare const shieldLabel: string;
+declare const shieldAc: string;
 declare const panelFooter: string;
 declare const addCustomBtn: string;
 declare const modalOverlay: string;
@@ -73,6 +77,10 @@ export {
 	activeLevelChip,
 	cardList,
 	emptyState,
+	shieldCard,
+	shieldIcon,
+	shieldLabel,
+	shieldAc,
 	panelFooter,
 	addCustomBtn,
 	modalOverlay,
@@ -116,6 +124,10 @@ declare const __default_export__: {
 	activeLevelChip: typeof activeLevelChip;
 	cardList: typeof cardList;
 	emptyState: typeof emptyState;
+	shieldCard: typeof shieldCard;
+	shieldIcon: typeof shieldIcon;
+	shieldLabel: typeof shieldLabel;
+	shieldAc: typeof shieldAc;
 	panelFooter: typeof panelFooter;
 	addCustomBtn: typeof addCustomBtn;
 	modalOverlay: typeof modalOverlay;

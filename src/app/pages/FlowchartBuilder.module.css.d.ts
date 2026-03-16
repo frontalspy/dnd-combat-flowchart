@@ -29,6 +29,8 @@ declare const edgeStyleGroup: string;
 declare const edgeStyleBtn: string;
 declare const edgeStyleBtnActive: string;
 declare const topDivider: string;
+declare const loadoutChip: string;
+declare const loadoutChipArmed: string;
 declare const workspace: string;
 declare const hint: string;
 
@@ -56,6 +58,8 @@ export {
 	edgeStyleBtn,
 	edgeStyleBtnActive,
 	topDivider,
+	loadoutChip,
+	loadoutChipArmed,
 	workspace,
 	hint
 };
@@ -84,6 +88,8 @@ declare const __default_export__: {
 	edgeStyleBtn: typeof edgeStyleBtn;
 	edgeStyleBtnActive: typeof edgeStyleBtnActive;
 	topDivider: typeof topDivider;
+	loadoutChip: typeof loadoutChip;
+	loadoutChipArmed: typeof loadoutChipArmed;
 	workspace: typeof workspace;
 	hint: typeof hint;
 };

@@ -273,6 +273,42 @@
   flex-shrink: 0;
 }
 
+/* Weapon loadout chip */
+.loadoutChip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text-mid);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.loadoutChip:hover {
+  background: var(--bg-surface);
+  color: var(--text);
+}
+
+.loadoutChipArmed {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+.loadoutChipArmed:hover {
+  border-color: var(--gold);
+  background: rgba(200, 144, 28, 0.08);
+}
+
 /* Main workspace */
 .workspace {
   flex: 1;

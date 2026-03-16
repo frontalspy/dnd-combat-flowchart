@@ -7,21 +7,26 @@ import {
   Edit2,
   FileText,
   Save,
+  Sword,
 } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import type { FlowCanvasExports } from "../components/FlowCanvas";
 import { type EdgeStyleType, FlowCanvas } from "../components/FlowCanvas";
+import { LoadoutPicker } from "../components/LoadoutPicker";
 import { MultiSelectBar } from "../components/MultiSelectBar";
 import { NodeEditor } from "../components/NodeEditor";
 import { SpellPanel } from "../components/SpellPanel";
 import { TabBar } from "../components/TabBar";
 import { useApp } from "../context/AppContext";
 import { CLASSES } from "../data/classes";
-import type { SavedFlowchart } from "../types";
+import type { Weapon } from "../data/weapons";
+import { WEAPONS } from "../data/weapons";
+import type { SavedFlowchart, WeaponLoadout } from "../types";
 import styles from "./FlowchartBuilder.module.css";
 
 export function FlowchartBuilder() {
-  const { state, goToSetup, saveFlowchart, getActiveFlowchart } = useApp();
+  const { state, goToSetup, saveFlowchart, getActiveFlowchart, setLoadout } =
+    useApp();
   const { character, activeTabId } = state;
 
   const activeChart = getActiveFlowchart();
@@ -34,6 +39,19 @@ export function FlowchartBuilder() {
   const [selectedNodes, setSelectedNodes] = useState<Node[]>([]);
   const [isSaved, setIsSaved] = useState(false);
   const [edgeStyle, setEdgeStyle] = useState<EdgeStyleType>("smoothstep");
+  const [showLoadoutPicker, setShowLoadoutPicker] = useState(false);
+  const [customWeapons, setCustomWeapons] = useState<Weapon[]>([]);
+
+  const handleAddCustomWeapon = useCallback((weapon: Weapon) => {
+    setCustomWeapons((prev) => [...prev, weapon]);
+  }, []);
+
+  const handleSaveLoadout = useCallback(
+    (loadout: WeaponLoadout) => {
+      setLoadout(loadout);
+    },
+    [setLoadout]
+  );
 
   // Keep chart name in sync when active tab changes
   useEffect(() => {
@@ -214,6 +232,37 @@ export function FlowchartBuilder() {
         </div>
 
         <div className={styles.topRight}>
+          {/* Loadout chip */}
+          <button
+            type="button"
+            className={`${styles.loadoutChip} ${character?.loadout?.mainHand ? styles.loadoutChipArmed : ""}`}
+            onClick={() => setShowLoadoutPicker(true)}
+            title="Configure weapon loadout"
+          >
+            <Sword size={13} />
+            {character?.loadout?.mainHand
+              ? (() => {
+                  const allWeapons = [...WEAPONS, ...customWeapons];
+                  const mh = allWeapons.find(
+                    (w) => w.id === character.loadout?.mainHand
+                  );
+                  const oh =
+                    character.loadout?.offHand === "shield"
+                      ? "Shield"
+                      : character.loadout?.offHand === "weapon"
+                        ? (allWeapons.find(
+                            (w) => w.id === character.loadout?.offHandWeaponId
+                          )?.name ?? "Weapon")
+                        : null;
+                  return oh
+                    ? `${mh?.name ?? "Weapon"} / ${oh}`
+                    : character.loadout?.twoHanded
+                      ? `${mh?.name ?? "Weapon"} (2H)`
+                      : (mh?.name ?? "Weapon");
+                })()
+              : "Loadout"}
+          </button>
+          <span className={styles.topDivider} />
           <div
             className={styles.edgeStyleGroup}
             role="group"
@@ -275,10 +324,25 @@ export function FlowchartBuilder() {
         </div>
       </header>
 
+      {/* Loadout picker modal */}
+      {showLoadoutPicker && character && (
+        <LoadoutPicker
+          character={character}
+          customWeapons={customWeapons}
+          onAddCustomWeapon={handleAddCustomWeapon}
+          onSave={handleSaveLoadout}
+          onClose={() => setShowLoadoutPicker(false)}
+        />
+      )}
+
       {/* Main layout */}
       <ReactFlowProvider>
         <div className={styles.workspace}>
-          <SpellPanel character={character} onDragStart={handleDragStart} />
+          <SpellPanel
+            character={character}
+            customWeapons={customWeapons}
+            onDragStart={handleDragStart}
+          />
 
           <FlowCanvas
             key={activeTabId ?? "draft"}

@@ -46,6 +46,37 @@
   letter-spacing: 0.3px;
 }
 
+.handBadgeMH {
+  font-size: 10px;
+  font-weight: 800;
+  color: #c8901c;
+  background: rgba(200, 144, 28, 0.15);
+  border: 1px solid rgba(200, 144, 28, 0.5);
+  border-radius: 2px;
+  padding: 0 4px;
+  letter-spacing: 0.3px;
+  margin-left: auto;
+}
+
+.handBadgeOH {
+  font-size: 10px;
+  font-weight: 800;
+  color: #6ea8d8;
+  background: rgba(110, 168, 216, 0.15);
+  border: 1px solid rgba(110, 168, 216, 0.5);
+  border-radius: 2px;
+  padding: 0 4px;
+  letter-spacing: 0.3px;
+  margin-left: auto;
+}
+
+.weaponIconBadge {
+  display: flex;
+  align-items: center;
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+
 .cardName {
   font-size: 15px;
   font-weight: 600;

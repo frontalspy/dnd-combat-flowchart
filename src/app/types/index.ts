@@ -61,10 +61,18 @@ export interface Spell {
   concentration?: boolean;
 }
 
+export interface WeaponLoadout {
+  mainHand: string | null;
+  offHand: "weapon" | "shield" | null;
+  offHandWeaponId: string | null;
+  twoHanded: boolean;
+}
+
 export interface Character {
   class: DndClass;
   subclass: string;
   level: number;
+  loadout?: WeaponLoadout;
 }
 
 export interface ActionItem {
@@ -93,6 +101,7 @@ export interface ActionNodeData extends Record<string, unknown> {
   notes?: string;
   source: "standard" | "class" | "spell" | "custom" | "weapon";
   damageDice?: string;
+  hand?: "main" | "off";
 }
 
 export interface ConditionNodeData extends Record<string, unknown> {

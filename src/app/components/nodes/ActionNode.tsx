@@ -77,6 +77,19 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
               {data.spellLevel === "cantrip" ? "✦" : `Lv${data.spellLevel}`}
             </span>
           )}
+          {data.hand === "main" && (
+            <span className={styles.handBadgeMH} title="Main hand">
+              MH
+            </span>
+          )}
+          {data.hand === "off" && (
+            <span
+              className={styles.handBadgeOH}
+              title="Off hand (Bonus Action)"
+            >
+              OH
+            </span>
+          )}
         </div>
         <span
           className={styles.actionTypeBadge}

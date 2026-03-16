@@ -5,6 +5,7 @@ import type { ClassAction } from "../data/classes";
 import { getClassDefinition, getMaxSpellLevel } from "../data/classes";
 import { SPELL_SCHOOLS } from "../data/damageTypes";
 import spellsData from "../data/spells.json";
+import type { Weapon } from "../data/weapons";
 import { WEAPONS } from "../data/weapons";
 import combatActionIcon from "../icons/combat/action.svg";
 import roundIcon from "../icons/combat/round.svg";
@@ -183,10 +184,15 @@ function CustomActionModal({ onClose, onAdd }: CustomActionModalProps) {
 
 interface SpellPanelProps {
   character: Character;
+  customWeapons: Weapon[];
   onDragStart: (e: React.DragEvent, data: unknown) => void;
 }
 
-export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
+export function SpellPanel({
+  character,
+  customWeapons,
+  onDragStart,
+}: SpellPanelProps) {
   const [activeTab, setActiveTab] = useState<PanelTab>("actions");
   const [search, setSearch] = useState("");
   const [spellLevelFilter, setSpellLevelFilter] =
@@ -201,23 +207,43 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
     character.level
   );
 
-  const availableWeapons = useMemo(() => {
-    if (!classDef?.weaponProficiencies) return [];
-    return WEAPONS.filter((w) =>
-      classDef.weaponProficiencies.includes(w.category)
-    );
-  }, [classDef]);
+  const loadoutWeapons = useMemo(() => {
+    const result: Array<{ weapon: Weapon; hand: "main" | "off" }> = [];
+    const loadout = character.loadout;
+    if (!loadout) return result;
+    const allWeapons = [...WEAPONS, ...customWeapons];
+    if (loadout.mainHand) {
+      const w = allWeapons.find((x) => x.id === loadout.mainHand);
+      if (w) result.push({ weapon: w, hand: "main" });
+    }
+    if (loadout.offHand === "weapon" && loadout.offHandWeaponId) {
+      const w = allWeapons.find((x) => x.id === loadout.offHandWeaponId);
+      if (w) result.push({ weapon: w, hand: "off" });
+    }
+    return result;
+  }, [character.loadout, customWeapons]);
 
-  const filteredWeapons = useMemo(() => {
-    if (!search.trim()) return availableWeapons;
+  const filteredCustomWeapons = useMemo(() => {
+    if (!search.trim()) return customWeapons;
     const q = search.toLowerCase();
-    return availableWeapons.filter(
+    return customWeapons.filter(
       (w) =>
         w.name.toLowerCase().includes(q) ||
         w.damageType.toLowerCase().includes(q) ||
         w.properties.some((p) => p.toLowerCase().includes(q))
     );
-  }, [availableWeapons, search]);
+  }, [customWeapons, search]);
+
+  const filteredLoadoutWeapons = useMemo(() => {
+    if (!search.trim()) return loadoutWeapons;
+    const q = search.toLowerCase();
+    return loadoutWeapons.filter(
+      ({ weapon: w }) =>
+        w.name.toLowerCase().includes(q) ||
+        w.damageType.toLowerCase().includes(q) ||
+        w.properties.some((p) => p.toLowerCase().includes(q))
+    );
+  }, [loadoutWeapons, search]);
 
   const classActions: ActionItem[] = useMemo(() => {
     if (!classDef) return [];
@@ -478,12 +504,37 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
             />
           ))}
 
-        {activeTab === "weapons" && filteredWeapons.length === 0 && (
-          <div className={styles.emptyState}>No weapons match your search.</div>
+        {activeTab === "weapons" && character.loadout?.offHand === "shield" && (
+          <div className={styles.shieldCard}>
+            <span className={styles.shieldIcon}>🛡</span>
+            <span className={styles.shieldLabel}>Shield</span>
+            <span className={styles.shieldAc}>+2 AC</span>
+          </div>
         )}
 
         {activeTab === "weapons" &&
-          filteredWeapons.map((weapon) => (
+          filteredLoadoutWeapons.length === 0 &&
+          filteredCustomWeapons.length === 0 &&
+          character.loadout?.offHand !== "shield" && (
+            <div className={styles.emptyState}>
+              {character.loadout?.mainHand || character.loadout?.offHandWeaponId
+                ? "No weapons match your search."
+                : "No weapons equipped. Use the Loadout button in the top bar to assign your weapons."}
+            </div>
+          )}
+
+        {activeTab === "weapons" &&
+          filteredLoadoutWeapons.map(({ weapon, hand }) => (
+            <WeaponCard
+              key={`${weapon.id}-${hand}`}
+              weapon={weapon}
+              hand={hand}
+              onDragStart={onDragStart}
+            />
+          ))}
+
+        {activeTab === "weapons" &&
+          filteredCustomWeapons.map((weapon) => (
             <WeaponCard
               key={weapon.id}
               weapon={weapon}
@@ -492,7 +543,6 @@ export function SpellPanel({ character, onDragStart }: SpellPanelProps) {
           ))}
       </div>
 
-      {/* Add custom action */}
       <div className={styles.panelFooter}>
         <button
           type="button"

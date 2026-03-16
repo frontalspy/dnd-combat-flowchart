@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
-import type { Character, SavedFlowchart } from "../types";
+import type { Character, SavedFlowchart, WeaponLoadout } from "../types";
 
 type AppView = "setup" | "builder";
 
@@ -21,7 +21,8 @@ type AppAction =
   | { type: "LOAD_STATE"; payload: Partial<AppState> }
   | { type: "OPEN_TAB"; payload: string }
   | { type: "CLOSE_TAB"; payload: string }
-  | { type: "SET_ACTIVE_TAB"; payload: string };
+  | { type: "SET_ACTIVE_TAB"; payload: string }
+  | { type: "SET_LOADOUT"; payload: WeaponLoadout };
 
 const STORAGE_KEY = "dnd-flowchart-app-state";
 
@@ -29,6 +30,13 @@ function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case "SET_CHARACTER":
       return { ...state, character: action.payload };
+    case "SET_LOADOUT":
+      return {
+        ...state,
+        character: state.character
+          ? { ...state.character, loadout: action.payload }
+          : state.character,
+      };
     case "SET_VIEW":
       return { ...state, view: action.payload };
     case "SAVE_FLOWCHART": {
@@ -133,6 +141,7 @@ interface AppContextValue {
   openTab: (id: string) => void;
   closeTab: (id: string) => void;
   setActiveTab: (id: string) => void;
+  setLoadout: (loadout: WeaponLoadout) => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -194,6 +203,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const closeTab = (id: string) => dispatch({ type: "CLOSE_TAB", payload: id });
   const setActiveTab = (id: string) =>
     dispatch({ type: "SET_ACTIVE_TAB", payload: id });
+  const setLoadout = (loadout: WeaponLoadout) =>
+    dispatch({ type: "SET_LOADOUT", payload: loadout });
 
   return (
     <AppContext.Provider
@@ -210,6 +221,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         openTab,
         closeTab,
         setActiveTab,
+        setLoadout,
       }}
     >
       {children}

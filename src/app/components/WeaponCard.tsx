@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from "react";
 import { DAMAGE_TYPES } from "../data/damageTypes";
 import type { Weapon } from "../data/weapons";
 import type { ActionNodeData } from "../types";
+import { Icon } from "./Icon";
 import styles from "./WeaponCard.module.css";
 
 interface WeaponTooltipProps {
@@ -43,10 +44,11 @@ function WeaponTooltip({ weapon, visible }: WeaponTooltipProps) {
 
 interface WeaponCardProps {
   weapon: Weapon;
+  hand?: "main" | "off";
   onDragStart: (e: React.DragEvent, data: unknown) => void;
 }
 
-export function WeaponCard({ weapon, onDragStart }: WeaponCardProps) {
+export function WeaponCard({ weapon, hand, onDragStart }: WeaponCardProps) {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const damageInfo = DAMAGE_TYPES[weapon.damageType];
@@ -65,7 +67,7 @@ export function WeaponCard({ weapon, onDragStart }: WeaponCardProps) {
   const dragData: Partial<ActionNodeData> & { type: string } = {
     type: "actionNode",
     label: weapon.name,
-    actionType: "action",
+    actionType: hand === "off" ? "bonus" : "action",
     damageType: weapon.damageType,
     damageDice: weapon.damageDice,
     range: weapon.range,
@@ -77,6 +79,7 @@ export function WeaponCard({ weapon, onDragStart }: WeaponCardProps) {
       .filter(Boolean)
       .join(". "),
     source: "weapon",
+    hand,
   };
 
   const tagIcons: string[] = [];
@@ -103,6 +106,21 @@ export function WeaponCard({ weapon, onDragStart }: WeaponCardProps) {
         </span>
         {weapon.category.startsWith("martial") && (
           <span className={styles.martialTag}>Martial</span>
+        )}
+        {weapon.icon && (
+          <span className={styles.weaponIconBadge}>
+            <Icon src={weapon.icon} size={16} />
+          </span>
+        )}
+        {hand === "main" && (
+          <span className={styles.handBadgeMh} title="Main hand">
+            MH
+          </span>
+        )}
+        {hand === "off" && (
+          <span className={styles.handBadgeOh} title="Off hand — Bonus Action">
+            OH
+          </span>
         )}
       </div>
 

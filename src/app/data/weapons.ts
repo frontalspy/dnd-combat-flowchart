@@ -15,6 +15,7 @@ export interface Weapon {
   range?: string;
   properties: string[];
   versatileDice?: string;
+  icon?: string;
 }
 
 export const WEAPONS: Weapon[] = [
