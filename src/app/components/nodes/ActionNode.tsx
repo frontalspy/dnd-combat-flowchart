@@ -48,7 +48,19 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
       className={`${styles.actionNode} ${selected ? styles.selected : ""}`}
       style={{ borderColor }}
     >
-      <Handle type="target" position={Position.Top} className={styles.handle} />
+      <Handle
+        type="target"
+        position={Position.Top}
+        id="target-top"
+        className={styles.handle}
+      />
+      <Handle
+        type="target"
+        position={Position.Left}
+        id="target-left"
+        className={styles.handle}
+        style={{ top: "50%" }}
+      />
 
       <div className={styles.header} style={{ borderColor }}>
         <div className={styles.badges}>
@@ -142,7 +154,15 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
       <Handle
         type="source"
         position={Position.Bottom}
+        id="source-bottom"
         className={styles.handle}
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="source-right"
+        className={styles.handle}
+        style={{ top: "50%" }}
       />
     </div>
   );

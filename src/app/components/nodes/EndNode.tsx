@@ -20,7 +20,18 @@ export function EndNode({ id, data, selected }: NodeProps<EndNodeType>) {
 
   return (
     <div className={`${styles.endNode} ${selected ? styles.selected : ""}`}>
-      <Handle type="target" position={Position.Top} className={styles.handle} />
+      <Handle
+        type="target"
+        position={Position.Top}
+        id="target-top"
+        className={styles.handle}
+      />
+      <Handle
+        type="target"
+        position={Position.Left}
+        id="target-left"
+        className={styles.handle}
+      />
       <div className={styles.inner}>
         <span className={styles.icon}>
           <Icon src={roundIcon} size={17} />

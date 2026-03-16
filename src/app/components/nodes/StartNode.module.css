@@ -66,4 +66,11 @@
   height: 10px;
   background: var(--gold);
   border: 2px solid var(--bg-deep);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.startNode:hover .handle,
+.selected .handle {
+  opacity: 1;
 }

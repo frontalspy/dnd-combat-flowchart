@@ -32,6 +32,12 @@ export function ConditionNode({
         className={styles.handle}
         id="target"
       />
+      <Handle
+        type="target"
+        position={Position.Left}
+        id="target-left"
+        className={styles.handle}
+      />
 
       <div className={styles.inner}>
         <div className={styles.icon}>
@@ -76,6 +82,12 @@ export function ConditionNode({
         position={Position.Right}
         id="no"
         className={`${styles.handle} ${styles.noHandle}`}
+      />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        id="default"
+        className={styles.handle}
       />
     </div>
   );

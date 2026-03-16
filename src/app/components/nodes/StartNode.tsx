@@ -48,6 +48,13 @@ export function StartNode({ id, data, selected }: NodeProps<StartNodeType>) {
       <Handle
         type="source"
         position={Position.Bottom}
+        id="source-bottom"
+        className={styles.handle}
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="source-right"
         className={styles.handle}
       />
     </div>

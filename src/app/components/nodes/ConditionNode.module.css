@@ -95,6 +95,13 @@
   width: 10px;
   height: 10px;
   border: 2px solid var(--bg-deep);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.conditionNode:hover .handle,
+.selected .handle {
+  opacity: 1;
 }
 
 .yesHandle {
