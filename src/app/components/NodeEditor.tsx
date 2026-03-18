@@ -13,6 +13,14 @@ import {
   SPELL_SCHOOLS,
 } from "../data/damageTypes";
 import spellsData from "../data/spells.json";
+import {
+  ABILITY_FULL_NAMES,
+  abilityModifier,
+  formatModifier,
+  proficiencyBonus,
+  spellAttackBonus,
+  spellSaveDC,
+} from "../data/stats";
 import type { Character, GroupNodeData, GroupVariant, Spell } from "../types";
 import { Icon } from "./Icon";
 import styles from "./NodeEditor.module.css";
@@ -297,6 +305,57 @@ export function NodeEditor({
               />
             </div>
           )}
+
+        {/* Computed character stats */}
+        {nodeType === "actionNode" &&
+          character?.abilityScores &&
+          (() => {
+            const classDef = getClassDefinition(character.class);
+            const spellAbility = classDef?.spellcastingAbility ?? null;
+            const scores = character.abilityScores;
+            const prof = proficiencyBonus(character.level);
+            if (!spellAbility) return null;
+            const score = scores[spellAbility];
+            const dc = spellSaveDC(character.level, score);
+            const atk = spellAttackBonus(character.level, score);
+            const mod = abilityModifier(score);
+            const abilityName = ABILITY_FULL_NAMES[spellAbility];
+            return (
+              <div className={styles.field}>
+                <label className={styles.fieldLabel}>Computed Stats</label>
+                <div className={styles.computedRows}>
+                  <div className={styles.computedRow}>
+                    <span className={styles.computedKey}>
+                      Spellcasting ({abilityName})
+                    </span>
+                    <span className={styles.computedVal}>
+                      {score} ({formatModifier(mod)})
+                    </span>
+                  </div>
+                  <div className={styles.computedRow}>
+                    <span className={styles.computedKey}>
+                      Proficiency Bonus
+                    </span>
+                    <span className={styles.computedVal}>
+                      {formatModifier(prof)}
+                    </span>
+                  </div>
+                  <div className={styles.computedRow}>
+                    <span className={styles.computedKey}>Spell Save DC</span>
+                    <span className={styles.computedVal}>{dc}</span>
+                  </div>
+                  <div className={styles.computedRow}>
+                    <span className={styles.computedKey}>
+                      Spell Attack Bonus
+                    </span>
+                    <span className={styles.computedVal}>
+                      {formatModifier(atk)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
 
         {/* ── Variant management (groupNode only) ── */}
         {nodeType === "groupNode" && groupData && (

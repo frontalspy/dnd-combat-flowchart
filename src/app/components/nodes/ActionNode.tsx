@@ -1,11 +1,14 @@
 import type { Node, NodeProps } from "@xyflow/react";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
 import React, { useCallback, useState } from "react";
+import { useApp } from "../../context/AppContext";
+import { getClassDefinition } from "../../data/classes";
 import {
   ACTION_TYPE_LABELS,
   DAMAGE_TYPES,
   SPELL_SCHOOLS,
 } from "../../data/damageTypes";
+import { spellSaveDC } from "../../data/stats";
 import reachIcon from "../../icons/combat/reach.svg";
 import d20Icon from "../../icons/dice/d20.svg";
 import timeIcon from "../../icons/entity/time.svg";
@@ -17,8 +20,19 @@ type ActionNodeType = Node<ActionNodeData, "actionNode">;
 
 export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
   const { updateNodeData } = useReactFlow();
+  const { state } = useApp();
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesValue, setNotesValue] = useState(data.notes ?? "");
+
+  // Compute spell save DC from character context
+  const character = state.character;
+  const computedSaveDC = (() => {
+    if (!character?.abilityScores) return null;
+    const classDef = getClassDefinition(character.class);
+    const ability = classDef?.spellcastingAbility;
+    if (!ability) return null;
+    return spellSaveDC(character.level, character.abilityScores[ability]);
+  })();
 
   const damageInfo = data.damageType ? DAMAGE_TYPES[data.damageType] : null;
   const schoolInfo = data.school
@@ -79,13 +93,13 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
             </span>
           )}
           {data.hand === "main" && (
-            <span className={styles.handBadgeMH} title="Main hand">
+            <span className={styles.handBadgeMh} title="Main hand">
               MH
             </span>
           )}
           {data.hand === "off" && (
             <span
-              className={styles.handBadgeOH}
+              className={styles.handBadgeOh}
               title="Off hand (Bonus Action)"
             >
               OH
@@ -151,8 +165,15 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
             {data.rollType === "save" && (
               <span
                 className={styles.savePill}
-                title={data.saveDC ?? "Saving throw required"}
+                title={
+                  computedSaveDC
+                    ? `DC ${computedSaveDC} saving throw`
+                    : "Saving throw required"
+                }
               >
+                {computedSaveDC && (
+                  <span className={styles.saveDCValue}>{computedSaveDC} </span>
+                )}
                 {data.saveAbility ? `${data.saveAbility} SAVE` : "SAVE"}
               </span>
             )}

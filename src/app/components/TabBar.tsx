@@ -1,8 +1,8 @@
+import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import { useApp } from "../context/AppContext";
 import { CLASSES } from "../data/classes";
 import combatIcon from "../icons/game/combat.svg";
-import buildIcon from "../icons/util/build.svg";
 import crossIcon from "../icons/util/cross.svg";
 import { Icon } from "./Icon";
 import styles from "./TabBar.module.css";
@@ -88,7 +88,7 @@ export function TabBar() {
           title="Open a saved chart in a new tab"
           aria-label="Open chart in new tab"
         >
-          <Icon src={buildIcon} size={16} />
+          <Plus size={16} />
         </button>
       </div>
 

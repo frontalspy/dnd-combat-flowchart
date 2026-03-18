@@ -45,6 +45,10 @@ declare const variantResultAdded: string;
 declare const variantResultLabel: string;
 declare const variantResultBadge: string;
 declare const variantSearchEmpty: string;
+declare const computedRows: string;
+declare const computedRow: string;
+declare const computedKey: string;
+declare const computedVal: string;
 
 export {
 	panel,
@@ -85,7 +89,11 @@ export {
 	variantResultAdded,
 	variantResultLabel,
 	variantResultBadge,
-	variantSearchEmpty
+	variantSearchEmpty,
+	computedRows,
+	computedRow,
+	computedKey,
+	computedVal
 };
 
 declare const __default_export__: {
@@ -128,5 +136,9 @@ declare const __default_export__: {
 	variantResultLabel: typeof variantResultLabel;
 	variantResultBadge: typeof variantResultBadge;
 	variantSearchEmpty: typeof variantSearchEmpty;
+	computedRows: typeof computedRows;
+	computedRow: typeof computedRow;
+	computedKey: typeof computedKey;
+	computedVal: typeof computedVal;
 };
 export default __default_export__;

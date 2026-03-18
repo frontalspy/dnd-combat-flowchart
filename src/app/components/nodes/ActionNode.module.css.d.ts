@@ -29,6 +29,7 @@ declare const notesInput: string;
 declare const diceRow: string;
 declare const dicePill: string;
 declare const savePill: string;
+declare const saveDCValue: string;
 declare const attackPill: string;
 declare const higherLevels: string;
 
@@ -56,6 +57,7 @@ export {
 	diceRow,
 	dicePill,
 	savePill,
+	saveDCValue as saveDcValue,
 	attackPill,
 	higherLevels
 };
@@ -84,6 +86,7 @@ declare const __default_export__: {
 	diceRow: typeof diceRow;
 	dicePill: typeof dicePill;
 	savePill: typeof savePill;
+	saveDcValue: typeof saveDCValue;
 	attackPill: typeof attackPill;
 	higherLevels: typeof higherLevels;
 };

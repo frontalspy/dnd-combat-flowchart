@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
-import type { Character, SavedFlowchart, WeaponLoadout } from "../types";
+import type {
+  AbilityScores,
+  Character,
+  SavedFlowchart,
+  WeaponLoadout,
+} from "../types";
 
 type AppView = "setup" | "builder";
 
@@ -22,7 +27,8 @@ type AppAction =
   | { type: "OPEN_TAB"; payload: string }
   | { type: "CLOSE_TAB"; payload: string }
   | { type: "SET_ACTIVE_TAB"; payload: string }
-  | { type: "SET_LOADOUT"; payload: WeaponLoadout };
+  | { type: "SET_LOADOUT"; payload: WeaponLoadout }
+  | { type: "SET_ABILITY_SCORES"; payload: AbilityScores };
 
 const STORAGE_KEY = "dnd-flowchart-app-state";
 
@@ -35,6 +41,13 @@ function appReducer(state: AppState, action: AppAction): AppState {
         ...state,
         character: state.character
           ? { ...state.character, loadout: action.payload }
+          : state.character,
+      };
+    case "SET_ABILITY_SCORES":
+      return {
+        ...state,
+        character: state.character
+          ? { ...state.character, abilityScores: action.payload }
           : state.character,
       };
     case "SET_VIEW":
@@ -142,6 +155,7 @@ interface AppContextValue {
   closeTab: (id: string) => void;
   setActiveTab: (id: string) => void;
   setLoadout: (loadout: WeaponLoadout) => void;
+  setAbilityScores: (scores: AbilityScores) => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -205,6 +219,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: "SET_ACTIVE_TAB", payload: id });
   const setLoadout = (loadout: WeaponLoadout) =>
     dispatch({ type: "SET_LOADOUT", payload: loadout });
+  const setAbilityScores = (scores: AbilityScores) =>
+    dispatch({ type: "SET_ABILITY_SCORES", payload: scores });
 
   return (
     <AppContext.Provider
@@ -222,6 +238,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         closeTab,
         setActiveTab,
         setLoadout,
+        setAbilityScores,
       }}
     >
       {children}

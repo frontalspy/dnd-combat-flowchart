@@ -8,6 +8,7 @@ import {
   FileText,
   Save,
   Sword,
+  BarChart2,
 } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import type { FlowCanvasExports } from "../components/FlowCanvas";
@@ -16,6 +17,7 @@ import { LoadoutPicker } from "../components/LoadoutPicker";
 import { MultiSelectBar } from "../components/MultiSelectBar";
 import { NodeEditor } from "../components/NodeEditor";
 import { SpellPanel } from "../components/SpellPanel";
+import { StatsEditor } from "../components/StatsEditor";
 import { TabBar } from "../components/TabBar";
 import { useApp } from "../context/AppContext";
 import { CLASSES } from "../data/classes";
@@ -25,8 +27,14 @@ import type { SavedFlowchart, WeaponLoadout } from "../types";
 import styles from "./FlowchartBuilder.module.css";
 
 export function FlowchartBuilder() {
-  const { state, goToSetup, saveFlowchart, getActiveFlowchart, setLoadout } =
-    useApp();
+  const {
+    state,
+    goToSetup,
+    saveFlowchart,
+    getActiveFlowchart,
+    setLoadout,
+    setAbilityScores,
+  } = useApp();
   const { character, activeTabId } = state;
 
   const activeChart = getActiveFlowchart();
@@ -40,6 +48,7 @@ export function FlowchartBuilder() {
   const [isSaved, setIsSaved] = useState(false);
   const [edgeStyle] = useState<EdgeStyleType>("step");
   const [showLoadoutPicker, setShowLoadoutPicker] = useState(false);
+  const [showStatsPicker, setShowStatsPicker] = useState(false);
   const [customWeapons, setCustomWeapons] = useState<Weapon[]>([]);
 
   const handleAddCustomWeapon = useCallback((weapon: Weapon) => {
@@ -111,24 +120,6 @@ export function FlowchartBuilder() {
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
   }, [activeChart, activeTabId, character, chartName, saveFlowchart]);
-
-  // Track Shift key state for edge angle-snapping connection preview
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "Shift")
-        (window as Window & { __shiftHeld?: boolean }).__shiftHeld = true;
-    };
-    const up = (e: KeyboardEvent) => {
-      if (e.key === "Shift")
-        (window as Window & { __shiftHeld?: boolean }).__shiftHeld = false;
-    };
-    window.addEventListener("keydown", down);
-    window.addEventListener("keyup", up);
-    return () => {
-      window.removeEventListener("keydown", down);
-      window.removeEventListener("keyup", up);
-    };
-  }, []);
 
   // Keyboard shortcuts — placed after handleSave so the closure captures it correctly
   useEffect(() => {
@@ -232,6 +223,16 @@ export function FlowchartBuilder() {
         </div>
 
         <div className={styles.topRight}>
+          {/* Stats chip */}
+          <button
+            type="button"
+            className={`${styles.loadoutChip} ${character?.abilityScores ? styles.loadoutChipArmed : ""}`}
+            onClick={() => setShowStatsPicker(true)}
+            title="Configure ability scores"
+          >
+            <BarChart2 size={13} />
+            Stats
+          </button>
           {/* Loadout chip */}
           <button
             type="button"
@@ -293,6 +294,18 @@ export function FlowchartBuilder() {
         </div>
       </header>
 
+      {/* Stats editor modal */}
+      {showStatsPicker && character && (
+        <StatsEditor
+          character={character}
+          onSave={(scores) => {
+            setAbilityScores(scores);
+            setShowStatsPicker(false);
+          }}
+          onClose={() => setShowStatsPicker(false)}
+        />
+      )}
+
       {/* Loadout picker modal */}
       {showLoadoutPicker && character && (
         <LoadoutPicker
@@ -352,8 +365,6 @@ export function FlowchartBuilder() {
         <span>
           Ctrl+C/V copy·paste · Ctrl+Z/Y undo·redo · Ctrl+A select all
         </span>
-        <span>·</span>
-        <span>Hold Shift while connecting to snap edges to 45° angles</span>
         <span>·</span>
         <span>Hover spell cards for full descriptions</span>
       </div>

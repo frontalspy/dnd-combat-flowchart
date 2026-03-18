@@ -2,10 +2,16 @@ import React, { useState } from "react";
 import { Icon } from "../components/Icon";
 import { useApp } from "../context/AppContext";
 import { CLASSES } from "../data/classes";
+import {
+  ABILITY_LABELS,
+  abilityModifier,
+  DEFAULT_SCORES,
+  formatModifier,
+} from "../data/stats";
 import combatIcon from "../icons/game/combat.svg";
 import dndIcon from "../icons/logo/dnd.svg";
 import crossIcon from "../icons/util/cross.svg";
-import type { Character, DndClass } from "../types";
+import type { AbilityScores, Character, DndClass } from "../types";
 import styles from "./CharacterSetup.module.css";
 
 export function CharacterSetup() {
@@ -20,6 +26,14 @@ export function CharacterSetup() {
   const [selectedClass, setSelectedClass] = useState<DndClass | null>(null);
   const [selectedSubclass, setSelectedSubclass] = useState("");
   const [level, setLevel] = useState(1);
+  const [abilityScores, setAbilityScores] = useState<AbilityScores>({
+    ...DEFAULT_SCORES,
+  });
+
+  const setScore = (key: keyof AbilityScores, raw: string) => {
+    const n = Math.min(30, Math.max(1, Number.parseInt(raw, 10) || 1));
+    setAbilityScores((prev) => ({ ...prev, [key]: n }));
+  };
 
   const classDef = selectedClass
     ? CLASSES.find((c) => c.id === selectedClass)
@@ -36,6 +50,7 @@ export function CharacterSetup() {
       class: selectedClass,
       subclass: selectedSubclass,
       level,
+      abilityScores,
     };
     const draftId = `draft-${Date.now()}`;
     setActiveFlowchart(null);
@@ -165,6 +180,38 @@ export function CharacterSetup() {
                   >
                     +
                   </button>
+                </div>
+              </div>
+            )}
+
+            {/* Ability Scores */}
+            {classDef && (
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>Ability Scores</label>
+                <div className={styles.abilityGrid}>
+                  {(Object.keys(abilityScores) as (keyof AbilityScores)[]).map(
+                    (key) => {
+                      const mod = abilityModifier(abilityScores[key]);
+                      return (
+                        <div key={key} className={styles.abilityCell}>
+                          <span className={styles.abilityLabel}>
+                            {ABILITY_LABELS[key]}
+                          </span>
+                          <input
+                            type="number"
+                            className={styles.abilityInput}
+                            min={1}
+                            max={30}
+                            value={abilityScores[key]}
+                            onChange={(e) => setScore(key, e.target.value)}
+                          />
+                          <span className={styles.abilityMod}>
+                            {formatModifier(mod)}
+                          </span>
+                        </div>
+                      );
+                    }
+                  )}
                 </div>
               </div>
             )}

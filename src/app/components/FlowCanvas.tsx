@@ -358,18 +358,13 @@ function FlowCanvasInner({
 
   const onConnect = useCallback(
     (connection: Connection) => {
-      const shiftHeld =
-        (window as Window & { __shiftHeld?: boolean }).__shiftHeld ?? false;
-      const angleSnapped =
-        (window as Window & { __angleSnapped?: boolean }).__angleSnapped ??
-        false;
       const isYes = connection.sourceHandle === "yes";
       const isNo = connection.sourceHandle === "no";
       const strokeColor = isYes ? "#66bb6a" : isNo ? "#ef5350" : "#8b949e";
       const newEdge: Edge = {
         ...connection,
         id: `edge-${Date.now()}`,
-        type: shiftHeld || angleSnapped ? "snappedEdge" : edgeStyle,
+        type: edgeStyle,
         animated: false,
         label: isYes ? "Yes" : isNo ? "No" : undefined,
         style: { stroke: strokeColor, strokeWidth: 2 },

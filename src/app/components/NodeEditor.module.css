@@ -446,3 +446,31 @@
   font-style: italic;
   text-align: center;
 }
+
+/* Computed character stats */
+.computedRows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.computedRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 6px;
+  background: var(--bg-raised);
+  border-radius: 3px;
+}
+
+.computedKey {
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.computedVal {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  font-family: var(--font-display);
+}

@@ -37,6 +37,11 @@ declare const savedCardInfo: string;
 declare const savedCardName: string;
 declare const savedCardMeta: string;
 declare const deleteSavedBtn: string;
+declare const abilityGrid: string;
+declare const abilityCell: string;
+declare const abilityLabel: string;
+declare const abilityInput: string;
+declare const abilityMod: string;
 
 export {
 	page,
@@ -69,7 +74,12 @@ export {
 	savedCardInfo,
 	savedCardName,
 	savedCardMeta,
-	deleteSavedBtn
+	deleteSavedBtn,
+	abilityGrid,
+	abilityCell,
+	abilityLabel,
+	abilityInput,
+	abilityMod
 };
 
 declare const __default_export__: {
@@ -104,5 +114,10 @@ declare const __default_export__: {
 	savedCardName: typeof savedCardName;
 	savedCardMeta: typeof savedCardMeta;
 	deleteSavedBtn: typeof deleteSavedBtn;
+	abilityGrid: typeof abilityGrid;
+	abilityCell: typeof abilityCell;
+	abilityLabel: typeof abilityLabel;
+	abilityInput: typeof abilityInput;
+	abilityMod: typeof abilityMod;
 };
 export default __default_export__;

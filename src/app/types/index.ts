@@ -68,11 +68,21 @@ export interface WeaponLoadout {
   twoHanded: boolean;
 }
 
+export interface AbilityScores {
+  str: number;
+  dex: number;
+  con: number;
+  int: number;
+  wis: number;
+  cha: number;
+}
+
 export interface Character {
   class: DndClass;
   subclass: string;
   level: number;
   loadout?: WeaponLoadout;
+  abilityScores?: AbilityScores;
 }
 
 export interface ActionItem {

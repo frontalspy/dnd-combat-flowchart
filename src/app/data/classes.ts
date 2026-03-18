@@ -11,6 +11,7 @@ import sorcererIcon from "../icons/class/sorcerer.svg";
 import warlockIcon from "../icons/class/warlock.svg";
 import wizardIcon from "../icons/class/wizard.svg";
 import type { ActionType, DamageType, DndClass } from "../types";
+import type { SpellcastingAbility } from "./stats";
 import type { WeaponCategory } from "./weapons";
 
 export type SpellcastingType = "full" | "half" | "third" | "warlock" | "none";
@@ -37,6 +38,7 @@ export interface ClassDefinition {
   icon: string;
   subclasses: SubclassDefinition[];
   spellcastingType: SpellcastingType;
+  spellcastingAbility: SpellcastingAbility | null;
   classActions: ClassAction[];
   weaponProficiencies: WeaponCategory[];
 }
@@ -47,6 +49,7 @@ export const CLASSES: ClassDefinition[] = [
     name: "Barbarian",
     color: "#c62828",
     icon: barbarianIcon,
+    spellcastingAbility: null,
     spellcastingType: "none",
     weaponProficiencies: [
       "simple-melee",
@@ -103,6 +106,7 @@ export const CLASSES: ClassDefinition[] = [
     name: "Bard",
     color: "#7b1fa2",
     icon: bardIcon,
+    spellcastingAbility: "cha",
     spellcastingType: "full",
     weaponProficiencies: ["simple-melee", "simple-ranged", "martial-melee"],
     subclasses: [
@@ -147,6 +151,7 @@ export const CLASSES: ClassDefinition[] = [
     name: "Cleric",
     color: "#f57f17",
     icon: clericIcon,
+    spellcastingAbility: "wis",
     spellcastingType: "full",
     weaponProficiencies: ["simple-melee", "simple-ranged"],
     subclasses: [
@@ -197,6 +202,7 @@ export const CLASSES: ClassDefinition[] = [
     name: "Druid",
     color: "#2e7d32",
     icon: druidIcon,
+    spellcastingAbility: "wis",
     spellcastingType: "full",
     weaponProficiencies: ["simple-melee", "simple-ranged"],
     subclasses: [
@@ -232,6 +238,7 @@ export const CLASSES: ClassDefinition[] = [
     name: "Fighter",
     color: "#e64a19",
     icon: fighterIcon,
+    spellcastingAbility: null,
     spellcastingType: "none",
     weaponProficiencies: [
       "simple-melee",
@@ -295,6 +302,7 @@ export const CLASSES: ClassDefinition[] = [
     name: "Monk",
     color: "#00838f",
     icon: monkIcon,
+    spellcastingAbility: "wis",
     spellcastingType: "none",
     weaponProficiencies: ["simple-melee", "simple-ranged"],
     subclasses: [
@@ -356,6 +364,7 @@ export const CLASSES: ClassDefinition[] = [
     name: "Paladin",
     color: "#f9a825",
     icon: paladinIcon,
+    spellcastingAbility: "cha",
     spellcastingType: "half",
     weaponProficiencies: [
       "simple-melee",
@@ -423,6 +432,7 @@ export const CLASSES: ClassDefinition[] = [
     name: "Ranger",
     color: "#388e3c",
     icon: rangerIcon,
+    spellcastingAbility: "wis",
     spellcastingType: "half",
     weaponProficiencies: [
       "simple-melee",
@@ -471,6 +481,7 @@ export const CLASSES: ClassDefinition[] = [
     name: "Rogue",
     color: "#546e7a",
     icon: rogueIcon,
+    spellcastingAbility: null,
     spellcastingType: "none",
     weaponProficiencies: ["simple-melee", "simple-ranged", "martial-melee"],
     subclasses: [
@@ -542,6 +553,7 @@ export const CLASSES: ClassDefinition[] = [
     name: "Sorcerer",
     color: "#b71c1c",
     icon: sorcererIcon,
+    spellcastingAbility: "cha",
     spellcastingType: "full",
     weaponProficiencies: ["simple-melee", "simple-ranged"],
     subclasses: [
@@ -602,6 +614,7 @@ export const CLASSES: ClassDefinition[] = [
     name: "Warlock",
     color: "#4a148c",
     icon: warlockIcon,
+    spellcastingAbility: "cha",
     spellcastingType: "warlock",
     weaponProficiencies: ["simple-melee", "simple-ranged"],
     subclasses: [
@@ -649,6 +662,7 @@ export const CLASSES: ClassDefinition[] = [
     name: "Wizard",
     color: "#1565c0",
     icon: wizardIcon,
+    spellcastingAbility: "int",
     spellcastingType: "full",
     weaponProficiencies: ["simple-melee", "simple-ranged"],
     subclasses: [
