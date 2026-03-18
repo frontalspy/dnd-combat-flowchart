@@ -38,7 +38,7 @@ export function FlowchartBuilder() {
   const [editingName, setEditingName] = useState(false);
   const [selectedNodes, setSelectedNodes] = useState<Node[]>([]);
   const [isSaved, setIsSaved] = useState(false);
-  const [edgeStyle, setEdgeStyle] = useState<EdgeStyleType>("smoothstep");
+  const [edgeStyle] = useState<EdgeStyleType>("step");
   const [showLoadoutPicker, setShowLoadoutPicker] = useState(false);
   const [customWeapons, setCustomWeapons] = useState<Weapon[]>([]);
 
@@ -262,37 +262,6 @@ export function FlowchartBuilder() {
                 })()
               : "Loadout"}
           </button>
-          <span className={styles.topDivider} />
-          <div
-            className={styles.edgeStyleGroup}
-            role="group"
-            aria-label="Edge routing style"
-          >
-            <button
-              type="button"
-              className={`${styles.edgeStyleBtn} ${edgeStyle === "smoothstep" ? styles.edgeStyleBtnActive : ""}`}
-              onClick={() => setEdgeStyle("smoothstep")}
-              title="Curved edges (smooth step)"
-            >
-              Curved
-            </button>
-            <button
-              type="button"
-              className={`${styles.edgeStyleBtn} ${edgeStyle === "step" ? styles.edgeStyleBtnActive : ""}`}
-              onClick={() => setEdgeStyle("step")}
-              title="Orthogonal edges (step)"
-            >
-              Step
-            </button>
-            <button
-              type="button"
-              className={`${styles.edgeStyleBtn} ${edgeStyle === "straight" ? styles.edgeStyleBtnActive : ""}`}
-              onClick={() => setEdgeStyle("straight")}
-              title="Straight edges"
-            >
-              Straight
-            </button>
-          </div>
           <span className={styles.topDivider} />
           <button
             type="button"

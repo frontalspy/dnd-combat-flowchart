@@ -162,24 +162,72 @@ function FlowCanvasInner({
 
   const wrappedOnNodesChange: OnNodesChange = useCallback(
     (changes) => {
-      (onNodesChange as OnNodesChange)(changes);
+      type MeasuredNode = Node & {
+        measured?: { width?: number; height?: number };
+      };
+      const NODE_SNAP_TOLERANCE_DEG = 2;
+      const allNodes = getNodes();
+      const allEdges = getEdges();
+      const snappedChanges = changes.map((change) => {
+        if (change.type !== "position" || !change.position) return change;
+        const nodeId = change.id;
+        const newPos = change.position;
+        const node = allNodes.find((n) => n.id === nodeId) as
+          | MeasuredNode
+          | undefined;
+        if (!node) return change;
+        const nodeW = node.measured?.width ?? 150;
+        const nodeH = node.measured?.height ?? 50;
+        const nodeCX = newPos.x + nodeW / 2;
+        const nodeCY = newPos.y + nodeH / 2;
+        const connectedEdges = allEdges.filter(
+          (e) => e.source === nodeId || e.target === nodeId
+        );
+        for (const edge of connectedEdges) {
+          const otherId = edge.source === nodeId ? edge.target : edge.source;
+          const otherNode = allNodes.find((n) => n.id === otherId) as
+            | MeasuredNode
+            | undefined;
+          if (!otherNode) continue;
+          const otherW = otherNode.measured?.width ?? 150;
+          const otherH = otherNode.measured?.height ?? 50;
+          const otherCX = otherNode.position.x + otherW / 2;
+          const otherCY = otherNode.position.y + otherH / 2;
+          const dx = nodeCX - otherCX;
+          const dy = nodeCY - otherCY;
+          const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+          const snappedAngle = Math.round(angle / 45) * 45;
+          const diff = Math.abs(angle - snappedAngle);
+          if (diff <= NODE_SNAP_TOLERANCE_DEG) {
+            const rad = snappedAngle * (Math.PI / 180);
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const newCX = otherCX + Math.cos(rad) * length;
+            const newCY = otherCY + Math.sin(rad) * length;
+            return {
+              ...change,
+              position: { x: newCX - nodeW / 2, y: newCY - nodeH / 2 },
+            };
+          }
+        }
+        return change;
+      });
+      (onNodesChange as OnNodesChange)(snappedChanges);
       const hasStructural = changes.some(
         (c) =>
           c.type === "add" ||
           c.type === "remove" ||
-          c.type === "reset" ||
           (c.type === "position" && c.dragging !== true)
       );
       if (hasStructural) scheduleSnapshot();
     },
-    [onNodesChange, scheduleSnapshot]
+    [onNodesChange, scheduleSnapshot, getNodes, getEdges]
   );
 
   const wrappedOnEdgesChange: OnEdgesChange = useCallback(
     (changes) => {
       (onEdgesChange as OnEdgesChange)(changes);
       const hasStructural = changes.some(
-        (c) => c.type === "add" || c.type === "remove" || c.type === "reset"
+        (c) => c.type === "add" || c.type === "remove"
       );
       if (hasStructural) scheduleSnapshot();
     },
@@ -312,13 +360,16 @@ function FlowCanvasInner({
     (connection: Connection) => {
       const shiftHeld =
         (window as Window & { __shiftHeld?: boolean }).__shiftHeld ?? false;
+      const angleSnapped =
+        (window as Window & { __angleSnapped?: boolean }).__angleSnapped ??
+        false;
       const isYes = connection.sourceHandle === "yes";
       const isNo = connection.sourceHandle === "no";
       const strokeColor = isYes ? "#66bb6a" : isNo ? "#ef5350" : "#8b949e";
       const newEdge: Edge = {
         ...connection,
         id: `edge-${Date.now()}`,
-        type: shiftHeld ? "snappedEdge" : edgeStyle,
+        type: shiftHeld || angleSnapped ? "snappedEdge" : edgeStyle,
         animated: false,
         label: isYes ? "Yes" : isNo ? "No" : undefined,
         style: { stroke: strokeColor, strokeWidth: 2 },
