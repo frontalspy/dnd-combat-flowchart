@@ -225,3 +225,24 @@ export function extractRollType(
   if (/make a.*attack|attack roll|ranged.*attack/.test(lower)) return "attack";
   return "auto";
 }
+
+const ABILITY_ABBR: Record<string, string> = {
+  strength: "STR",
+  dexterity: "DEX",
+  constitution: "CON",
+  intelligence: "INT",
+  wisdom: "WIS",
+  charisma: "CHA",
+};
+
+export function extractSaveAbility(description: string): string | null {
+  const match = description.match(
+    /\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma)\s+saving throw/i
+  );
+  if (match) return ABILITY_ABBR[match[1].toLowerCase()] ?? null;
+  const dcMatch = description.match(
+    /DC\s*\d+\s*(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma)/i
+  );
+  if (dcMatch) return ABILITY_ABBR[dcMatch[1].toLowerCase()] ?? null;
+  return null;
+}

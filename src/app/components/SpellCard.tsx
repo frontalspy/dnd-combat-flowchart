@@ -5,6 +5,7 @@ import {
   detectDamageType,
   extractDamageDice,
   extractRollType,
+  extractSaveAbility,
   extractSaveDC,
   getActionTypeFromCastingTime,
   SPELL_SCHOOLS,
@@ -109,6 +110,7 @@ export function SpellCard({ spell, onDragStart }: SpellCardProps) {
     source: "spell" as const,
     damageDice: extractDamageDice(spell.description) ?? undefined,
     saveDC: extractSaveDC(spell.description) ?? undefined,
+    saveAbility: extractSaveAbility(spell.description) ?? undefined,
     rollType: extractRollType(spell.description),
     higherLevels: spell.higher_levels ?? undefined,
   };
@@ -201,6 +203,10 @@ export function ActionCard({ action, onDragStart }: ActionCardProps) {
     range: action.range,
     duration: action.duration,
     source: action.source,
+    damageDice: extractDamageDice(action.description) ?? undefined,
+    saveDC: extractSaveDC(action.description) ?? undefined,
+    saveAbility: extractSaveAbility(action.description) ?? undefined,
+    rollType: extractRollType(action.description),
   };
 
   return (

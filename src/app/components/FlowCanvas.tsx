@@ -396,6 +396,12 @@ function FlowCanvasInner({
           range: item.range as string | undefined,
           duration: item.duration as string | undefined,
           source: (item.source as ActionNodeData["source"]) ?? "standard",
+          damageDice: item.damageDice as string | undefined,
+          saveDC: item.saveDC as string | undefined,
+          saveAbility: item.saveAbility as string | undefined,
+          rollType: item.rollType as ActionNodeData["rollType"],
+          higherLevels: item.higherLevels as string | undefined,
+          hand: item.hand as ActionNodeData["hand"],
           notes: "",
         };
         newNode = { id: newId(), type: "actionNode", position, data };
