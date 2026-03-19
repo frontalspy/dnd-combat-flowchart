@@ -29,14 +29,9 @@ import "@xyflow/react/dist/style.css";
 import { toJpeg, toPng } from "html-to-image";
 import jsPDF from "jspdf";
 import { useClipboard } from "../hooks/useClipboard";
-import type {
-  ActionNodeData,
-  ConditionNodeData,
-  EndNodeData,
-  GroupNodeData,
-  NoteNodeData,
-  StartNodeData,
-} from "../types";
+import { useFlowDrop } from "../hooks/useFlowDrop";
+import { useFlowHistory } from "../hooks/useFlowHistory";
+import type { StartNodeData } from "../types";
 import { SnappedConnectionLine } from "./edges/SnappedConnectionLine";
 import { SnappedEdge } from "./edges/SnappedEdge";
 import styles from "./FlowCanvas.module.css";
@@ -101,57 +96,18 @@ function FlowCanvasInner({
   );
 
   // History for undo/redo
-  const historyRef = useRef<Array<{ nodes: Node[]; edges: Edge[] }>>([
-    {
-      nodes: initialNodes ?? [DEFAULT_START_NODE],
-      edges: initialEdges ?? [],
-    },
-  ]);
-  const historyCursorRef = useRef(0);
-  const isHistoryActionRef = useRef(false);
-  const snapshotTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { scheduleSnapshot, handleUndo, handleRedo, snapshotTimerRef } =
+    useFlowHistory({
+      initialNodes: initialNodes ?? [DEFAULT_START_NODE],
+      initialEdges: initialEdges ?? [],
+      setNodes,
+      setEdges,
+      getNodes,
+      getEdges,
+    });
 
   // Clipboard for copy/paste
   const { copy: clipCopy, paste: clipPaste } = useClipboard();
-
-  const scheduleSnapshot = useCallback(() => {
-    if (isHistoryActionRef.current) return;
-    if (snapshotTimerRef.current) clearTimeout(snapshotTimerRef.current);
-    snapshotTimerRef.current = setTimeout(() => {
-      const snap = { nodes: getNodes(), edges: getEdges() };
-      historyRef.current = historyRef.current.slice(
-        0,
-        historyCursorRef.current + 1
-      );
-      historyRef.current.push(snap);
-      if (historyRef.current.length > 50) historyRef.current.shift();
-      historyCursorRef.current = historyRef.current.length - 1;
-    }, 300);
-  }, [getNodes, getEdges]);
-
-  const handleUndo = useCallback(() => {
-    if (historyCursorRef.current <= 0) return;
-    isHistoryActionRef.current = true;
-    historyCursorRef.current--;
-    const snap = historyRef.current[historyCursorRef.current];
-    setNodes(snap.nodes);
-    setEdges(snap.edges);
-    setTimeout(() => {
-      isHistoryActionRef.current = false;
-    }, 0);
-  }, [setNodes, setEdges]);
-
-  const handleRedo = useCallback(() => {
-    if (historyCursorRef.current >= historyRef.current.length - 1) return;
-    isHistoryActionRef.current = true;
-    historyCursorRef.current++;
-    const snap = historyRef.current[historyCursorRef.current];
-    setNodes(snap.nodes);
-    setEdges(snap.edges);
-    setTimeout(() => {
-      isHistoryActionRef.current = false;
-    }, 0);
-  }, [setNodes, setEdges]);
 
   const handleSelectAll = useCallback(() => {
     setNodes((nds) => nds.map((n) => ({ ...n, selected: true })));
@@ -246,7 +202,7 @@ function FlowCanvasInner({
     return () => {
       if (snapshotTimerRef.current) clearTimeout(snapshotTimerRef.current);
     };
-  }, []);
+  }, [snapshotTimerRef]);
 
   // Report changes upward
   useEffect(() => {
@@ -392,88 +348,12 @@ function FlowCanvasInner({
     [setEdges, scheduleSnapshot, animatedEdges]
   );
 
-  const onDragOver = useCallback((event: React.DragEvent) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "move";
-  }, []);
-
-  const onDrop = useCallback(
-    (event: React.DragEvent) => {
-      event.preventDefault();
-      const raw = event.dataTransfer.getData("application/reactflow");
-      if (!raw) return;
-
-      let item: Record<string, unknown>;
-      try {
-        item = JSON.parse(raw) as Record<string, unknown>;
-      } catch {
-        return;
-      }
-
-      const position = screenToFlowPosition({
-        x: event.clientX,
-        y: event.clientY,
-      });
-
-      const nodeType =
-        (item.nodeType as string | undefined) ?? (item.type as string);
-
-      let newNode: Node;
-
-      if (nodeType === "conditionNode") {
-        const data: ConditionNodeData = {
-          label: (item.label as string) ?? "Condition?",
-        };
-        newNode = { id: newId(), type: "conditionNode", position, data };
-      } else if (nodeType === "noteNode") {
-        const data: NoteNodeData = { content: "" };
-        newNode = { id: newId(), type: "noteNode", position, data };
-      } else if (nodeType === "startNode") {
-        const data: StartNodeData = {
-          label: (item.label as string) ?? "Start",
-        };
-        newNode = { id: newId(), type: "startNode", position, data };
-      } else if (nodeType === "endNode") {
-        const data: EndNodeData = {
-          label: (item.label as string) ?? "End of Round",
-        };
-        newNode = { id: newId(), type: "endNode", position, data };
-      } else if (nodeType === "groupNode") {
-        const data: GroupNodeData = {
-          label: (item.label as string) ?? "Action Group",
-          variants: (item.variants as GroupNodeData["variants"]) ?? [],
-          collapsed: false,
-        };
-        newNode = { id: newId(), type: "groupNode", position, data };
-      } else {
-        // ActionNode (spell or action)
-        const data: ActionNodeData = {
-          label: (item.label as string) ?? "Action",
-          actionType:
-            (item.actionType as ActionNodeData["actionType"]) ?? "action",
-          damageType: item.damageType as ActionNodeData["damageType"],
-          school: item.school as string | undefined,
-          description: item.description as string | undefined,
-          spellLevel: item.spellLevel as string | undefined,
-          range: item.range as string | undefined,
-          duration: item.duration as string | undefined,
-          source: (item.source as ActionNodeData["source"]) ?? "standard",
-          damageDice: item.damageDice as string | undefined,
-          saveDC: item.saveDC as string | undefined,
-          saveAbility: item.saveAbility as string | undefined,
-          rollType: item.rollType as ActionNodeData["rollType"],
-          higherLevels: item.higherLevels as string | undefined,
-          hand: item.hand as ActionNodeData["hand"],
-          notes: "",
-        };
-        newNode = { id: newId(), type: "actionNode", position, data };
-      }
-
-      setNodes((nds) => [...nds, newNode]);
-      scheduleSnapshot();
-    },
-    [screenToFlowPosition, setNodes, scheduleSnapshot]
-  );
+  // Drop handler
+  const { onDrop, onDragOver } = useFlowDrop({
+    screenToFlowPosition,
+    setNodes,
+    scheduleSnapshot,
+  });
 
   const handleSelectionChange = useCallback(
     ({ nodes: selectedNodes }: { nodes: Node[] }) => {

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useApp } from "../context/AppContext";
 import { CLASSES } from "../data/classes";
 import combatIcon from "../icons/game/combat.svg";
+import buildIcon from "../icons/util/build.svg";
 import crossIcon from "../icons/util/cross.svg";
 import { Icon } from "./Icon";
 import styles from "./TabBar.module.css";

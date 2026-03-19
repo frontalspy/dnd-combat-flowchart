@@ -172,7 +172,7 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
                 }
               >
                 {computedSaveDC && (
-                  <span className={styles.saveDCValue}>{computedSaveDC} </span>
+                  <span className={styles.saveDcValue}>{computedSaveDC} </span>
                 )}
                 {data.saveAbility ? `${data.saveAbility} SAVE` : "SAVE"}
               </span>
