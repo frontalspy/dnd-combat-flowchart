@@ -207,6 +207,12 @@
   color: var(--green-light);
 }
 
+.animateBtnActive {
+  background: rgba(184, 144, 26, 0.15);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
 /* Edge routing style toggle group */
 .edgeStyleGroup {
   display: flex;

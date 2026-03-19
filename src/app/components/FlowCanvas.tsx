@@ -65,6 +65,7 @@ interface FlowCanvasInnerProps {
   onExportReady: (fns: FlowCanvasExports) => void;
   onFlowChange: (nodes: Node[], edges: Edge[]) => void;
   edgeStyle?: EdgeStyleType;
+  animatedEdges?: boolean;
 }
 
 const DEFAULT_START_NODE: Node<StartNodeData, "startNode"> = {
@@ -86,6 +87,7 @@ function FlowCanvasInner({
   onExportReady,
   onFlowChange,
   edgeStyle = "smoothstep",
+  animatedEdges = false,
 }: FlowCanvasInnerProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { fitView, getNodes, getEdges, screenToFlowPosition, addNodes } =
@@ -234,6 +236,11 @@ function FlowCanvasInner({
     [onEdgesChange, scheduleSnapshot]
   );
 
+  // Retroactively toggle animation on all existing edges
+  useEffect(() => {
+    setEdges((eds) => eds.map((e) => ({ ...e, animated: animatedEdges })));
+  }, [animatedEdges, setEdges]);
+
   // Cleanup snapshot timer on unmount
   useEffect(() => {
     return () => {
@@ -366,7 +373,7 @@ function FlowCanvasInner({
         ...connection,
         id: `edge-${Date.now()}`,
         type: "snappedEdge",
-        animated: false,
+        animated: animatedEdges,
         data: { label: defaultLabel },
         style: { stroke: strokeColor, strokeWidth: 2 },
         markerEnd: { type: "arrow" as const, color: strokeColor },
@@ -374,7 +381,7 @@ function FlowCanvasInner({
       setEdges((eds) => addEdge(newEdge, eds));
       scheduleSnapshot();
     },
-    [setEdges, scheduleSnapshot]
+    [setEdges, scheduleSnapshot, animatedEdges]
   );
 
   const onDragOver = useCallback((event: React.DragEvent) => {
@@ -518,6 +525,7 @@ interface FlowCanvasProps {
   onExportReady: (fns: FlowCanvasExports) => void;
   onFlowChange: (nodes: Node[], edges: Edge[]) => void;
   edgeStyle?: EdgeStyleType;
+  animatedEdges?: boolean;
 }
 
 export function FlowCanvas(props: FlowCanvasProps) {

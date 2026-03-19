@@ -1,6 +1,7 @@
 import type { Node } from "@xyflow/react";
 import { ReactFlowProvider } from "@xyflow/react";
 import {
+  BarChart2,
   Check,
   ChevronLeft,
   Download,
@@ -8,7 +9,7 @@ import {
   FileText,
   Save,
   Sword,
-  BarChart2,
+  Zap,
 } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import type { FlowCanvasExports } from "../components/FlowCanvas";
@@ -47,6 +48,7 @@ export function FlowchartBuilder() {
   const [selectedNodes, setSelectedNodes] = useState<Node[]>([]);
   const [isSaved, setIsSaved] = useState(false);
   const [edgeStyle] = useState<EdgeStyleType>("step");
+  const [animatedEdges, setAnimatedEdges] = useState(false);
   const [showLoadoutPicker, setShowLoadoutPicker] = useState(false);
   const [showStatsPicker, setShowStatsPicker] = useState(false);
   const [customWeapons, setCustomWeapons] = useState<Weapon[]>([]);
@@ -264,6 +266,16 @@ export function FlowchartBuilder() {
               : "Loadout"}
           </button>
           <span className={styles.topDivider} />
+          {/* Animate edges toggle */}
+          <button
+            type="button"
+            className={`${styles.actionBtn} ${animatedEdges ? styles.animateBtnActive : ""}`}
+            onClick={() => setAnimatedEdges((v) => !v)}
+            title={animatedEdges ? "Disable edge animation" : "Animate edges"}
+          >
+            <Zap size={14} />
+            Animate
+          </button>
           <button
             type="button"
             className={`${styles.actionBtn} ${isSaved ? styles.savedBtn : ""}`}
@@ -336,6 +348,7 @@ export function FlowchartBuilder() {
             onExportReady={handleExportReady}
             onFlowChange={handleFlowChange}
             edgeStyle={edgeStyle}
+            animatedEdges={animatedEdges}
           />
 
           {selectedNodes.length === 1 && (
