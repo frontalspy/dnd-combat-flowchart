@@ -292,9 +292,14 @@
   background: rgba(200, 144, 28, 0.14);
   border: 1px solid var(--gold-dim);
   border-radius: 10px;
-  padding: 1px 6px;
+  padding: 0px 4px 3px 4px;
   min-width: 18px;
-  text-align: center;
+  height: 18px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 /* Card list */
