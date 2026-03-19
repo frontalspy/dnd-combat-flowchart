@@ -1,5 +1,5 @@
 import type { Node } from "@xyflow/react";
-import { useReactFlow } from "@xyflow/react";
+import { useReactFlow, useStore } from "@xyflow/react";
 import { Plus, Trash2, X } from "lucide-react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { STANDARD_ACTIONS } from "../data/actions";
@@ -9,6 +9,9 @@ import {
   ACTION_TYPE_LABELS,
   DAMAGE_TYPES,
   detectDamageType,
+  extractDamageDice,
+  extractRollType,
+  extractSaveAbility,
   getActionTypeFromCastingTime,
   SPELL_SCHOOLS,
 } from "../data/damageTypes";
@@ -38,7 +41,15 @@ export function NodeEditor({
   onClose,
   character,
 }: NodeEditorProps) {
-  const { updateNodeData, deleteElements } = useReactFlow();
+  const { updateNodeData, deleteElements, getNode } = useReactFlow();
+
+  // Reactively subscribe to the selected node's data so the panel re-renders
+  // whenever updateNodeData fires (getNode() is imperative and does not trigger re-renders).
+  const liveGroupData = useStore((s) => {
+    if (!selectedNode || selectedNode.type !== "groupNode") return null;
+    const node = s.nodeLookup.get(selectedNode.id);
+    return node ? (node.data as GroupNodeData) : null;
+  });
   const [notes, setNotes] = useState("");
   const [label, setLabel] = useState("");
   const [variantSearch, setVariantSearch] = useState("");
@@ -71,31 +82,33 @@ export function NodeEditor({
 
   // ── Variant management (groupNode only) ──────────────────────────
 
-  const groupData =
-    selectedNode?.type === "groupNode"
-      ? (selectedNode.data as GroupNodeData)
-      : null;
+  const groupData = liveGroupData;
 
   const handleRemoveVariant = useCallback(
     (variantId: string) => {
       if (!selectedNode || !groupData) return;
+      const live = getNode(selectedNode.id)?.data as GroupNodeData | undefined;
+      if (!live) return;
       updateNodeData(selectedNode.id, {
-        variants: groupData.variants.filter((v) => v.id !== variantId),
+        variants: live.variants.filter((v) => v.id !== variantId),
       });
     },
-    [selectedNode, groupData, updateNodeData]
+    [selectedNode, groupData, getNode, updateNodeData]
   );
 
   const handleAddVariant = useCallback(
     (variant: GroupVariant) => {
       if (!selectedNode || !groupData) return;
-      if (groupData.variants.some((v) => v.label === variant.label)) return;
+      const live = getNode(selectedNode.id)?.data as GroupNodeData | undefined;
+      if (!live) return;
+      if (live.variants.some((v) => v.label === variant.label)) return;
       updateNodeData(selectedNode.id, {
-        variants: [...groupData.variants, variant],
+        variants: [...live.variants, variant],
       });
       setVariantSearch("");
+      setShowVariantAdd(false);
     },
-    [selectedNode, groupData, updateNodeData]
+    [selectedNode, groupData, getNode, updateNodeData]
   );
 
   const variantPool = useMemo(() => {
@@ -119,6 +132,14 @@ export function NodeEditor({
             school: undefined as string | undefined,
             spellLevel: undefined as string | undefined,
             description: a.description,
+            damageDice: extractDamageDice(a.description) ?? undefined,
+            saveAbility: extractSaveAbility(a.description) ?? undefined,
+            rollType: extractRollType(a.description) as
+              | "attack"
+              | "save"
+              | "auto",
+            range: undefined as string | undefined,
+            duration: undefined as string | undefined,
           }))
       : [];
 
@@ -130,13 +151,18 @@ export function NodeEditor({
       school: a.school,
       spellLevel: a.level,
       description: a.description,
+      damageDice: extractDamageDice(a.description) ?? undefined,
+      saveAbility: extractSaveAbility(a.description) ?? undefined,
+      rollType: extractRollType(a.description) as "attack" | "save" | "auto",
+      range: a.range,
+      duration: a.duration,
     }));
 
     const spellItems =
       maxSpellLevel > 0
         ? allSpells
             .filter((spell) => {
-              if (!spell.classes.includes(character.class)) return false;
+              if (spell.classes.indexOf(character.class) === -1) return false;
               if (spell.level === "cantrip") return true;
               const lvl = parseInt(spell.level, 10);
               return !isNaN(lvl) && lvl <= maxSpellLevel;
@@ -149,6 +175,14 @@ export function NodeEditor({
               school: spell.school,
               spellLevel: spell.level,
               description: spell.description,
+              damageDice: extractDamageDice(spell.description) ?? undefined,
+              saveAbility: extractSaveAbility(spell.description) ?? undefined,
+              rollType: extractRollType(spell.description) as
+                | "attack"
+                | "save"
+                | "auto",
+              range: spell.range,
+              duration: spell.duration,
             }))
         : [];
 
@@ -474,6 +508,11 @@ export function NodeEditor({
                                 school: item.school,
                                 spellLevel: item.spellLevel,
                                 description: item.description,
+                                damageDice: item.damageDice,
+                                saveAbility: item.saveAbility,
+                                rollType: item.rollType,
+                                range: item.range,
+                                duration: item.duration,
                               });
                             }
                           }}

@@ -34,60 +34,60 @@ declare const attackPill: string;
 declare const higherLevels: string;
 
 export {
-	actionNode,
-	selected,
-	handle,
-	header,
-	badges,
-	schoolBadge,
-	levelBadge,
-	handBadgeMH as handBadgeMh,
-	handBadgeOH as handBadgeOh,
-	actionTypeBadge,
-	body,
-	name,
-	pills,
-	damagePill,
-	infoPill,
-	notesSection,
-	notesDisplay,
-	notesText,
-	notesPlaceholder,
-	notesInput,
-	diceRow,
-	dicePill,
-	savePill,
-	saveDCValue as saveDcValue,
-	attackPill,
-	higherLevels
+  actionNode,
+  selected,
+  handle,
+  header,
+  badges,
+  schoolBadge,
+  levelBadge,
+  handBadgeMH as handBadgeMh,
+  handBadgeOH as handBadgeOh,
+  actionTypeBadge,
+  body,
+  name,
+  pills,
+  damagePill,
+  infoPill,
+  notesSection,
+  notesDisplay,
+  notesText,
+  notesPlaceholder,
+  notesInput,
+  diceRow,
+  dicePill,
+  savePill,
+  saveDCValue,
+  attackPill,
+  higherLevels,
 };
 
 declare const __default_export__: {
-	actionNode: typeof actionNode;
-	selected: typeof selected;
-	handle: typeof handle;
-	header: typeof header;
-	badges: typeof badges;
-	schoolBadge: typeof schoolBadge;
-	levelBadge: typeof levelBadge;
-	handBadgeMh: typeof handBadgeMH;
-	handBadgeOh: typeof handBadgeOH;
-	actionTypeBadge: typeof actionTypeBadge;
-	body: typeof body;
-	name: typeof name;
-	pills: typeof pills;
-	damagePill: typeof damagePill;
-	infoPill: typeof infoPill;
-	notesSection: typeof notesSection;
-	notesDisplay: typeof notesDisplay;
-	notesText: typeof notesText;
-	notesPlaceholder: typeof notesPlaceholder;
-	notesInput: typeof notesInput;
-	diceRow: typeof diceRow;
-	dicePill: typeof dicePill;
-	savePill: typeof savePill;
-	saveDcValue: typeof saveDCValue;
-	attackPill: typeof attackPill;
-	higherLevels: typeof higherLevels;
+  actionNode: typeof actionNode;
+  selected: typeof selected;
+  handle: typeof handle;
+  header: typeof header;
+  badges: typeof badges;
+  schoolBadge: typeof schoolBadge;
+  levelBadge: typeof levelBadge;
+  handBadgeMh: typeof handBadgeMH;
+  handBadgeOh: typeof handBadgeOH;
+  actionTypeBadge: typeof actionTypeBadge;
+  body: typeof body;
+  name: typeof name;
+  pills: typeof pills;
+  damagePill: typeof damagePill;
+  infoPill: typeof infoPill;
+  notesSection: typeof notesSection;
+  notesDisplay: typeof notesDisplay;
+  notesText: typeof notesText;
+  notesPlaceholder: typeof notesPlaceholder;
+  notesInput: typeof notesInput;
+  diceRow: typeof diceRow;
+  dicePill: typeof dicePill;
+  savePill: typeof savePill;
+  saveDCValue: typeof saveDCValue;
+  attackPill: typeof attackPill;
+  higherLevels: typeof higherLevels;
 };
 export default __default_export__;

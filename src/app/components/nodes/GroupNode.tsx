@@ -108,46 +108,98 @@ export function GroupNode({ id, data, selected }: NodeProps<GroupNodeType>) {
 
             return (
               <div key={variant.id} className={styles.variantRow}>
-                <span className={styles.variantDot}>✦</span>
-                <span className={styles.variantLabel} title={variant.label}>
-                  {variant.label}
-                </span>
-                <div className={styles.variantBadges}>
-                  {schoolInfo && (
-                    <span
-                      className={styles.schoolBadge}
-                      style={{ color: schoolInfo.color }}
-                      title={schoolInfo.label}
-                    >
-                      {schoolInfo.abbreviation}
-                    </span>
-                  )}
-                  {variant.spellLevel !== undefined && (
-                    <span className={styles.levelBadge}>
-                      {variant.spellLevel === "cantrip"
-                        ? "✦"
-                        : `Lv${variant.spellLevel}`}
-                    </span>
-                  )}
-                  <span
-                    className={styles.actionTypeBadge}
-                    style={{ backgroundColor: actionInfo.color }}
-                    title={actionInfo.label}
-                  >
-                    {actionInfo.short}
+                <div className={styles.variantRowTop}>
+                  <span className={styles.variantDot}>✦</span>
+                  <span className={styles.variantLabel} title={variant.label}>
+                    {variant.label}
                   </span>
-                  {damageInfo && (
+                  <div className={styles.variantBadges}>
+                    {schoolInfo && (
+                      <span
+                        className={styles.schoolBadge}
+                        style={{ color: schoolInfo.color }}
+                        title={schoolInfo.label}
+                      >
+                        {schoolInfo.abbreviation}
+                      </span>
+                    )}
+                    {variant.spellLevel !== undefined && (
+                      <span className={styles.levelBadge}>
+                        {variant.spellLevel === "cantrip"
+                          ? "✦"
+                          : `Lv${variant.spellLevel}`}
+                      </span>
+                    )}
                     <span
-                      className={styles.damagePill}
-                      style={{
-                        color: damageInfo.color,
-                        backgroundColor: damageInfo.bgColor,
-                      }}
+                      className={styles.actionTypeBadge}
+                      style={{ backgroundColor: actionInfo.color }}
+                      title={actionInfo.label}
                     >
-                      {damageInfo.label}
+                      {actionInfo.short}
                     </span>
-                  )}
+                    {damageInfo && (
+                      <span
+                        className={styles.damagePill}
+                        style={{
+                          color: damageInfo.color,
+                          backgroundColor: damageInfo.bgColor,
+                        }}
+                      >
+                        {variant.damageDice ? `${variant.damageDice} ` : ""}
+                        {damageInfo.label}
+                      </span>
+                    )}
+                  </div>
                 </div>
+
+                {/* Detail sub-line: roll type, range, duration */}
+                {(variant.rollType === "attack" ||
+                  (variant.rollType === "save" && variant.saveAbility) ||
+                  variant.range ||
+                  (variant.duration &&
+                    variant.duration !== "Instantaneous")) && (
+                  <div className={styles.variantDetails}>
+                    {variant.rollType === "attack" && (
+                      <span
+                        className={styles.variantAttackPill}
+                        title="Attack roll"
+                      >
+                        ATK
+                      </span>
+                    )}
+                    {variant.rollType === "save" && variant.saveAbility && (
+                      <span
+                        className={styles.variantSavePill}
+                        title="Saving throw"
+                      >
+                        {variant.saveAbility} SAVE
+                      </span>
+                    )}
+                    {variant.range && (
+                      <span className={styles.variantDetailPill} title="Range">
+                        {variant.range}
+                      </span>
+                    )}
+                    {variant.duration &&
+                      variant.duration !== "Instantaneous" && (
+                        <span
+                          className={styles.variantDetailPill}
+                          title="Duration"
+                        >
+                          {variant.duration}
+                        </span>
+                      )}
+                  </div>
+                )}
+
+                {!data.collapsed && (
+                  <Handle
+                    type="source"
+                    position={Position.Right}
+                    id={`source-variant-${variant.id}`}
+                    className={styles.variantHandle}
+                  />
+                )}
               </div>
             );
           })
@@ -158,7 +210,7 @@ export function GroupNode({ id, data, selected }: NodeProps<GroupNodeType>) {
         type="source"
         position={Position.Bottom}
         id="source-bottom"
-        className={styles.handle}
+        className={`${styles.handle} ${styles.bottomHandle}`}
       />
     </div>
   );

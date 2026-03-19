@@ -367,7 +367,15 @@ function FlowCanvasInner({
     (connection: Connection) => {
       const isYes = connection.sourceHandle === "yes";
       const isNo = connection.sourceHandle === "no";
-      const strokeColor = isYes ? "#66bb6a" : isNo ? "#ef5350" : "#8b949e";
+      const isVariant =
+        connection.sourceHandle?.startsWith("source-variant-") ?? false;
+      const strokeColor = isYes
+        ? "#66bb6a"
+        : isNo
+          ? "#ef5350"
+          : isVariant
+            ? "#c8901c"
+            : "#8b949e";
       const defaultLabel = isYes ? "Yes" : isNo ? "No" : "";
       const newEdge: Edge = {
         ...connection,

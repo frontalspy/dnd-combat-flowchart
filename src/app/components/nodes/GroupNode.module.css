@@ -161,15 +161,22 @@
 }
 
 .variantRow {
+  position: relative;
   display: flex;
-  align-items: center;
-  gap: 5px;
+  flex-direction: column;
+  gap: 3px;
   padding: 5px 10px;
   border-bottom: 1px solid var(--border-dim);
 }
 
 .variantRow:last-child {
   border-bottom: none;
+}
+
+.variantRowTop {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .variantDot {
@@ -228,4 +235,85 @@
   font-weight: 600;
   padding: 1px 5px;
   border-radius: 8px;
+}
+
+/* ── Variant detail sub-line ─────────────────── */
+
+.variantDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding-left: 14px;
+}
+
+.variantDetailPill {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(107, 76, 42, 0.08);
+  color: var(--text-mid);
+  white-space: nowrap;
+}
+
+.variantAttackPill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(107, 76, 42, 0.12);
+  color: var(--text-mid);
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+.variantSavePill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(200, 100, 30, 0.12);
+  color: #c87020;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+.variantHandle {
+  width: 8px !important;
+  height: 8px !important;
+  background: var(--gold) !important;
+  border: 2px solid var(--bg-deep) !important;
+  border-radius: 50% !important;
+  right: -5px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  opacity: 0;
+  transition: opacity 0.15s;
+  position: absolute !important;
+}
+
+.groupNode:hover .variantHandle,
+.selected .variantHandle {
+  opacity: 1;
+}
+
+/* Hide bottom source handle when expanded; show it only when collapsed */
+.bottomHandle {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.groupNode:hover .bottomHandle,
+.selected .bottomHandle {
+  opacity: 0;
+}
+
+.collapsed .bottomHandle {
+  opacity: 0;
+}
+
+.groupNode:hover .collapsed .bottomHandle,
+.collapsed.groupNode:hover .bottomHandle,
+.collapsed.selected .bottomHandle {
+  opacity: 1;
 }

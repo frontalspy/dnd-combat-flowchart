@@ -20,6 +20,7 @@ declare const variantList: string;
 declare const collapsed: string;
 declare const emptyHint: string;
 declare const variantRow: string;
+declare const variantRowTop: string;
 declare const variantDot: string;
 declare const variantLabel: string;
 declare const variantBadges: string;
@@ -27,6 +28,12 @@ declare const schoolBadge: string;
 declare const levelBadge: string;
 declare const actionTypeBadge: string;
 declare const damagePill: string;
+declare const variantDetails: string;
+declare const variantDetailPill: string;
+declare const variantAttackPill: string;
+declare const variantSavePill: string;
+declare const variantHandle: string;
+declare const bottomHandle: string;
 
 export {
 	groupNode,
@@ -43,13 +50,20 @@ export {
 	collapsed,
 	emptyHint,
 	variantRow,
+	variantRowTop,
 	variantDot,
 	variantLabel,
 	variantBadges,
 	schoolBadge,
 	levelBadge,
 	actionTypeBadge,
-	damagePill
+	damagePill,
+	variantDetails,
+	variantDetailPill,
+	variantAttackPill,
+	variantSavePill,
+	variantHandle,
+	bottomHandle
 };
 
 declare const __default_export__: {
@@ -67,6 +81,7 @@ declare const __default_export__: {
 	collapsed: typeof collapsed;
 	emptyHint: typeof emptyHint;
 	variantRow: typeof variantRow;
+	variantRowTop: typeof variantRowTop;
 	variantDot: typeof variantDot;
 	variantLabel: typeof variantLabel;
 	variantBadges: typeof variantBadges;
@@ -74,5 +89,11 @@ declare const __default_export__: {
 	levelBadge: typeof levelBadge;
 	actionTypeBadge: typeof actionTypeBadge;
 	damagePill: typeof damagePill;
+	variantDetails: typeof variantDetails;
+	variantDetailPill: typeof variantDetailPill;
+	variantAttackPill: typeof variantAttackPill;
+	variantSavePill: typeof variantSavePill;
+	variantHandle: typeof variantHandle;
+	bottomHandle: typeof bottomHandle;
 };
 export default __default_export__;
