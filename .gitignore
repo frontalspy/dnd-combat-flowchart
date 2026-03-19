@@ -10,5 +10,3 @@ node_modules
 dist
 
 docs/
-
-**/*.module.css.d.ts
