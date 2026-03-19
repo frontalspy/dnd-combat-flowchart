@@ -207,6 +207,12 @@
   color: var(--green-light);
 }
 
+.shareBtnActive {
+  background: rgba(60, 120, 200, 0.12);
+  border-color: #5b9bd5;
+  color: #5b9bd5;
+}
+
 .animateBtnActive {
   background: rgba(184, 144, 26, 0.15);
   border-color: var(--gold);

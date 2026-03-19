@@ -7,6 +7,7 @@ import {
   Download,
   Edit2,
   FileText,
+  Link2,
   Save,
   Sword,
   Zap,
@@ -25,6 +26,7 @@ import { CLASSES } from "../data/classes";
 import type { Weapon } from "../data/weapons";
 import { WEAPONS } from "../data/weapons";
 import type { SavedFlowchart, WeaponLoadout } from "../types";
+import { encodeFlowchart, SHARE_PARAM } from "../utils/shareUrl";
 import styles from "./FlowchartBuilder.module.css";
 
 export function FlowchartBuilder() {
@@ -49,6 +51,7 @@ export function FlowchartBuilder() {
   const [isSaved, setIsSaved] = useState(false);
   const [edgeStyle] = useState<EdgeStyleType>("step");
   const [animatedEdges, setAnimatedEdges] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
   const [showLoadoutPicker, setShowLoadoutPicker] = useState(false);
   const [showStatsPicker, setShowStatsPicker] = useState(false);
   const [customWeapons, setCustomWeapons] = useState<Weapon[]>([]);
@@ -155,6 +158,26 @@ export function FlowchartBuilder() {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [handleSave]);
+
+  const handleShare = useCallback(() => {
+    if (!character) return;
+    const id = activeChart?.id ?? activeTabId ?? `chart-${Date.now()}`;
+    const chart: SavedFlowchart = {
+      id,
+      name: chartName,
+      character,
+      nodes: flowDataRef.current.nodes,
+      edges: flowDataRef.current.edges,
+      createdAt: activeChart?.createdAt ?? Date.now(),
+      updatedAt: Date.now(),
+    };
+    const encoded = encodeFlowchart(chart);
+    const url = `${window.location.origin}${window.location.pathname}?${SHARE_PARAM}=${encoded}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    });
+  }, [activeChart, activeTabId, character, chartName]);
 
   const handleExportJpg = useCallback(async () => {
     await exportFnsRef.current?.exportJpg(chartName);
@@ -266,6 +289,16 @@ export function FlowchartBuilder() {
               : "Loadout"}
           </button>
           <span className={styles.topDivider} />
+          {/* Share button */}
+          <button
+            type="button"
+            className={`${styles.actionBtn} ${isCopied ? styles.shareBtnActive : ""}`}
+            onClick={handleShare}
+            title="Copy shareable link to clipboard"
+          >
+            {isCopied ? <Check size={14} /> : <Link2 size={14} />}
+            {isCopied ? "Copied!" : "Share"}
+          </button>
           {/* Animate edges toggle */}
           <button
             type="button"

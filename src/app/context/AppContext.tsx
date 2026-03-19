@@ -5,6 +5,7 @@ import type {
   SavedFlowchart,
   WeaponLoadout,
 } from "../types";
+import { decodeFlowchart, SHARE_PARAM } from "../utils/shareUrl";
 
 type AppView = "setup" | "builder";
 
@@ -163,7 +164,7 @@ const AppContext = createContext<AppContextValue | null>(null);
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
-  // Load persisted state on mount
+  // Load persisted state on mount, then honour any ?chart= share URL
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -189,6 +190,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       }
     } catch {
       // Ignore parse errors
+    }
+
+    // Handle shared ?chart= URL — must come after LOAD_STATE so it wins
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get(SHARE_PARAM);
+    if (encoded) {
+      const chart = decodeFlowchart(encoded);
+      if (chart) {
+        const importedChart = { ...chart, id: `shared-${Date.now()}` };
+        dispatch({ type: "SAVE_FLOWCHART", payload: importedChart });
+        dispatch({ type: "OPEN_TAB", payload: importedChart.id });
+        dispatch({ type: "SET_VIEW", payload: "builder" });
+        window.history.replaceState(null, "", window.location.pathname);
+      }
     }
   }, []);
 
