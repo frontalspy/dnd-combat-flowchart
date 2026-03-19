@@ -2,7 +2,8 @@ import {
   BaseEdge,
   EdgeLabelRenderer,
   type EdgeProps,
-  getStraightPath,
+  getSmoothStepPath,
+  Position,
   useReactFlow,
 } from "@xyflow/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -82,30 +83,24 @@ export function SnappedEdge({
   id,
   sourceX,
   sourceY,
+  sourcePosition,
   targetX,
   targetY,
+  targetPosition,
   markerEnd,
   style,
   data,
 }: EdgeProps) {
-  const dx = targetX - sourceX;
-  const dy = targetY - sourceY;
-  const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-  const snappedAngle = Math.round(angle / 45) * 45;
-  const rad = snappedAngle * (Math.PI / 180);
-  const length = Math.sqrt(dx * dx + dy * dy);
-  const tx = sourceX + Math.cos(rad) * length;
-  const ty = sourceY + Math.sin(rad) * length;
-
-  const [path] = getStraightPath({
+  const [path, midX, midY] = getSmoothStepPath({
     sourceX,
     sourceY,
-    targetX: tx,
-    targetY: ty,
+    sourcePosition: sourcePosition ?? Position.Bottom,
+    targetX,
+    targetY,
+    targetPosition: targetPosition ?? Position.Top,
+    borderRadius: 0,
   });
 
-  const midX = (sourceX + tx) / 2;
-  const midY = (sourceY + ty) / 2;
   const label = (data as EdgeData)?.label ?? "";
 
   return (
