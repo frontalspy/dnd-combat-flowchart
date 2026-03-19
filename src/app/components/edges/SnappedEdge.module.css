@@ -1,0 +1,61 @@
+/* Edge label pill — parchment-styled annotation on flowchart edges */
+
+.labelPillWrapper {
+  position: absolute;
+  pointer-events: all;
+}
+
+.labelPill {
+  display: inline-block;
+  background: var(--bg-raised);
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  padding: 1px 8px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  line-height: 1.6;
+  transition:
+    border-color 0.12s,
+    box-shadow 0.12s;
+}
+
+.labelPill:hover {
+  border-color: var(--gold-light);
+  box-shadow: 0 0 0 2px var(--gold-glow);
+}
+
+/* Faint "+" affordance shown only on hover when the label is empty */
+.emptyPill {
+  opacity: 0;
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-faint);
+  transition:
+    opacity 0.15s,
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.labelPillWrapper:hover .emptyPill {
+  opacity: 0.7;
+  border-color: var(--border-dim);
+  background: var(--bg-raised);
+}
+
+.labelInput {
+  background: var(--bg-raised);
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  padding: 1px 6px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--text);
+  outline: none;
+  min-width: 40px;
+  line-height: 1.6;
+  box-shadow: 0 0 0 2px var(--gold-glow);
+}

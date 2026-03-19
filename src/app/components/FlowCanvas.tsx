@@ -361,19 +361,20 @@ function FlowCanvasInner({
       const isYes = connection.sourceHandle === "yes";
       const isNo = connection.sourceHandle === "no";
       const strokeColor = isYes ? "#66bb6a" : isNo ? "#ef5350" : "#8b949e";
+      const defaultLabel = isYes ? "Yes" : isNo ? "No" : "";
       const newEdge: Edge = {
         ...connection,
         id: `edge-${Date.now()}`,
-        type: edgeStyle,
+        type: "snappedEdge",
         animated: false,
-        label: isYes ? "Yes" : isNo ? "No" : undefined,
+        data: { label: defaultLabel },
         style: { stroke: strokeColor, strokeWidth: 2 },
         markerEnd: { type: "arrow" as const, color: strokeColor },
       } as Edge;
       setEdges((eds) => addEdge(newEdge, eds));
       scheduleSnapshot();
     },
-    [setEdges, scheduleSnapshot, edgeStyle]
+    [setEdges, scheduleSnapshot]
   );
 
   const onDragOver = useCallback((event: React.DragEvent) => {
