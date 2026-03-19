@@ -441,7 +441,7 @@ function FlowCanvasInner({
       } else if (nodeType === "groupNode") {
         const data: GroupNodeData = {
           label: (item.label as string) ?? "Action Group",
-          variants: [],
+          variants: (item.variants as GroupNodeData["variants"]) ?? [],
           collapsed: false,
         };
         newNode = { id: newId(), type: "groupNode", position, data };

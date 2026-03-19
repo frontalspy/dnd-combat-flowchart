@@ -29,6 +29,12 @@ declare const activeTab: string;
 declare const levelFilters: string;
 declare const levelChip: string;
 declare const activeLevelChip: string;
+declare const suggestedGroups: string;
+declare const suggestedGroupsLabel: string;
+declare const suggestedGroupsList: string;
+declare const groupChip: string;
+declare const groupChipLabel: string;
+declare const groupChipCount: string;
 declare const cardList: string;
 declare const emptyState: string;
 declare const shieldCard: string;
@@ -75,6 +81,12 @@ export {
 	levelFilters,
 	levelChip,
 	activeLevelChip,
+	suggestedGroups,
+	suggestedGroupsLabel,
+	suggestedGroupsList,
+	groupChip,
+	groupChipLabel,
+	groupChipCount,
 	cardList,
 	emptyState,
 	shieldCard,
@@ -122,6 +134,12 @@ declare const __default_export__: {
 	levelFilters: typeof levelFilters;
 	levelChip: typeof levelChip;
 	activeLevelChip: typeof activeLevelChip;
+	suggestedGroups: typeof suggestedGroups;
+	suggestedGroupsLabel: typeof suggestedGroupsLabel;
+	suggestedGroupsList: typeof suggestedGroupsList;
+	groupChip: typeof groupChip;
+	groupChipLabel: typeof groupChipLabel;
+	groupChipCount: typeof groupChipCount;
 	cardList: typeof cardList;
 	emptyState: typeof emptyState;
 	shieldCard: typeof shieldCard;

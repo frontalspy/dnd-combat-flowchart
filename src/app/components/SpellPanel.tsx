@@ -4,6 +4,7 @@ import { STANDARD_ACTIONS } from "../data/actions";
 import type { ClassAction } from "../data/classes";
 import { getClassDefinition, getMaxSpellLevel } from "../data/classes";
 import { SPELL_SCHOOLS } from "../data/damageTypes";
+import { resolveGroupTemplates } from "../data/groupTemplates";
 import spellsData from "../data/spells.json";
 import type { Weapon } from "../data/weapons";
 import { WEAPONS } from "../data/weapons";
@@ -297,6 +298,11 @@ export function SpellPanel({
     return spells;
   }, [availableSpells, spellLevelFilter, search]);
 
+  const suggestedGroups = useMemo(
+    () => resolveGroupTemplates(character.class, character.level),
+    [character.class, character.level]
+  );
+
   const handleAddCustom = useCallback((action: ActionItem) => {
     setCustomActions((prev) => [...prev, action]);
   }, []);
@@ -478,6 +484,35 @@ export function SpellPanel({
 
       {/* Card list */}
       <div className={styles.cardList}>
+        {activeTab === "actions" && suggestedGroups.length > 0 && (
+          <div className={styles.suggestedGroups}>
+            <div className={styles.suggestedGroupsLabel}>Suggested Groups</div>
+            <div className={styles.suggestedGroupsList}>
+              {suggestedGroups.map((group) => (
+                <div
+                  key={group.label}
+                  className={styles.groupChip}
+                  draggable
+                  title={`${group.variants.length} variants — drag to canvas`}
+                  onDragStart={(e) =>
+                    handleTemplateDrag(e, "groupNode", {
+                      label: group.label,
+                      variants: group.variants,
+                      collapsed: false,
+                    })
+                  }
+                >
+                  <Icon src={buildIcon} size={14} />
+                  <span className={styles.groupChipLabel}>{group.label}</span>
+                  <span className={styles.groupChipCount}>
+                    {group.variants.length}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {activeTab === "actions" &&
           filteredActions.map((action) => (
             <ActionCard
