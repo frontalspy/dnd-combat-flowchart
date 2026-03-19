@@ -10,3 +10,5 @@ node_modules
 dist
 
 docs/
+
+src/**/*.module.css.d.ts
