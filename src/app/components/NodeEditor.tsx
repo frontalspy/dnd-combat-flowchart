@@ -25,12 +25,14 @@ interface NodeEditorProps {
   selectedNode: Node | null;
   onClose: () => void;
   character?: Character;
+  customWeapons?: import("../data/weapons").Weapon[];
 }
 
 export function NodeEditor({
   selectedNode,
   onClose,
   character,
+  customWeapons = [],
 }: NodeEditorProps) {
   const { updateNodeData, deleteElements, getNode } = useReactFlow();
 
@@ -267,6 +269,7 @@ export function NodeEditor({
             selectedNodeId={selectedNode.id}
             groupData={liveGroupData}
             character={character}
+            customWeapons={customWeapons}
           />
         )}
       </div>

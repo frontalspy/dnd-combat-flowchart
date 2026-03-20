@@ -828,6 +828,7 @@ export function FlowchartBuilder() {
               selectedNode={selectedNodes[0]}
               onClose={() => setSelectedNodes([])}
               character={character}
+              customWeapons={customWeapons}
             />
           )}
           {selectedNodes.length > 1 && (

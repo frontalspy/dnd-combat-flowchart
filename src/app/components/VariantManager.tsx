@@ -14,6 +14,8 @@ import {
   getActionTypeFromCastingTime,
 } from "../data/damageTypes";
 import spellsData from "../data/spells.json";
+import type { Weapon } from "../data/weapons";
+import { WEAPONS } from "../data/weapons";
 import type { Character, GroupNodeData, GroupVariant, Spell } from "../types";
 import styles from "./NodeEditor.module.css";
 
@@ -23,12 +25,14 @@ interface VariantManagerProps {
   selectedNodeId: string;
   groupData: GroupNodeData;
   character?: Character;
+  customWeapons?: Weapon[];
 }
 
 export function VariantManager({
   selectedNodeId,
   groupData,
   character,
+  customWeapons = [],
 }: VariantManagerProps) {
   const { updateNodeData, getNode } = useReactFlow();
   const [variantSearch, setVariantSearch] = useState("");
@@ -91,7 +95,9 @@ export function VariantManager({
           }))
       : [];
 
-    const standardItems = STANDARD_ACTIONS.map((a) => ({
+    const standardItems = STANDARD_ACTIONS.filter(
+      (a) => a.id !== "std-attack"
+    ).map((a) => ({
       id: a.id,
       label: a.name,
       actionType: a.actionType,
@@ -105,6 +111,69 @@ export function VariantManager({
       range: a.range,
       duration: a.duration,
     }));
+
+    // Loadout weapons (main + off hand) from SRD + custom weapons list
+    const allWeapons = [...WEAPONS, ...customWeapons];
+    const loadout = character.loadout;
+    const loadoutWeaponItems: typeof standardItems = [];
+    if (loadout?.mainHand) {
+      const w = allWeapons.find((x) => x.id === loadout.mainHand);
+      if (w) {
+        loadoutWeaponItems.push({
+          id: `weapon-${w.id}-main`,
+          label: w.name,
+          actionType: "action" as const,
+          damageType: w.damageType,
+          school: undefined,
+          spellLevel: undefined,
+          description: `${w.damageDice} ${w.damageType}`,
+          damageDice: w.damageDice,
+          saveAbility: undefined,
+          rollType: "attack" as const,
+          range: w.range,
+          duration: undefined,
+        });
+      }
+    }
+    if (loadout?.offHand === "weapon" && loadout.offHandWeaponId) {
+      const w = allWeapons.find((x) => x.id === loadout.offHandWeaponId);
+      if (w) {
+        loadoutWeaponItems.push({
+          id: `weapon-${w.id}-off`,
+          label: `${w.name} (off hand)`,
+          actionType: "bonus" as const,
+          damageType: w.damageType,
+          school: undefined,
+          spellLevel: undefined,
+          description: `${w.damageDice} ${w.damageType}`,
+          damageDice: w.damageDice,
+          saveAbility: undefined,
+          rollType: "attack" as const,
+          range: w.range,
+          duration: undefined,
+        });
+      }
+    }
+    // Unassigned custom weapons
+    const loadoutIds = new Set(
+      [loadout?.mainHand, loadout?.offHandWeaponId].filter(Boolean)
+    );
+    const freeCustomWeaponItems = customWeapons
+      .filter((w) => !loadoutIds.has(w.id))
+      .map((w) => ({
+        id: `weapon-${w.id}`,
+        label: w.name,
+        actionType: "action" as const,
+        damageType: w.damageType,
+        school: undefined,
+        spellLevel: undefined,
+        description: `${w.damageDice} ${w.damageType}`,
+        damageDice: w.damageDice,
+        saveAbility: undefined,
+        rollType: "attack" as const,
+        range: w.range,
+        duration: undefined,
+      }));
 
     const spellItems =
       maxSpellLevel > 0
@@ -134,8 +203,14 @@ export function VariantManager({
             }))
         : [];
 
-    return [...classActionItems, ...standardItems, ...spellItems];
-  }, [character]);
+    return [
+      ...loadoutWeaponItems,
+      ...freeCustomWeaponItems,
+      ...classActionItems,
+      ...standardItems,
+      ...spellItems,
+    ];
+  }, [character, customWeapons]);
 
   const filteredPool = useMemo(() => {
     if (!variantSearch.trim()) return variantPool.slice(0, 20);
