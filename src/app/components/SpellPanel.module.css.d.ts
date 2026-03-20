@@ -39,6 +39,12 @@ declare const suggestedGroupsList: string;
 declare const groupChip: string;
 declare const groupChipLabel: string;
 declare const groupChipCount: string;
+declare const weaponsSection: string;
+declare const weaponsSectionLabel: string;
+declare const noWeaponCard: string;
+declare const noWeaponInfo: string;
+declare const noWeaponLabel: string;
+declare const noWeaponHint: string;
 declare const cardList: string;
 declare const emptyState: string;
 declare const shieldCard: string;
@@ -95,6 +101,12 @@ export {
 	groupChip,
 	groupChipLabel,
 	groupChipCount,
+	weaponsSection,
+	weaponsSectionLabel,
+	noWeaponCard,
+	noWeaponInfo,
+	noWeaponLabel,
+	noWeaponHint,
 	cardList,
 	emptyState,
 	shieldCard,
@@ -152,6 +164,12 @@ declare const __default_export__: {
 	groupChip: typeof groupChip;
 	groupChipLabel: typeof groupChipLabel;
 	groupChipCount: typeof groupChipCount;
+	weaponsSection: typeof weaponsSection;
+	weaponsSectionLabel: typeof weaponsSectionLabel;
+	noWeaponCard: typeof noWeaponCard;
+	noWeaponInfo: typeof noWeaponInfo;
+	noWeaponLabel: typeof noWeaponLabel;
+	noWeaponHint: typeof noWeaponHint;
 	cardList: typeof cardList;
 	emptyState: typeof emptyState;
 	shieldCard: typeof shieldCard;

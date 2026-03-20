@@ -25,7 +25,7 @@ import { WeaponCard } from "./WeaponCard";
 
 const allSpells = spellsData as Spell[];
 
-type PanelTab = "actions" | "spells" | "weapons";
+type PanelTab = "actions" | "spells";
 type SpellLevelFilter =
   | "all"
   | "cantrip"
@@ -72,12 +72,16 @@ function DragTemplate({
 interface SpellPanelProps {
   character: Character;
   customWeapons: Weapon[];
+  customActions: ActionItem[];
+  onAddCustomAction: (action: ActionItem) => void;
   onDragStart: (e: React.DragEvent, data: unknown) => void;
 }
 
 export function SpellPanel({
   character,
   customWeapons,
+  customActions,
+  onAddCustomAction,
   onDragStart,
 }: SpellPanelProps) {
   const [activeTab, setActiveTab] = useState<PanelTab>("actions");
@@ -86,7 +90,6 @@ export function SpellPanel({
     useState<SpellLevelFilter>("all");
   const [sourceFilter, setSourceFilter] = useState<SpellSourceFilter>("all");
   const [showCustomModal, setShowCustomModal] = useState(false);
-  const [customActions, setCustomActions] = useState<ActionItem[]>([]);
 
   const classDef = getClassDefinition(character.class);
   const maxSpellLevel = getMaxSpellLevel(
@@ -112,15 +115,17 @@ export function SpellPanel({
   }, [character.loadout, customWeapons]);
 
   const filteredCustomWeapons = useMemo(() => {
-    if (!search.trim()) return customWeapons;
+    const loadoutIds = new Set(loadoutWeapons.map(({ weapon }) => weapon.id));
+    const unassigned = customWeapons.filter((w) => !loadoutIds.has(w.id));
+    if (!search.trim()) return unassigned;
     const q = search.toLowerCase();
-    return customWeapons.filter(
+    return unassigned.filter(
       (w) =>
         w.name.toLowerCase().includes(q) ||
         w.damageType.toLowerCase().includes(q) ||
         w.properties.some((p) => p.toLowerCase().includes(q))
     );
-  }, [customWeapons, search]);
+  }, [customWeapons, loadoutWeapons, search]);
 
   const filteredLoadoutWeapons = useMemo(() => {
     if (!search.trim()) return loadoutWeapons;
@@ -196,9 +201,12 @@ export function SpellPanel({
     [character.class, character.level]
   );
 
-  const handleAddCustom = useCallback((action: ActionItem) => {
-    setCustomActions((prev) => [...prev, action]);
-  }, []);
+  const handleAddCustom = useCallback(
+    (action: ActionItem) => {
+      onAddCustomAction(action);
+    },
+    [onAddCustomAction]
+  );
 
   const handleTemplateDrag = useCallback(
     (e: React.DragEvent, nodeType: string, data: unknown) => {
@@ -347,16 +355,6 @@ export function SpellPanel({
             Spells
           </button>
         )}
-        <button
-          type="button"
-          className={`${styles.tab} ${activeTab === "weapons" ? styles.activeTab : ""}`}
-          onClick={() => {
-            setActiveTab("weapons");
-          }}
-        >
-          <Icon src={swordIcon} size={14} />
-          Weapons
-        </button>
       </div>
 
       {/* Spell level filter */}
@@ -434,18 +432,78 @@ export function SpellPanel({
             </div>
           )}
 
-        {activeTab === "actions" && filteredActions.length === 0 && (
-          <div className={styles.emptyState}>No actions match your search.</div>
+        {/* Weapons — shown below suggested groups in actions tab */}
+        {activeTab === "actions" && (
+          <div className={styles.weaponsSection}>
+            <div className={styles.weaponsSectionLabel}>Weapons</div>
+            {!character.loadout?.mainHand ? (
+              <div className={styles.noWeaponCard}>
+                <Icon src={swordIcon} size={16} />
+                <div className={styles.noWeaponInfo}>
+                  <span className={styles.noWeaponLabel}>
+                    Main Hand — No weapon equipped
+                  </span>
+                  <span className={styles.noWeaponHint}>
+                    Use the Loadout button to assign weapons
+                  </span>
+                </div>
+              </div>
+            ) : (
+              filteredLoadoutWeapons
+                .filter(({ hand }) => hand === "main")
+                .map(({ weapon, hand }) => (
+                  <WeaponCard
+                    key={`${weapon.id}-${hand}`}
+                    weapon={weapon}
+                    hand={hand}
+                    onDragStart={onDragStart}
+                  />
+                ))
+            )}
+            {filteredLoadoutWeapons
+              .filter(({ hand }) => hand === "off")
+              .map(({ weapon, hand }) => (
+                <WeaponCard
+                  key={`${weapon.id}-${hand}`}
+                  weapon={weapon}
+                  hand={hand}
+                  onDragStart={onDragStart}
+                />
+              ))}
+            {character.loadout?.offHand === "shield" && (
+              <div className={styles.shieldCard}>
+                <span className={styles.shieldIcon}>🛡</span>
+                <span className={styles.shieldLabel}>Shield</span>
+                <span className={styles.shieldAc}>+2 AC</span>
+              </div>
+            )}
+            {filteredCustomWeapons.map((weapon) => (
+              <WeaponCard
+                key={weapon.id}
+                weapon={weapon}
+                onDragStart={onDragStart}
+              />
+            ))}
+          </div>
         )}
 
         {activeTab === "actions" &&
-          filteredActions.map((action) => (
-            <ActionCard
-              key={action.id}
-              action={action}
-              onDragStart={onDragStart}
-            />
-          ))}
+          filteredActions.filter((a) => a.id !== "std-attack").length === 0 && (
+            <div className={styles.emptyState}>
+              No actions match your search.
+            </div>
+          )}
+
+        {activeTab === "actions" &&
+          filteredActions
+            .filter((a) => a.id !== "std-attack")
+            .map((action) => (
+              <ActionCard
+                key={action.id}
+                action={action}
+                onDragStart={onDragStart}
+              />
+            ))}
 
         {activeTab === "spells" && filteredSpells.length === 0 && (
           <div className={styles.emptyState}>
@@ -460,44 +518,6 @@ export function SpellPanel({
             <SpellCard
               key={spell.name}
               spell={spell}
-              onDragStart={onDragStart}
-            />
-          ))}
-
-        {activeTab === "weapons" && character.loadout?.offHand === "shield" && (
-          <div className={styles.shieldCard}>
-            <span className={styles.shieldIcon}>🛡</span>
-            <span className={styles.shieldLabel}>Shield</span>
-            <span className={styles.shieldAc}>+2 AC</span>
-          </div>
-        )}
-
-        {activeTab === "weapons" &&
-          filteredLoadoutWeapons.length === 0 &&
-          filteredCustomWeapons.length === 0 &&
-          character.loadout?.offHand !== "shield" && (
-            <div className={styles.emptyState}>
-              {character.loadout?.mainHand || character.loadout?.offHandWeaponId
-                ? "No weapons match your search."
-                : "No weapons equipped. Use the Loadout button in the top bar to assign your weapons."}
-            </div>
-          )}
-
-        {activeTab === "weapons" &&
-          filteredLoadoutWeapons.map(({ weapon, hand }) => (
-            <WeaponCard
-              key={`${weapon.id}-${hand}`}
-              weapon={weapon}
-              hand={hand}
-              onDragStart={onDragStart}
-            />
-          ))}
-
-        {activeTab === "weapons" &&
-          filteredCustomWeapons.map((weapon) => (
-            <WeaponCard
-              key={weapon.id}
-              weapon={weapon}
               onDragStart={onDragStart}
             />
           ))}

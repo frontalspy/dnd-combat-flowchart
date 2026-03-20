@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import { getSpellSlots } from "../data/classes";
+import type { Weapon } from "../data/weapons";
 import type {
   AbilityScores,
+  ActionItem,
   Character,
   SavedFlowchart,
   WeaponLoadout,
@@ -18,6 +20,8 @@ interface AppState {
   openTabIds: string[];
   activeTabId: string | null;
   spellSlots: Record<number, number>;
+  customWeapons: Weapon[];
+  customActions: ActionItem[];
 }
 
 type AppAction =
@@ -34,7 +38,9 @@ type AppAction =
   | { type: "SET_ABILITY_SCORES"; payload: AbilityScores }
   | { type: "USE_SLOT"; payload: number }
   | { type: "RESTORE_SLOT"; payload: number }
-  | { type: "RESTORE_SLOTS" };
+  | { type: "RESTORE_SLOTS" }
+  | { type: "ADD_CUSTOM_WEAPON"; payload: Weapon }
+  | { type: "ADD_CUSTOM_ACTION"; payload: ActionItem };
 
 const STORAGE_KEY = "dnd-flowchart-app-state";
 
@@ -103,6 +109,16 @@ function appReducer(state: AppState, action: AppAction): AppState {
         ),
       };
     }
+    case "ADD_CUSTOM_WEAPON":
+      return {
+        ...state,
+        customWeapons: [...state.customWeapons, action.payload],
+      };
+    case "ADD_CUSTOM_ACTION":
+      return {
+        ...state,
+        customActions: [...state.customActions, action.payload],
+      };
     case "SET_VIEW":
       return { ...state, view: action.payload };
     case "SAVE_FLOWCHART": {
@@ -193,6 +209,8 @@ const initialState: AppState = {
   openTabIds: [],
   activeTabId: null,
   spellSlots: {},
+  customWeapons: [],
+  customActions: [],
 };
 
 interface AppContextValue {
@@ -214,6 +232,8 @@ interface AppContextValue {
   spendSlot: (level: number) => void;
   restoreSlot: (level: number) => void;
   restoreSpellSlots: () => void;
+  addCustomWeapon: (weapon: Weapon) => void;
+  addCustomAction: (action: ActionItem) => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -299,6 +319,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const restoreSlot = (level: number) =>
     dispatch({ type: "RESTORE_SLOT", payload: level });
   const restoreSpellSlots = () => dispatch({ type: "RESTORE_SLOTS" });
+  const addCustomWeapon = (weapon: Weapon) =>
+    dispatch({ type: "ADD_CUSTOM_WEAPON", payload: weapon });
+  const addCustomAction = (action: ActionItem) =>
+    dispatch({ type: "ADD_CUSTOM_ACTION", payload: action });
 
   return (
     <AppContext.Provider
@@ -321,6 +345,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         spendSlot,
         restoreSlot,
         restoreSpellSlots,
+        addCustomWeapon,
+        addCustomAction,
       }}
     >
       {children}

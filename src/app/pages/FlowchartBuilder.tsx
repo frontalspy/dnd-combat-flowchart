@@ -55,8 +55,10 @@ export function FlowchartBuilder() {
     spendSlot,
     restoreSlot,
     restoreSpellSlots,
+    addCustomWeapon,
+    addCustomAction,
   } = useApp();
-  const { character, activeTabId } = state;
+  const { character, activeTabId, customWeapons } = state;
 
   const activeChart = getActiveFlowchart();
 
@@ -74,7 +76,6 @@ export function FlowchartBuilder() {
   const [showStatsPicker, setShowStatsPicker] = useState(false);
   const [showSlotsPopover, setShowSlotsPopover] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
-  const [customWeapons, setCustomWeapons] = useState<Weapon[]>([]);
   const [concentrationInfo, setConcentrationInfo] = useState<{
     spells: Array<{ id: string; label: string }>;
     conflictIds: string[];
@@ -114,10 +115,6 @@ export function FlowchartBuilder() {
     },
     []
   );
-
-  const handleAddCustomWeapon = useCallback((weapon: Weapon) => {
-    setCustomWeapons((prev) => [...prev, weapon]);
-  }, []);
 
   const handleSaveLoadout = useCallback(
     (loadout: WeaponLoadout) => {
@@ -794,7 +791,7 @@ export function FlowchartBuilder() {
         <LoadoutPicker
           character={character}
           customWeapons={customWeapons}
-          onAddCustomWeapon={handleAddCustomWeapon}
+          onAddCustomWeapon={addCustomWeapon}
           onSave={handleSaveLoadout}
           onClose={() => setShowLoadoutPicker(false)}
         />
@@ -806,6 +803,8 @@ export function FlowchartBuilder() {
           <SpellPanel
             character={character}
             customWeapons={customWeapons}
+            customActions={state.customActions}
+            onAddCustomAction={addCustomAction}
             onDragStart={handleDragStart}
           />
 
