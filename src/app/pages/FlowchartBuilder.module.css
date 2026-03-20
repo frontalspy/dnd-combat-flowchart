@@ -805,7 +805,11 @@
   background: transparent;
   border-color: var(--border-mid);
   opacity: 0.45;
-  cursor: default;
+}
+
+.slotCircleEmpty:hover {
+  opacity: 0.7;
+  border-color: var(--border-accent);
 }
 
 .slotsCount {

@@ -52,6 +52,7 @@ export function FlowchartBuilder() {
     setLoadout,
     setAbilityScores,
     spendSlot,
+    restoreSlot,
     restoreSpellSlots,
   } = useApp();
   const { character, activeTabId } = state;
@@ -560,13 +561,13 @@ export function FlowchartBuilder() {
                               className={`${styles.slotCircle} ${filled ? styles.slotCircleFilled : styles.slotCircleEmpty}`}
                               onClick={() => {
                                 if (filled) spendSlot(lvl);
+                                else restoreSlot(lvl);
                               }}
                               title={
                                 filled
                                   ? `Use ${lvl}${ordSuffix}-level slot`
-                                  : "Spent"
+                                  : `Restore ${lvl}${ordSuffix}-level slot`
                               }
-                              disabled={!filled}
                             />
                           );
                         })}

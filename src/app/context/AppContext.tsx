@@ -33,6 +33,7 @@ type AppAction =
   | { type: "SET_LOADOUT"; payload: WeaponLoadout }
   | { type: "SET_ABILITY_SCORES"; payload: AbilityScores }
   | { type: "USE_SLOT"; payload: number }
+  | { type: "RESTORE_SLOT"; payload: number }
   | { type: "RESTORE_SLOTS" };
 
 const STORAGE_KEY = "dnd-flowchart-app-state";
@@ -72,6 +73,25 @@ function appReducer(state: AppState, action: AppAction): AppState {
           ),
         },
       };
+    case "RESTORE_SLOT": {
+      if (!state.character) return state;
+      const maxForLevel =
+        getSpellSlots(
+          state.character.class,
+          state.character.subclass,
+          state.character.level
+        )[action.payload] ?? 0;
+      return {
+        ...state,
+        spellSlots: {
+          ...state.spellSlots,
+          [action.payload]: Math.min(
+            maxForLevel,
+            (state.spellSlots[action.payload] ?? 0) + 1
+          ),
+        },
+      };
+    }
     case "RESTORE_SLOTS": {
       if (!state.character) return state;
       return {
@@ -192,6 +212,7 @@ interface AppContextValue {
   setAbilityScores: (scores: AbilityScores) => void;
   useSpellSlot: (level: number) => void;
   spendSlot: (level: number) => void;
+  restoreSlot: (level: number) => void;
   restoreSpellSlots: () => void;
 }
 
@@ -275,6 +296,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const useSpellSlot = (level: number) =>
     dispatch({ type: "USE_SLOT", payload: level });
   const spendSlot = useSpellSlot;
+  const restoreSlot = (level: number) =>
+    dispatch({ type: "RESTORE_SLOT", payload: level });
   const restoreSpellSlots = () => dispatch({ type: "RESTORE_SLOTS" });
 
   return (
@@ -296,6 +319,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setAbilityScores,
         useSpellSlot,
         spendSlot,
+        restoreSlot,
         restoreSpellSlots,
       }}
     >
