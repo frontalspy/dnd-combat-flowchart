@@ -81,6 +81,14 @@ declare const slotCircle: string;
 declare const slotCircleFilled: string;
 declare const slotCircleEmpty: string;
 declare const slotsCount: string;
+declare const exportMenuWrapper: string;
+declare const exportMenu: string;
+declare const exportMenuItem: string;
+declare const exportMenuItemActive: string;
+declare const exportMenuItemSuccess: string;
+declare const exportMenuItemKbd: string;
+declare const exportMenuItemCheck: string;
+declare const exportMenuDivider: string;
 
 export {
 	page,
@@ -157,7 +165,15 @@ export {
 	slotCircle,
 	slotCircleFilled,
 	slotCircleEmpty,
-	slotsCount
+	slotsCount,
+	exportMenuWrapper,
+	exportMenu,
+	exportMenuItem,
+	exportMenuItemActive,
+	exportMenuItemSuccess,
+	exportMenuItemKbd,
+	exportMenuItemCheck,
+	exportMenuDivider
 };
 
 declare const __default_export__: {
@@ -236,5 +252,13 @@ declare const __default_export__: {
 	slotCircleFilled: typeof slotCircleFilled;
 	slotCircleEmpty: typeof slotCircleEmpty;
 	slotsCount: typeof slotsCount;
+	exportMenuWrapper: typeof exportMenuWrapper;
+	exportMenu: typeof exportMenu;
+	exportMenuItem: typeof exportMenuItem;
+	exportMenuItemActive: typeof exportMenuItemActive;
+	exportMenuItemSuccess: typeof exportMenuItemSuccess;
+	exportMenuItemKbd: typeof exportMenuItemKbd;
+	exportMenuItemCheck: typeof exportMenuItemCheck;
+	exportMenuDivider: typeof exportMenuDivider;
 };
 export default __default_export__;

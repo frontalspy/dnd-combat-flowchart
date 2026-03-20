@@ -219,6 +219,14 @@
   font-family: inherit;
 }
 
+.levelChipCircle {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
 .levelChip:hover {
   background: var(--bg-surface);
   color: var(--text);
@@ -327,10 +335,11 @@
   color: var(--gold);
   background: rgba(200, 144, 28, 0.14);
   border: 1px solid var(--gold-dim);
-  border-radius: 10px;
-  padding: 0px 4px 3px 4px;
-  min-width: 18px;
-  height: 18px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  flex-shrink: 0;
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;

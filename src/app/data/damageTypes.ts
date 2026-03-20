@@ -60,8 +60,8 @@ export const DAMAGE_TYPES: Record<DamageType, DamageTypeMeta> = {
   },
   lightning: {
     label: "Lightning",
-    color: "#fff176",
-    bgColor: "rgba(255,241,118,0.15)",
+    color: "#c8b400",
+    bgColor: "rgba(200,180,0,0.18)",
     icon: lightningIcon,
     keywords: ["lightning"],
   },
@@ -95,8 +95,8 @@ export const DAMAGE_TYPES: Record<DamageType, DamageTypeMeta> = {
   },
   radiant: {
     label: "Radiant",
-    color: "#fff59d",
-    bgColor: "rgba(255,245,157,0.15)",
+    color: "#c49a0a",
+    bgColor: "rgba(196,154,10,0.18)",
     icon: radiantIcon,
     keywords: ["radiant"],
   },

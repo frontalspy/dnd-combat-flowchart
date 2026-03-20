@@ -11,6 +11,7 @@ import {
   Focus,
   Layers,
   Link2,
+  MoreHorizontal,
   Save,
   Sword,
   Zap,
@@ -72,6 +73,7 @@ export function FlowchartBuilder() {
   const [showLoadoutPicker, setShowLoadoutPicker] = useState(false);
   const [showStatsPicker, setShowStatsPicker] = useState(false);
   const [showSlotsPopover, setShowSlotsPopover] = useState(false);
+  const [showExportMenu, setShowExportMenu] = useState(false);
   const [customWeapons, setCustomWeapons] = useState<Weapon[]>([]);
   const [concentrationInfo, setConcentrationInfo] = useState<{
     spells: Array<{ id: string; label: string }>;
@@ -133,6 +135,7 @@ export function FlowchartBuilder() {
   }, [activeChart?.name]);
 
   const exportFnsRef = useRef<FlowCanvasExports | null>(null);
+  const exportMenuRef = useRef<HTMLDivElement>(null);
   const flowDataRef = useRef<{ nodes: Node[]; edges: unknown[] }>({
     nodes: (activeChart?.nodes ?? []) as Node[],
     edges: activeChart?.edges ?? [],
@@ -215,6 +218,22 @@ export function FlowchartBuilder() {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [handleSave]);
+
+  // Close export menu when clicking outside
+  useEffect(() => {
+    if (!showExportMenu) return;
+    const handler = (e: MouseEvent) => {
+      if (
+        exportMenuRef.current &&
+        e.target instanceof Element &&
+        !exportMenuRef.current.contains(e.target)
+      ) {
+        setShowExportMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showExportMenu]);
 
   const handleShare = useCallback(() => {
     if (!character) return;
@@ -681,53 +700,80 @@ export function FlowchartBuilder() {
               : "Loadout"}
           </button>
           <span className={styles.topDivider} />
-          {/* Share button */}
-          <button
-            type="button"
-            className={`${styles.actionBtn} ${isCopied ? styles.shareBtnActive : ""}`}
-            onClick={handleShare}
-            title="Copy shareable link to clipboard"
-          >
-            {isCopied ? <Check size={14} /> : <Link2 size={14} />}
-            {isCopied ? "Copied!" : "Share"}
-          </button>
-          {/* Animate edges toggle */}
-          <button
-            type="button"
-            className={`${styles.actionBtn} ${animatedEdges ? styles.animateBtnActive : ""}`}
-            onClick={() => setAnimatedEdges((v) => !v)}
-            title={animatedEdges ? "Disable edge animation" : "Animate edges"}
-          >
-            <Zap size={14} />
-            Animate
-          </button>
-          <button
-            type="button"
-            className={`${styles.actionBtn} ${isSaved ? styles.savedBtn : ""}`}
-            onClick={handleSave}
-            title="Save (Ctrl+S)"
-          >
-            <Save size={14} />
-            {isSaved ? "Saved!" : "Save"}
-          </button>
-          <button
-            type="button"
-            className={styles.actionBtn}
-            onClick={handleExportJpg}
-            title="Export as JPG image"
-          >
-            <Download size={14} />
-            JPG
-          </button>
-          <button
-            type="button"
-            className={styles.actionBtn}
-            onClick={handleExportPdf}
-            title="Export as PDF"
-          >
-            <FileText size={14} />
-            PDF
-          </button>
+          {/* Export / Save menu */}
+          <div className={styles.exportMenuWrapper} ref={exportMenuRef}>
+            <button
+              type="button"
+              className={`${styles.actionBtn} ${isSaved ? styles.savedBtn : ""}`}
+              onClick={() => setShowExportMenu((v) => !v)}
+              title="Save & Export options"
+            >
+              <MoreHorizontal size={14} />
+              {isSaved ? "Saved!" : "Menu"}
+            </button>
+            {showExportMenu && (
+              <div className={styles.exportMenu}>
+                <button
+                  type="button"
+                  className={`${styles.exportMenuItem} ${isSaved ? styles.exportMenuItemSuccess : ""}`}
+                  onClick={() => {
+                    handleSave();
+                    setShowExportMenu(false);
+                  }}
+                >
+                  <Save size={14} />
+                  Save
+                  <span className={styles.exportMenuItemKbd}>Ctrl+S</span>
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.exportMenuItem} ${isCopied ? styles.exportMenuItemSuccess : ""}`}
+                  onClick={() => {
+                    handleShare();
+                    setShowExportMenu(false);
+                  }}
+                >
+                  {isCopied ? <Check size={14} /> : <Link2 size={14} />}
+                  {isCopied ? "Copied!" : "Share Link"}
+                </button>
+                <div className={styles.exportMenuDivider} />
+                <button
+                  type="button"
+                  className={styles.exportMenuItem}
+                  onClick={() => {
+                    handleExportJpg();
+                    setShowExportMenu(false);
+                  }}
+                >
+                  <Download size={14} />
+                  Export JPG
+                </button>
+                <button
+                  type="button"
+                  className={styles.exportMenuItem}
+                  onClick={() => {
+                    handleExportPdf();
+                    setShowExportMenu(false);
+                  }}
+                >
+                  <FileText size={14} />
+                  Export PDF
+                </button>
+                <div className={styles.exportMenuDivider} />
+                <button
+                  type="button"
+                  className={`${styles.exportMenuItem} ${animatedEdges ? styles.exportMenuItemActive : ""}`}
+                  onClick={() => setAnimatedEdges((v) => !v)}
+                >
+                  <Zap size={14} />
+                  Animate Edges
+                  {animatedEdges && (
+                    <span className={styles.exportMenuItemCheck}>✓</span>
+                  )}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 

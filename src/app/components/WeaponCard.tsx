@@ -1,4 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
+import ReactDOM from "react-dom";
 import { DAMAGE_TYPES } from "../data/damageTypes";
 import type { Weapon } from "../data/weapons";
 import type { ActionNodeData } from "../types";
@@ -8,13 +9,15 @@ import styles from "./WeaponCard.module.css";
 interface WeaponTooltipProps {
   weapon: Weapon;
   visible: boolean;
+  top: number;
+  left: number;
 }
 
-function WeaponTooltip({ weapon, visible }: WeaponTooltipProps) {
+function WeaponTooltip({ weapon, visible, top, left }: WeaponTooltipProps) {
   if (!visible) return null;
   const damageInfo = DAMAGE_TYPES[weapon.damageType];
-  return (
-    <div className={styles.tooltip}>
+  return ReactDOM.createPortal(
+    <div className={styles.tooltip} style={{ top, left }}>
       <div className={styles.tooltipHeader}>
         <span className={styles.tooltipName}>{weapon.name}</span>
         <span className={styles.tooltipType}>
@@ -38,7 +41,8 @@ function WeaponTooltip({ weapon, visible }: WeaponTooltipProps) {
           </span>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -50,10 +54,16 @@ interface WeaponCardProps {
 
 export function WeaponCard({ weapon, hand, onDragStart }: WeaponCardProps) {
   const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const damageInfo = DAMAGE_TYPES[weapon.damageType];
 
   const handleMouseEnter = useCallback(() => {
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      setTooltipPos({ top: rect.top, left: rect.right + 8 });
+    }
     timeoutRef.current = setTimeout(() => setTooltipVisible(true), 500);
   }, []);
   const handleMouseLeave = useCallback(() => {
@@ -94,6 +104,7 @@ export function WeaponCard({ weapon, hand, onDragStart }: WeaponCardProps) {
 
   return (
     <div
+      ref={cardRef}
       className={styles.card}
       draggable
       onDragStart={(e) => onDragStart(e, dragData)}
@@ -162,7 +173,12 @@ export function WeaponCard({ weapon, hand, onDragStart }: WeaponCardProps) {
         </div>
       )}
 
-      <WeaponTooltip weapon={weapon} visible={tooltipVisible} />
+      <WeaponTooltip
+        weapon={weapon}
+        visible={tooltipVisible}
+        top={tooltipPos.top}
+        left={tooltipPos.left}
+      />
     </div>
   );
 }

@@ -328,7 +328,9 @@ export function SpellPanel({
         <button
           type="button"
           className={`${styles.tab} ${activeTab === "actions" ? styles.activeTab : ""}`}
-          onClick={() => setActiveTab("actions")}
+          onClick={() => {
+            setActiveTab("actions");
+          }}
         >
           <Icon src={combatActionIcon} size={14} />
           Actions
@@ -337,7 +339,9 @@ export function SpellPanel({
           <button
             type="button"
             className={`${styles.tab} ${activeTab === "spells" ? styles.activeTab : ""}`}
-            onClick={() => setActiveTab("spells")}
+            onClick={() => {
+              setActiveTab("spells");
+            }}
           >
             <Icon src={spellIcon} size={14} />
             Spells
@@ -346,7 +350,9 @@ export function SpellPanel({
         <button
           type="button"
           className={`${styles.tab} ${activeTab === "weapons" ? styles.activeTab : ""}`}
-          onClick={() => setActiveTab("weapons")}
+          onClick={() => {
+            setActiveTab("weapons");
+          }}
         >
           <Icon src={swordIcon} size={14} />
           Weapons
@@ -366,7 +372,7 @@ export function SpellPanel({
               <button
                 key={level}
                 type="button"
-                className={`${styles.levelChip} ${spellLevelFilter === level ? styles.activeLevelChip : ""}`}
+                className={`${styles.levelChip} ${level !== "all" ? styles.levelChipCircle : ""} ${spellLevelFilter === level ? styles.activeLevelChip : ""}`}
                 onClick={() => setSpellLevelFilter(level)}
               >
                 {level === "all" ? "All" : level === "cantrip" ? "✦" : level}
@@ -394,34 +400,42 @@ export function SpellPanel({
       )}
 
       {/* Card list */}
-      <div className={styles.cardList}>
-        {activeTab === "actions" && suggestedGroups.length > 0 && (
-          <div className={styles.suggestedGroups}>
-            <div className={styles.suggestedGroupsLabel}>Suggested Groups</div>
-            <div className={styles.suggestedGroupsList}>
-              {suggestedGroups.map((group) => (
-                <div
-                  key={group.label}
-                  className={styles.groupChip}
-                  draggable
-                  title={`${group.variants.length} variants — drag to canvas`}
-                  onDragStart={(e) =>
-                    handleTemplateDrag(e, "groupNode", {
-                      label: group.label,
-                      variants: group.variants,
-                      collapsed: false,
-                    })
-                  }
-                >
-                  <Icon src={buildIcon} size={14} />
-                  <span className={styles.groupChipLabel}>{group.label}</span>
-                  <span className={styles.groupChipCount}>
-                    {group.variants.length}
-                  </span>
-                </div>
-              ))}
+      <div className={styles.cardList} key={activeTab}>
+        {activeTab === "actions" &&
+          suggestedGroups.length > 0 &&
+          !search.trim() && (
+            <div className={styles.suggestedGroups}>
+              <div className={styles.suggestedGroupsLabel}>
+                Suggested Groups
+              </div>
+              <div className={styles.suggestedGroupsList}>
+                {suggestedGroups.map((group) => (
+                  <div
+                    key={group.label}
+                    className={styles.groupChip}
+                    draggable
+                    title={`${group.variants.length} variants — drag to canvas`}
+                    onDragStart={(e) =>
+                      handleTemplateDrag(e, "groupNode", {
+                        label: group.label,
+                        variants: group.variants,
+                        collapsed: false,
+                      })
+                    }
+                  >
+                    <Icon src={buildIcon} size={14} />
+                    <span className={styles.groupChipLabel}>{group.label}</span>
+                    <span className={styles.groupChipCount}>
+                      {group.variants.length}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
+        {activeTab === "actions" && filteredActions.length === 0 && (
+          <div className={styles.emptyState}>No actions match your search.</div>
         )}
 
         {activeTab === "actions" &&

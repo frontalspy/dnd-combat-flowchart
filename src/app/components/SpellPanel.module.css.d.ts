@@ -28,6 +28,7 @@ declare const tab: string;
 declare const activeTab: string;
 declare const levelFilters: string;
 declare const levelChip: string;
+declare const levelChipCircle: string;
 declare const activeLevelChip: string;
 declare const sourceFilters: string;
 declare const sourceChip: string;
@@ -83,6 +84,7 @@ export {
 	activeTab,
 	levelFilters,
 	levelChip,
+	levelChipCircle,
 	activeLevelChip,
 	sourceFilters,
 	sourceChip,
@@ -139,6 +141,7 @@ declare const __default_export__: {
 	activeTab: typeof activeTab;
 	levelFilters: typeof levelFilters;
 	levelChip: typeof levelChip;
+	levelChipCircle: typeof levelChipCircle;
 	activeLevelChip: typeof activeLevelChip;
 	sourceFilters: typeof sourceFilters;
 	sourceChip: typeof sourceChip;
