@@ -94,6 +94,20 @@ export function useFlowDrop({
         };
         newNode = { id: newId(), type: "conditionStatusNode", position, data };
       } else {
+        // Auto-populate resourceCost for spell nodes
+        let resourceCost: ActionNodeData["resourceCost"];
+        const spellLevelRaw = item.spellLevel as string | undefined;
+        if (
+          item.source === "spell" &&
+          spellLevelRaw &&
+          spellLevelRaw !== "cantrip"
+        ) {
+          const lvl = parseInt(spellLevelRaw, 10);
+          if (!Number.isNaN(lvl)) {
+            resourceCost = { type: "spell-slot", amount: lvl };
+          }
+        }
+
         const data: ActionNodeData = {
           label: (item.label as string) ?? "Action",
           actionType:
@@ -113,6 +127,7 @@ export function useFlowDrop({
           hand: item.hand as ActionNodeData["hand"],
           concentration: (item.concentration as boolean | undefined) ?? false,
           notes: "",
+          resourceCost,
         };
         newNode = { id: newId(), type: "actionNode", position, data };
       }

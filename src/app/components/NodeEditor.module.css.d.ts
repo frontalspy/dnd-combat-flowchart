@@ -27,6 +27,9 @@ declare const conditionInfoRow: string;
 declare const conditionDisplayName: string;
 declare const descText: string;
 declare const notesTextarea: string;
+declare const resourceSelect: string;
+declare const amountLabel: string;
+declare const amountInput: string;
 declare const footer: string;
 declare const deleteBtn: string;
 declare const hint: string;
@@ -75,6 +78,9 @@ export {
 	conditionDisplayName,
 	descText,
 	notesTextarea,
+	resourceSelect,
+	amountLabel,
+	amountInput,
 	footer,
 	deleteBtn,
 	hint,
@@ -124,6 +130,9 @@ declare const __default_export__: {
 	conditionDisplayName: typeof conditionDisplayName;
 	descText: typeof descText;
 	notesTextarea: typeof notesTextarea;
+	resourceSelect: typeof resourceSelect;
+	amountLabel: typeof amountLabel;
+	amountInput: typeof amountInput;
 	footer: typeof footer;
 	deleteBtn: typeof deleteBtn;
 	hint: typeof hint;

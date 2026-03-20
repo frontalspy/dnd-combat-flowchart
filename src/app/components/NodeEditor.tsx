@@ -19,8 +19,11 @@ import {
 import type {
   Character,
   ConditionStatusNodeData,
+  DndClass,
   DndCondition,
   GroupNodeData,
+  ResourceCost,
+  ResourceType,
 } from "../types";
 import { Icon } from "./Icon";
 import styles from "./NodeEditor.module.css";
@@ -30,6 +33,58 @@ import {
   CONDITION_ICONS,
 } from "./nodes/ConditionStatusNode";
 import { VariantManager } from "./VariantManager";
+
+const RESOURCE_LABELS: Record<ResourceType, string> = {
+  "spell-slot": "Spell Slot",
+  ki: "Ki Points",
+  rage: "Rage",
+  "superiority-die": "Superiority Die",
+  "channel-divinity": "Channel Divinity",
+  "bardic-inspiration": "Bardic Inspiration",
+  "lay-on-hands": "Lay on Hands",
+  "wild-shape": "Wild Shape",
+  "sorcery-point": "Sorcery Points",
+  "warlock-invocation": "Warlock Slot",
+  custom: "Custom",
+};
+
+const CLASS_RESOURCES: Record<DndClass, ResourceType[]> = {
+  barbarian: ["rage", "custom"],
+  bard: ["spell-slot", "bardic-inspiration", "custom"],
+  cleric: ["spell-slot", "channel-divinity", "custom"],
+  druid: ["spell-slot", "wild-shape", "custom"],
+  fighter: ["spell-slot", "superiority-die", "custom"],
+  monk: ["ki", "custom"],
+  paladin: ["spell-slot", "channel-divinity", "lay-on-hands", "custom"],
+  ranger: ["spell-slot", "custom"],
+  rogue: ["spell-slot", "custom"],
+  sorcerer: ["spell-slot", "sorcery-point", "custom"],
+  warlock: ["spell-slot", "warlock-invocation", "custom"],
+  wizard: ["spell-slot", "custom"],
+};
+
+const ALL_RESOURCE_TYPES: ResourceType[] = [
+  "spell-slot",
+  "ki",
+  "rage",
+  "superiority-die",
+  "channel-divinity",
+  "bardic-inspiration",
+  "lay-on-hands",
+  "wild-shape",
+  "sorcery-point",
+  "warlock-invocation",
+  "custom",
+];
+
+/** Resource types that carry a numeric amount */
+const AMOUNT_RESOURCE_TYPES = new Set<ResourceType>([
+  "spell-slot",
+  "ki",
+  "superiority-die",
+  "lay-on-hands",
+  "sorcery-point",
+]);
 
 interface NodeEditorProps {
   selectedNode: Node | null;
@@ -55,12 +110,19 @@ export function NodeEditor({
   });
   const [notes, setNotes] = useState("");
   const [label, setLabel] = useState("");
+  const [rcType, setRcType] = useState<ResourceType | "">("");
+  const [rcAmount, setRcAmount] = useState("");
+  const [rcLabel, setRcLabel] = useState("");
 
   useEffect(() => {
     if (!selectedNode) return;
     const d = selectedNode.data as Record<string, unknown>;
     setNotes(typeof d.notes === "string" ? d.notes : "");
     setLabel(typeof d.label === "string" ? d.label : "");
+    const rc = d.resourceCost as ResourceCost | undefined;
+    setRcType(rc?.type ?? "");
+    setRcAmount(rc?.amount !== undefined ? String(rc.amount) : "");
+    setRcLabel(rc?.label ?? "");
   }, [selectedNode]);
 
   const handleSaveNotes = useCallback(() => {
@@ -78,6 +140,44 @@ export function NodeEditor({
     deleteElements({ nodes: [selectedNode] });
     onClose();
   }, [selectedNode, deleteElements, onClose]);
+
+  const applyResourceCost = useCallback(
+    (type: ResourceType | "", amount: string, label: string) => {
+      if (!selectedNode) return;
+      if (!type) {
+        updateNodeData(selectedNode.id, { resourceCost: undefined });
+        return;
+      }
+      const parsedAmount = parseInt(amount, 10);
+      const rc: ResourceCost = {
+        type,
+        amount:
+          AMOUNT_RESOURCE_TYPES.has(type) && !Number.isNaN(parsedAmount)
+            ? parsedAmount
+            : undefined,
+        label: type === "custom" && label ? label : undefined,
+      };
+      updateNodeData(selectedNode.id, { resourceCost: rc });
+    },
+    [selectedNode, updateNodeData]
+  );
+
+  const handleRcTypeChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const newType = e.target.value as ResourceType | "";
+      setRcType(newType);
+      applyResourceCost(newType, rcAmount, rcLabel);
+    },
+    [applyResourceCost, rcAmount, rcLabel]
+  );
+
+  const handleRcAmountBlur = useCallback(() => {
+    applyResourceCost(rcType, rcAmount, rcLabel);
+  }, [applyResourceCost, rcType, rcAmount, rcLabel]);
+
+  const handleRcLabelBlur = useCallback(() => {
+    applyResourceCost(rcType, rcAmount, rcLabel);
+  }, [applyResourceCost, rcType, rcAmount, rcLabel]);
 
   // ─────────────────────────────────────────────────────────────────
 
@@ -256,6 +356,64 @@ export function NodeEditor({
             <p className={styles.descText}>{descriptionText}</p>
           </div>
         )}
+
+        {/* Resource Cost (action nodes only) */}
+        {nodeType === "actionNode" &&
+          (() => {
+            const availableResources: ResourceType[] = character
+              ? (CLASS_RESOURCES[character.class] ?? ALL_RESOURCE_TYPES)
+              : ALL_RESOURCE_TYPES;
+            return (
+              <div className={styles.field}>
+                <label className={styles.fieldLabel}>Resource Cost</label>
+                <div className={styles.fieldRow}>
+                  <select
+                    className={styles.resourceSelect}
+                    value={rcType}
+                    onChange={handleRcTypeChange}
+                  >
+                    <option value="">— None —</option>
+                    {availableResources.map((rt) => (
+                      <option key={rt} value={rt}>
+                        {RESOURCE_LABELS[rt]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {rcType && AMOUNT_RESOURCE_TYPES.has(rcType) && (
+                  <div className={styles.fieldRow}>
+                    <label className={styles.amountLabel}>Amount</label>
+                    <input
+                      type="number"
+                      min={1}
+                      className={styles.amountInput}
+                      value={rcAmount}
+                      onChange={(e) => setRcAmount(e.target.value)}
+                      onBlur={handleRcAmountBlur}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleRcAmountBlur();
+                      }}
+                      placeholder="1"
+                    />
+                  </div>
+                )}
+                {rcType === "custom" && (
+                  <div className={styles.fieldRow}>
+                    <input
+                      className={styles.fieldInput}
+                      value={rcLabel}
+                      onChange={(e) => setRcLabel(e.target.value)}
+                      onBlur={handleRcLabelBlur}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleRcLabelBlur();
+                      }}
+                      placeholder="Label (e.g. Bardic Dice)"
+                    />
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
         {/* Notes */}
         {nodeType !== "noteNode" &&

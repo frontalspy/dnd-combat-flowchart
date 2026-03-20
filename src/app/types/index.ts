@@ -100,6 +100,25 @@ export interface ActionItem {
   minLevel?: number;
 }
 
+export type ResourceType =
+  | "spell-slot"
+  | "ki"
+  | "rage"
+  | "superiority-die"
+  | "channel-divinity"
+  | "bardic-inspiration"
+  | "lay-on-hands"
+  | "wild-shape"
+  | "sorcery-point"
+  | "warlock-invocation"
+  | "custom";
+
+export interface ResourceCost {
+  type: ResourceType;
+  amount?: number;
+  label?: string;
+}
+
 export interface ActionNodeData extends Record<string, unknown> {
   label: string;
   actionType: ActionType;
@@ -118,6 +137,7 @@ export interface ActionNodeData extends Record<string, unknown> {
   higherLevels?: string;
   hand?: "main" | "off";
   concentration?: boolean;
+  resourceCost?: ResourceCost;
 }
 
 export interface ConditionNodeData extends Record<string, unknown> {

@@ -283,6 +283,30 @@
   border-left: 3px solid rgba(239, 83, 80, 0.85) !important;
 }
 
+/* Resource cost badge */
+.resourceCostRow {
+  margin-top: 4px;
+  margin-bottom: 2px;
+}
+
+.resourceCostBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: rgba(107, 76, 42, 0.12);
+  border: 1px solid rgba(107, 76, 42, 0.3);
+  color: var(--text-mid);
+}
+
+.resourceCostAmount {
+  font-weight: 800;
+  color: var(--gold);
+}
+
 .concentrationConflict:hover,
 .concentrationConflict.selected {
   border-color: #e57373 !important;

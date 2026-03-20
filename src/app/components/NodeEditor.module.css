@@ -205,6 +205,52 @@
   color: var(--text-faint);
 }
 
+/* Resource cost editor */
+.resourceSelect {
+  flex: 1;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  padding: 5px 8px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  appearance: none;
+}
+
+.resourceSelect:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.amountLabel {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  align-self: center;
+  white-space: nowrap;
+  min-width: 48px;
+}
+
+.amountInput {
+  width: 60px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  padding: 5px 8px;
+  font-family: inherit;
+  text-align: center;
+  transition: border-color 0.15s;
+}
+
+.amountInput:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
 .footer {
   padding: 12px;
   border-top: 1px solid var(--border-dim);

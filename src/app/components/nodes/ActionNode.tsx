@@ -9,14 +9,53 @@ import {
   SPELL_SCHOOLS,
 } from "../../data/damageTypes";
 import { spellSaveDC } from "../../data/stats";
+import barbarianIcon from "../../icons/class/barbarian.svg";
+import bardIcon from "../../icons/class/bard.svg";
+import clericIcon from "../../icons/class/cleric.svg";
+import druidIcon from "../../icons/class/druid.svg";
+import fighterIcon from "../../icons/class/fighter.svg";
+import monkIcon from "../../icons/class/monk.svg";
+import paladinIcon from "../../icons/class/paladin.svg";
+import sorcererIcon from "../../icons/class/sorcerer.svg";
+import warlockIcon from "../../icons/class/warlock.svg";
 import reachIcon from "../../icons/combat/reach.svg";
 import d20Icon from "../../icons/dice/d20.svg";
 import timeIcon from "../../icons/entity/time.svg";
+import spellIcon from "../../icons/game/spell.svg";
 import concentrationIcon from "../../icons/spell/concentration.svg";
-import type { ActionNodeData } from "../../types";
+import starIcon from "../../icons/util/star.svg";
+import type { ActionNodeData, ResourceType } from "../../types";
 import { ActionEconomyContext, ConcentrationContext } from "../FlowCanvas";
 import { Icon } from "../Icon";
 import styles from "./ActionNode.module.css";
+
+const RESOURCE_ICONS: Record<ResourceType, string> = {
+  "spell-slot": spellIcon,
+  ki: monkIcon,
+  rage: barbarianIcon,
+  "superiority-die": fighterIcon,
+  "channel-divinity": clericIcon,
+  "bardic-inspiration": bardIcon,
+  "lay-on-hands": paladinIcon,
+  "wild-shape": druidIcon,
+  "sorcery-point": sorcererIcon,
+  "warlock-invocation": warlockIcon,
+  custom: starIcon,
+};
+
+const RESOURCE_SHORT_LABELS: Record<ResourceType, string> = {
+  "spell-slot": "Slot",
+  ki: "Ki",
+  rage: "Rage",
+  "superiority-die": "SD",
+  "channel-divinity": "CD",
+  "bardic-inspiration": "BI",
+  "lay-on-hands": "LoH",
+  "wild-shape": "WS",
+  "sorcery-point": "SP",
+  "warlock-invocation": "Pact",
+  custom: "",
+};
 
 type ActionNodeType = Node<ActionNodeData, "actionNode">;
 
@@ -200,6 +239,29 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
         {data.higherLevels && (
           <div className={styles.higherLevels} title="At higher levels">
             ↑ {data.higherLevels}
+          </div>
+        )}
+
+        {data.resourceCost && (
+          <div className={styles.resourceCostRow}>
+            <span
+              className={styles.resourceCostBadge}
+              title={`Resource cost: ${data.resourceCost.label || RESOURCE_SHORT_LABELS[data.resourceCost.type] || data.resourceCost.type}`}
+            >
+              <Icon
+                src={RESOURCE_ICONS[data.resourceCost.type]}
+                size={11}
+                alt=""
+              />
+              {data.resourceCost.amount !== undefined && (
+                <span className={styles.resourceCostAmount}>
+                  {data.resourceCost.amount}
+                </span>
+              )}
+              {data.resourceCost.label
+                ? data.resourceCost.label
+                : RESOURCE_SHORT_LABELS[data.resourceCost.type]}
+            </span>
           </div>
         )}
 

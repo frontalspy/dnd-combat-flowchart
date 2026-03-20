@@ -35,6 +35,9 @@ declare const higherLevels: string;
 declare const concentrationBadge: string;
 declare const concentrationConflict: string;
 declare const overBudget: string;
+declare const resourceCostRow: string;
+declare const resourceCostBadge: string;
+declare const resourceCostAmount: string;
 
 export {
 	actionNode,
@@ -65,7 +68,10 @@ export {
 	higherLevels,
 	concentrationBadge,
 	concentrationConflict,
-	overBudget
+	overBudget,
+	resourceCostRow,
+	resourceCostBadge,
+	resourceCostAmount
 };
 
 declare const __default_export__: {
@@ -98,5 +104,8 @@ declare const __default_export__: {
 	concentrationBadge: typeof concentrationBadge;
 	concentrationConflict: typeof concentrationConflict;
 	overBudget: typeof overBudget;
+	resourceCostRow: typeof resourceCostRow;
+	resourceCostBadge: typeof resourceCostBadge;
+	resourceCostAmount: typeof resourceCostAmount;
 };
 export default __default_export__;
