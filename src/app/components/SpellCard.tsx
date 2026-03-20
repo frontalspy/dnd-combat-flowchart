@@ -49,7 +49,14 @@ function SpellTooltip({ spell, visible }: SpellTooltipProps) {
           <strong>At Higher Levels:</strong> {spell.higher_levels}
         </p>
       )}
-      {spell.ritual && <span className={styles.ritualBadge}>Ritual</span>}
+      <div className={styles.tooltipFooter}>
+        {spell.ritual && <span className={styles.ritualBadge}>Ritual</span>}
+        {spell.source && spell.source !== "SRD" && (
+          <span className={styles.sourceBadge} data-source={spell.source}>
+            {spell.source}
+          </span>
+        )}
+      </div>
     </div>
   );
 }

@@ -171,6 +171,34 @@
   border: 1px solid var(--gold-dim);
   border-radius: 2px;
   padding: 1px 6px;
-  margin-top: 6px;
   letter-spacing: 0.5px;
+}
+
+.tooltipFooter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.sourceBadge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 2px;
+  padding: 1px 6px;
+  letter-spacing: 0.5px;
+}
+
+.sourceBadge[data-source="XGtE"] {
+  color: #4db8a0;
+  border: 1px solid rgba(77, 184, 160, 0.4);
+  background: rgba(77, 184, 160, 0.1);
+}
+
+.sourceBadge[data-source="TCoE"] {
+  color: #b07fd4;
+  border: 1px solid rgba(176, 127, 212, 0.4);
+  background: rgba(176, 127, 212, 0.1);
 }

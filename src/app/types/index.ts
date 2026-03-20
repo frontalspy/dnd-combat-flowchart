@@ -59,6 +59,7 @@ export interface Spell {
   type: string;
   higher_levels?: string;
   concentration?: boolean;
+  source?: "SRD" | "XGtE" | "TCoE" | "PHB";
 }
 
 export interface WeaponLoadout {

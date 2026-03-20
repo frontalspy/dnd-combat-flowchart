@@ -23,6 +23,7 @@ declare const tooltipMeta: string;
 declare const tooltipDesc: string;
 declare const tooltipHigher: string;
 declare const ritualBadge: string;
+declare const tooltipFooter: string;
 
 export {
 	card,
@@ -41,7 +42,8 @@ export {
 	tooltipMeta,
 	tooltipDesc,
 	tooltipHigher,
-	ritualBadge
+	ritualBadge,
+	tooltipFooter
 };
 
 declare const __default_export__: {
@@ -62,5 +64,6 @@ declare const __default_export__: {
 	tooltipDesc: typeof tooltipDesc;
 	tooltipHigher: typeof tooltipHigher;
 	ritualBadge: typeof ritualBadge;
+	tooltipFooter: typeof tooltipFooter;
 };
 export default __default_export__;

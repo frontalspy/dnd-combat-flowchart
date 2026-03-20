@@ -230,6 +230,42 @@
   color: var(--gold);
 }
 
+/* Source filters */
+.sourceFilters {
+  display: flex;
+  gap: 4px;
+  padding: 6px 12px 8px;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.sourceChip {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-dim);
+  border-radius: 10px;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+}
+
+.sourceChip:hover {
+  background: var(--bg-surface);
+  color: var(--text-mid);
+}
+
+.activeSourceChip {
+  background: rgba(110, 168, 216, 0.12);
+  border-color: #6ea8d8;
+  color: #6ea8d8;
+}
+
 /* Suggested Groups */
 .suggestedGroups {
   padding: 8px 8px 0;

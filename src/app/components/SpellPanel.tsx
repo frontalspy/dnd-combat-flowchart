@@ -39,6 +39,8 @@ type SpellLevelFilter =
   | "8"
   | "9";
 
+type SpellSourceFilter = "all" | "SRD" | "XGtE" | "TCoE";
+
 interface DragTemplateProps {
   icon: string;
   label: string;
@@ -82,6 +84,7 @@ export function SpellPanel({
   const [search, setSearch] = useState("");
   const [spellLevelFilter, setSpellLevelFilter] =
     useState<SpellLevelFilter>("all");
+  const [sourceFilter, setSourceFilter] = useState<SpellSourceFilter>("all");
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [customActions, setCustomActions] = useState<ActionItem[]>([]);
 
@@ -170,6 +173,12 @@ export function SpellPanel({
     if (spellLevelFilter !== "all") {
       spells = spells.filter((s) => s.level === spellLevelFilter);
     }
+    if (sourceFilter !== "all") {
+      spells = spells.filter((s) => {
+        const src = s.source ?? "SRD";
+        return src === sourceFilter;
+      });
+    }
     if (search.trim()) {
       const q = search.toLowerCase();
       spells = spells.filter(
@@ -180,7 +189,7 @@ export function SpellPanel({
       );
     }
     return spells;
-  }, [availableSpells, spellLevelFilter, search]);
+  }, [availableSpells, spellLevelFilter, search, sourceFilter]);
 
   const suggestedGroups = useMemo(
     () => resolveGroupTemplates(character.class, character.level),
@@ -363,6 +372,24 @@ export function SpellPanel({
                 {level === "all" ? "All" : level === "cantrip" ? "✦" : level}
               </button>
             ))}
+        </div>
+      )}
+
+      {/* Source filter */}
+      {activeTab === "spells" && (
+        <div className={styles.sourceFilters}>
+          {(["all", "SRD", "XGtE", "TCoE"] as SpellSourceFilter[]).map(
+            (src) => (
+              <button
+                key={src}
+                type="button"
+                className={`${styles.sourceChip} ${sourceFilter === src ? styles.activeSourceChip : ""}`}
+                onClick={() => setSourceFilter(src)}
+              >
+                {src === "all" ? "All Sources" : src}
+              </button>
+            )
+          )}
         </div>
       )}
 
