@@ -10,4 +10,4 @@ node_modules
 dist
 
 docs/
-.github/
+.github/copilot-instructions.md
