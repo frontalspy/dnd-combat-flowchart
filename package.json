@@ -6,6 +6,7 @@
   "author": "frontalspy",
   "license": "MIT",
   "scripts": {
+    "build": "vite build --config ./config/vite.config.ts",
     "start": "vite --config ./config/vite.config.ts",
     "test": "vitest run --config ./config/vitest.config.ts",
     "format": "biome format --write"
