@@ -1,8 +1,9 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { patchCssModules, cssModules } from "vite-css-modules";
+import { defineConfig } from "vite";
+import { patchCssModules } from "vite-css-modules";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  base: command === "build" ? "/dnd-combat-flowchart/" : "/",
   server: {
     port: 3000,
     open: true,
@@ -13,4 +14,4 @@ export default defineConfig({
       localsConvention: "camelCaseOnly",
     },
   },
-});
+}));
