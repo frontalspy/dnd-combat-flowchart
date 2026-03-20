@@ -51,6 +51,10 @@ declare const economyPopoverHeader: string;
 declare const economyPopoverCloseBtn: string;
 declare const economyPopoverEmpty: string;
 declare const economyWorstCase: string;
+declare const economyBudgetGroup: string;
+declare const economyActionBadge: string;
+declare const economyActionBadgeSm: string;
+declare const economyBudgetCount: string;
 declare const economyBudgetStat: string;
 declare const economyOk: string;
 declare const economyOver: string;
@@ -58,6 +62,7 @@ declare const economyPathList: string;
 declare const economyPathItem: string;
 declare const economyPathItemOver: string;
 declare const economyPathLabel: string;
+declare const economyPathStatGroup: string;
 declare const economyPathStat: string;
 declare const economyPathNodes: string;
 declare const economyPathMore: string;
@@ -110,6 +115,10 @@ export {
 	economyPopoverCloseBtn,
 	economyPopoverEmpty,
 	economyWorstCase,
+	economyBudgetGroup,
+	economyActionBadge,
+	economyActionBadgeSm,
+	economyBudgetCount,
 	economyBudgetStat,
 	economyOk,
 	economyOver,
@@ -117,6 +126,7 @@ export {
 	economyPathItem,
 	economyPathItemOver,
 	economyPathLabel,
+	economyPathStatGroup,
 	economyPathStat,
 	economyPathNodes,
 	economyPathMore,
@@ -170,6 +180,10 @@ declare const __default_export__: {
 	economyPopoverCloseBtn: typeof economyPopoverCloseBtn;
 	economyPopoverEmpty: typeof economyPopoverEmpty;
 	economyWorstCase: typeof economyWorstCase;
+	economyBudgetGroup: typeof economyBudgetGroup;
+	economyActionBadge: typeof economyActionBadge;
+	economyActionBadgeSm: typeof economyActionBadgeSm;
+	economyBudgetCount: typeof economyBudgetCount;
 	economyBudgetStat: typeof economyBudgetStat;
 	economyOk: typeof economyOk;
 	economyOver: typeof economyOver;
@@ -177,6 +191,7 @@ declare const __default_export__: {
 	economyPathItem: typeof economyPathItem;
 	economyPathItemOver: typeof economyPathItemOver;
 	economyPathLabel: typeof economyPathLabel;
+	economyPathStatGroup: typeof economyPathStatGroup;
 	economyPathStat: typeof economyPathStat;
 	economyPathNodes: typeof economyPathNodes;
 	economyPathMore: typeof economyPathMore;

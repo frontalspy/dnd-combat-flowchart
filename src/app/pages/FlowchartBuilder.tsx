@@ -35,6 +35,7 @@ import { StatsEditor } from "../components/StatsEditor";
 import { TabBar } from "../components/TabBar";
 import { useApp } from "../context/AppContext";
 import { CLASSES } from "../data/classes";
+import { ACTION_TYPE_LABELS } from "../data/damageTypes";
 import type { Weapon } from "../data/weapons";
 import { WEAPONS } from "../data/weapons";
 import type { SavedFlowchart, WeaponLoadout } from "../types";
@@ -360,36 +361,37 @@ export function FlowchartBuilder() {
               ) : (
                 <>
                   <div className={styles.economyWorstCase}>
-                    <span
-                      className={`${styles.economyBudgetStat} ${
-                        worstCase.actions > 1
-                          ? styles.economyOver
-                          : styles.economyOk
-                      }`}
-                    >
-                      A: {worstCase.actions}/1{" "}
-                      {worstCase.actions > 1 ? "⚠" : "✓"}
-                    </span>
-                    <span
-                      className={`${styles.economyBudgetStat} ${
-                        worstCase.bonusActions > 1
-                          ? styles.economyOver
-                          : styles.economyOk
-                      }`}
-                    >
-                      B: {worstCase.bonusActions}/1{" "}
-                      {worstCase.bonusActions > 1 ? "⚠" : "✓"}
-                    </span>
-                    <span
-                      className={`${styles.economyBudgetStat} ${
-                        worstCase.reactions > 1
-                          ? styles.economyOver
-                          : styles.economyOk
-                      }`}
-                    >
-                      R: {worstCase.reactions}/1{" "}
-                      {worstCase.reactions > 1 ? "⚠" : "✓"}
-                    </span>
+                    {(["action", "bonus", "reaction"] as const).map((type) => {
+                      const info = ACTION_TYPE_LABELS[type];
+                      const count =
+                        type === "action"
+                          ? worstCase.actions
+                          : type === "bonus"
+                            ? worstCase.bonusActions
+                            : worstCase.reactions;
+                      const over = count > 1;
+                      return (
+                        <div key={type} className={styles.economyBudgetGroup}>
+                          <span
+                            className={styles.economyActionBadge}
+                            style={{
+                              backgroundColor: info.color,
+                              color: "#0d1117",
+                            }}
+                            title={info.label}
+                          >
+                            {info.short}
+                          </span>
+                          <span
+                            className={`${styles.economyBudgetCount} ${
+                              over ? styles.economyOver : styles.economyOk
+                            }`}
+                          >
+                            {count}/1 {over ? "⚠" : "✓"}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                   {actionEconomyInfo.budgets.length > 0 && (
                     <ul className={styles.economyPathList}>
@@ -408,33 +410,44 @@ export function FlowchartBuilder() {
                             <span className={styles.economyPathLabel}>
                               Path {i + 1}
                             </span>
-                            <span
-                              className={`${styles.economyPathStat} ${
-                                path.actions > 1
-                                  ? styles.economyOver
-                                  : styles.economyOk
-                              }`}
-                            >
-                              A:{path.actions}
-                            </span>
-                            <span
-                              className={`${styles.economyPathStat} ${
-                                path.bonusActions > 1
-                                  ? styles.economyOver
-                                  : styles.economyOk
-                              }`}
-                            >
-                              B:{path.bonusActions}
-                            </span>
-                            <span
-                              className={`${styles.economyPathStat} ${
-                                path.reactions > 1
-                                  ? styles.economyOver
-                                  : styles.economyOk
-                              }`}
-                            >
-                              R:{path.reactions}
-                            </span>
+                            {(["action", "bonus", "reaction"] as const).map(
+                              (type) => {
+                                const info = ACTION_TYPE_LABELS[type];
+                                const count =
+                                  type === "action"
+                                    ? path.actions
+                                    : type === "bonus"
+                                      ? path.bonusActions
+                                      : path.reactions;
+                                const over = count > 1;
+                                return (
+                                  <span
+                                    key={type}
+                                    className={styles.economyPathStatGroup}
+                                  >
+                                    <span
+                                      className={styles.economyActionBadgeSm}
+                                      style={{
+                                        backgroundColor: info.color,
+                                        color: "#0d1117",
+                                      }}
+                                      title={info.label}
+                                    >
+                                      {info.short}
+                                    </span>
+                                    <span
+                                      className={`${styles.economyPathStat} ${
+                                        over
+                                          ? styles.economyOver
+                                          : styles.economyOk
+                                      }`}
+                                    >
+                                      {count}
+                                    </span>
+                                  </span>
+                                );
+                              }
+                            )}
                             {path.nodeLabels.length > 0 && (
                               <span className={styles.economyPathNodes}>
                                 {path.nodeLabels.join(" → ")}

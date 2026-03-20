@@ -451,8 +451,7 @@
   top: 52px;
   right: 0;
   z-index: 100;
-  min-width: 280px;
-  max-width: 420px;
+  max-width: 540px;
   background: var(--bg-raised);
   border: 1px solid var(--border-mid);
   border-radius: 3px;
@@ -464,8 +463,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px 6px;
-  font-size: 12px;
+  padding: 10px 14px 8px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text-mid);
   letter-spacing: 0.5px;
@@ -498,8 +497,8 @@
 }
 
 .economyPopoverEmpty {
-  padding: 10px 12px;
-  font-size: 13px;
+  padding: 14px 16px;
+  font-size: 14px;
   color: var(--text-faint);
   font-style: italic;
 }
@@ -508,14 +507,55 @@
 .economyWorstCase {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
+  gap: 20px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--border-dim);
   background: var(--bg-base);
 }
 
+/* Badge + count pairing in worst-case row */
+.economyBudgetGroup {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* Circular action-type badge — mirrors ActionNode's .actionTypeBadge */
+.economyActionBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* Smaller badge used inside per-path rows */
+.economyActionBadgeSm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.economyBudgetCount {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
 .economyBudgetStat {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.3px;
 }
@@ -534,17 +574,17 @@
   list-style: none;
   margin: 0;
   padding: 4px 0;
-  max-height: 260px;
+  max-height: 320px;
   overflow-y: auto;
 }
 
 .economyPathItem {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 5px 12px;
-  font-size: 12px;
+  gap: 8px;
+  padding: 7px 16px;
+  font-size: 13px;
   color: var(--text);
 }
 
@@ -561,21 +601,29 @@
 }
 
 .economyPathLabel {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--text-faint);
-  min-width: 44px;
+  min-width: 48px;
   flex-shrink: 0;
 }
 
+/* badge + number group in per-path rows */
+.economyPathStatGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .economyPathStat {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
-  min-width: 28px;
+  min-width: 16px;
+  text-align: left;
 }
 
 .economyPathNodes {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-mid);
   font-style: italic;
   flex: 1;
@@ -586,8 +634,8 @@
 }
 
 .economyPathMore {
-  padding: 4px 12px 6px;
-  font-size: 11px;
+  padding: 4px 16px 8px;
+  font-size: 12px;
   color: var(--text-faint);
   font-style: italic;
 }
