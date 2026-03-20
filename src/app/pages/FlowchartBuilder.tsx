@@ -1,5 +1,7 @@
 import type { Node } from "@xyflow/react";
 import { ReactFlowProvider } from "@xyflow/react";
+import { toPng } from "html-to-image";
+import jsPDF from "jspdf";
 import {
   Activity,
   BarChart2,
@@ -12,6 +14,7 @@ import {
   Layers,
   Link2,
   MoreHorizontal,
+  Printer,
   Save,
   Sword,
   Zap,
@@ -32,6 +35,7 @@ import {
 import { LoadoutPicker } from "../components/LoadoutPicker";
 import { MultiSelectBar } from "../components/MultiSelectBar";
 import { NodeEditor } from "../components/NodeEditor";
+import { PRINT_H, PRINT_W, PrintLayout } from "../components/PrintLayout";
 import { SpellPanel } from "../components/SpellPanel";
 import { StatsEditor } from "../components/StatsEditor";
 import { TabBar } from "../components/TabBar";
@@ -77,6 +81,11 @@ export function FlowchartBuilder() {
   const [showStatsPicker, setShowStatsPicker] = useState(false);
   const [showSlotsPopover, setShowSlotsPopover] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const [printData, setPrintData] = useState<{
+    nodes: Node[];
+    edges: unknown[];
+  } | null>(null);
+  const printLayoutRef = useRef<HTMLDivElement>(null);
   const [concentrationInfo, setConcentrationInfo] = useState<{
     spells: Array<{ id: string; label: string }>;
     conflictIds: string[];
@@ -233,6 +242,37 @@ export function FlowchartBuilder() {
     return () => document.removeEventListener("mousedown", handler);
   }, [showExportMenu]);
 
+  // Print card capture: wait for PrintLayout to render, then capture via html-to-image
+  useEffect(() => {
+    if (!printData) return;
+    const name = chartName;
+    const timer = setTimeout(async () => {
+      const el = printLayoutRef.current;
+      if (!el) return;
+      try {
+        const dataUrl = await toPng(el, {
+          backgroundColor: "#ffffff",
+          width: PRINT_W,
+          height: PRINT_H,
+          pixelRatio: 1,
+          skipFonts: true,
+        });
+        const pdf = new jsPDF({
+          orientation: "landscape",
+          unit: "mm",
+          format: [148, 210],
+        });
+        const pw = pdf.internal.pageSize.getWidth();
+        const ph = pdf.internal.pageSize.getHeight();
+        pdf.addImage(dataUrl, "PNG", 0, 0, pw, ph);
+        pdf.save(`${name}-reference-card.pdf`);
+      } finally {
+        setPrintData(null);
+      }
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [printData, chartName]);
+
   const handleShare = useCallback(() => {
     if (!character) return;
     const id = activeChart?.id ?? activeTabId ?? `chart-${Date.now()}`;
@@ -276,6 +316,14 @@ export function FlowchartBuilder() {
   const handleExportPdf = useCallback(async () => {
     await exportFnsRef.current?.exportPdf(chartName);
   }, [chartName]);
+
+  const handlePrintCard = useCallback(() => {
+    setPrintData({
+      nodes: flowDataRef.current.nodes,
+      edges: flowDataRef.current.edges,
+    });
+    setShowExportMenu(false);
+  }, []);
 
   if (!character) {
     goToSetup();
@@ -757,6 +805,15 @@ export function FlowchartBuilder() {
                   <FileText size={14} />
                   Export PDF
                 </button>
+                <button
+                  type="button"
+                  className={styles.exportMenuItem}
+                  onClick={handlePrintCard}
+                  title="Export condensed A5 reference card as PDF"
+                >
+                  <Printer size={14} />
+                  Print Card
+                </button>
                 <div className={styles.exportMenuDivider} />
                 <button
                   type="button"
@@ -841,6 +898,23 @@ export function FlowchartBuilder() {
           )}
         </div>
       </ReactFlowProvider>
+
+      {/* Print layout (off-screen, captured for reference card export) */}
+      {printData && (
+        <PrintLayout
+          ref={printLayoutRef}
+          nodes={printData.nodes}
+          edges={printData.edges}
+          chartName={chartName}
+          characterLabel={
+            character
+              ? `${classDef?.name ?? ""}${
+                  subclassDef?.name ? ` (${subclassDef.name})` : ""
+                } Lv. ${character.level}`
+              : ""
+          }
+        />
+      )}
 
       {/* Keyboard hint */}
       <div className={styles.hint}>
