@@ -243,6 +243,14 @@
   color: var(--gold-light);
   padding: 1px 6px;
   border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.attackBonusValue {
+  font-weight: 800;
+  opacity: 0.95;
 }
 
 .higherLevels {

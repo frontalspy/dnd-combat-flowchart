@@ -31,6 +31,7 @@ declare const dicePill: string;
 declare const savePill: string;
 declare const saveDCValue: string;
 declare const attackPill: string;
+declare const attackBonusValue: string;
 declare const higherLevels: string;
 declare const concentrationBadge: string;
 declare const concentrationConflict: string;
@@ -65,6 +66,7 @@ export {
 	savePill,
 	saveDCValue as saveDcValue,
 	attackPill,
+	attackBonusValue,
 	higherLevels,
 	concentrationBadge,
 	concentrationConflict,
@@ -100,6 +102,7 @@ declare const __default_export__: {
 	savePill: typeof savePill;
 	saveDcValue: typeof saveDCValue;
 	attackPill: typeof attackPill;
+	attackBonusValue: typeof attackBonusValue;
 	higherLevels: typeof higherLevels;
 	concentrationBadge: typeof concentrationBadge;
 	concentrationConflict: typeof concentrationConflict;

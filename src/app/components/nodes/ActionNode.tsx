@@ -8,7 +8,13 @@ import {
   DAMAGE_TYPES,
   SPELL_SCHOOLS,
 } from "../../data/damageTypes";
-import { spellSaveDC } from "../../data/stats";
+import {
+  abilityModifier,
+  formatModifier,
+  proficiencyBonus,
+  spellAttackBonus,
+  spellSaveDC,
+} from "../../data/stats";
 import barbarianIcon from "../../icons/class/barbarian.svg";
 import bardIcon from "../../icons/class/bard.svg";
 import clericIcon from "../../icons/class/cleric.svg";
@@ -69,7 +75,7 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesValue, setNotesValue] = useState(data.notes ?? "");
 
-  // Compute spell save DC from character context
+  // Compute spell save DC and attack bonus from character context
   const character = state.character;
   const computedSaveDC = (() => {
     if (!character?.abilityScores) return null;
@@ -77,6 +83,26 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
     const ability = classDef?.spellcastingAbility;
     if (!ability) return null;
     return spellSaveDC(character.level, character.abilityScores[ability]);
+  })();
+
+  const computedAttackBonus = (() => {
+    if (!character?.abilityScores) return null;
+    // Spell attack: triggered when the node was dropped from the spell list or carries a school
+    const isSpellAttack = data.source === "spell" || Boolean(data.school);
+    if (isSpellAttack) {
+      const classDef = getClassDefinition(character.class);
+      const ability = classDef?.spellcastingAbility;
+      if (!ability) return null;
+      return spellAttackBonus(
+        character.level,
+        character.abilityScores[ability]
+      );
+    }
+    // Weapon / generic attack: proficiency + higher of STR or DEX
+    const prof = proficiencyBonus(character.level);
+    const strMod = abilityModifier(character.abilityScores.str);
+    const dexMod = abilityModifier(character.abilityScores.dex);
+    return prof + Math.max(strMod, dexMod);
   })();
 
   const damageInfo = data.damageType ? DAMAGE_TYPES[data.damageType] : null;
@@ -211,8 +237,21 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
           (data.damageDice && !data.damageType)) && (
           <div className={styles.diceRow}>
             {(data.rollType === "attack" || data.label === "Attack") && (
-              <span className={styles.attackPill} title="Attack roll required">
+              <span
+                className={styles.attackPill}
+                title={
+                  computedAttackBonus !== null
+                    ? `Attack roll: ${formatModifier(computedAttackBonus)} to hit`
+                    : "Attack roll required"
+                }
+              >
                 <Icon src={d20Icon} size={12} /> 1d20
+                {computedAttackBonus !== null && (
+                  <span className={styles.attackBonusValue}>
+                    {" "}
+                    {formatModifier(computedAttackBonus)}
+                  </span>
+                )}
               </span>
             )}
             {data.rollType === "save" && (
