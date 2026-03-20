@@ -155,17 +155,6 @@
   color: var(--text-mid);
   line-height: 1.65;
   margin: 0;
-  max-height: 120px;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-.descText::-webkit-scrollbar {
-  width: 3px;
-}
-
-.descText::-webkit-scrollbar-thumb {
-  background: var(--border-mid);
 }
 
 .notesTextarea {

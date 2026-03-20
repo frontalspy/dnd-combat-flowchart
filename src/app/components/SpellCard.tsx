@@ -1,4 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
+import ReactDOM from "react-dom";
 import {
   ACTION_TYPE_LABELS,
   DAMAGE_TYPES,
@@ -19,12 +20,14 @@ import styles from "./SpellCard.module.css";
 interface SpellTooltipProps {
   spell: Spell;
   visible: boolean;
+  top: number;
+  left: number;
 }
 
-function SpellTooltip({ spell, visible }: SpellTooltipProps) {
+function SpellTooltip({ spell, visible, top, left }: SpellTooltipProps) {
   if (!visible) return null;
-  return (
-    <div className={styles.tooltip}>
+  return ReactDOM.createPortal(
+    <div className={styles.tooltip} style={{ top, left }}>
       <div className={styles.tooltipHeader}>
         <span className={styles.tooltipName}>{spell.name}</span>
         <span className={styles.tooltipType}>{spell.type}</span>
@@ -57,19 +60,22 @@ function SpellTooltip({ spell, visible }: SpellTooltipProps) {
           </span>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
 interface ActionTooltipProps {
   action: ActionItem;
   visible: boolean;
+  top: number;
+  left: number;
 }
 
-function ActionTooltip({ action, visible }: ActionTooltipProps) {
+function ActionTooltip({ action, visible, top, left }: ActionTooltipProps) {
   if (!visible) return null;
-  return (
-    <div className={styles.tooltip}>
+  return ReactDOM.createPortal(
+    <div className={styles.tooltip} style={{ top, left }}>
       <div className={styles.tooltipHeader}>
         <span className={styles.tooltipName}>{action.name}</span>
         <span className={styles.tooltipType}>
@@ -77,7 +83,8 @@ function ActionTooltip({ action, visible }: ActionTooltipProps) {
         </span>
       </div>
       <p className={styles.tooltipDesc}>{action.description}</p>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -88,7 +95,9 @@ interface SpellCardProps {
 
 export function SpellCard({ spell, onDragStart }: SpellCardProps) {
   const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const damageType = detectDamageType(spell.description, spell.name);
   const damageInfo = damageType ? DAMAGE_TYPES[damageType] : null;
   const schoolInfo = SPELL_SCHOOLS[spell.school?.toLowerCase()] ?? null;
@@ -96,6 +105,10 @@ export function SpellCard({ spell, onDragStart }: SpellCardProps) {
   const actionInfo = ACTION_TYPE_LABELS[actionType];
 
   const handleMouseEnter = useCallback(() => {
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      setTooltipPos({ top: rect.top, left: rect.right + 8 });
+    }
     timeoutRef.current = setTimeout(() => setTooltipVisible(true), 500);
   }, []);
 
@@ -127,6 +140,7 @@ export function SpellCard({ spell, onDragStart }: SpellCardProps) {
 
   return (
     <div
+      ref={cardRef}
       className={styles.card}
       draggable
       onDragStart={(e) => onDragStart(e, dragData)}
@@ -179,7 +193,12 @@ export function SpellCard({ spell, onDragStart }: SpellCardProps) {
         </span>
       )}
 
-      <SpellTooltip spell={spell} visible={tooltipVisible} />
+      <SpellTooltip
+        spell={spell}
+        visible={tooltipVisible}
+        top={tooltipPos.top}
+        left={tooltipPos.left}
+      />
     </div>
   );
 }
@@ -191,12 +210,18 @@ interface ActionCardProps {
 
 export function ActionCard({ action, onDragStart }: ActionCardProps) {
   const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const damageInfo = action.damageType ? DAMAGE_TYPES[action.damageType] : null;
   const actionInfo =
     ACTION_TYPE_LABELS[action.actionType] ?? ACTION_TYPE_LABELS.action;
 
   const handleMouseEnter = useCallback(() => {
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      setTooltipPos({ top: rect.top, left: rect.right + 8 });
+    }
     timeoutRef.current = setTimeout(() => setTooltipVisible(true), 500);
   }, []);
   const handleMouseLeave = useCallback(() => {
@@ -221,6 +246,7 @@ export function ActionCard({ action, onDragStart }: ActionCardProps) {
 
   return (
     <div
+      ref={cardRef}
       className={styles.card}
       draggable
       onDragStart={(e) => onDragStart(e, dragData)}
@@ -278,7 +304,12 @@ export function ActionCard({ action, onDragStart }: ActionCardProps) {
         </span>
       )}
 
-      <ActionTooltip action={action} visible={tooltipVisible} />
+      <ActionTooltip
+        action={action}
+        visible={tooltipVisible}
+        top={tooltipPos.top}
+        left={tooltipPos.left}
+      />
     </div>
   );
 }
