@@ -46,6 +46,23 @@ declare const noWeaponInfo: string;
 declare const noWeaponLabel: string;
 declare const noWeaponHint: string;
 declare const cardList: string;
+declare const conditionsSection: string;
+declare const conditionsSectionHeader: string;
+declare const conditionsSectionLabel: string;
+declare const conditionAffectsToggle: string;
+declare const conditionAffectsBtn: string;
+declare const conditionAffectsBtnActive: string;
+declare const conditionChips: string;
+declare const conditionChip: string;
+declare const conditionChipIcon: string;
+declare const conditionChipLabel: string;
+declare const conditionsTab: string;
+declare const conditionAffectsRow: string;
+declare const conditionAffectsRowLabel: string;
+declare const conditionChipsFull: string;
+declare const conditionChipFull: string;
+declare const conditionChipFullIcon: string;
+declare const conditionChipFullLabel: string;
 declare const emptyState: string;
 declare const shieldCard: string;
 declare const shieldIcon: string;
@@ -108,6 +125,23 @@ export {
 	noWeaponLabel,
 	noWeaponHint,
 	cardList,
+	conditionsSection,
+	conditionsSectionHeader,
+	conditionsSectionLabel,
+	conditionAffectsToggle,
+	conditionAffectsBtn,
+	conditionAffectsBtnActive,
+	conditionChips,
+	conditionChip,
+	conditionChipIcon,
+	conditionChipLabel,
+	conditionsTab,
+	conditionAffectsRow,
+	conditionAffectsRowLabel,
+	conditionChipsFull,
+	conditionChipFull,
+	conditionChipFullIcon,
+	conditionChipFullLabel,
 	emptyState,
 	shieldCard,
 	shieldIcon,
@@ -171,6 +205,23 @@ declare const __default_export__: {
 	noWeaponLabel: typeof noWeaponLabel;
 	noWeaponHint: typeof noWeaponHint;
 	cardList: typeof cardList;
+	conditionsSection: typeof conditionsSection;
+	conditionsSectionHeader: typeof conditionsSectionHeader;
+	conditionsSectionLabel: typeof conditionsSectionLabel;
+	conditionAffectsToggle: typeof conditionAffectsToggle;
+	conditionAffectsBtn: typeof conditionAffectsBtn;
+	conditionAffectsBtnActive: typeof conditionAffectsBtnActive;
+	conditionChips: typeof conditionChips;
+	conditionChip: typeof conditionChip;
+	conditionChipIcon: typeof conditionChipIcon;
+	conditionChipLabel: typeof conditionChipLabel;
+	conditionsTab: typeof conditionsTab;
+	conditionAffectsRow: typeof conditionAffectsRow;
+	conditionAffectsRowLabel: typeof conditionAffectsRowLabel;
+	conditionChipsFull: typeof conditionChipsFull;
+	conditionChipFull: typeof conditionChipFull;
+	conditionChipFullIcon: typeof conditionChipFullIcon;
+	conditionChipFullLabel: typeof conditionChipFullLabel;
 	emptyState: typeof emptyState;
 	shieldCard: typeof shieldCard;
 	shieldIcon: typeof shieldIcon;

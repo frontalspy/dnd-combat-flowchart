@@ -12,20 +12,43 @@ import combatActionIcon from "../icons/combat/action.svg";
 import roundIcon from "../icons/combat/round.svg";
 import scrollIcon from "../icons/entity/scroll.svg";
 import combatIcon from "../icons/game/combat.svg";
+import conditionTabIcon from "../icons/game/hazard.svg";
 import puzzleIcon from "../icons/game/puzzle.svg";
 import spellIcon from "../icons/game/spell.svg";
 import buildIcon from "../icons/util/build.svg";
 import swordIcon from "../icons/weapon/sword.svg";
-import type { ActionItem, Character, Spell } from "../types";
+import type { ActionItem, Character, DndCondition, Spell } from "../types";
 import { CustomActionModal } from "./CustomActionModal";
 import { Icon } from "./Icon";
+import {
+  CONDITION_DISPLAY_NAMES,
+  CONDITION_ICONS,
+} from "./nodes/ConditionStatusNode";
 import { ActionCard, SpellCard } from "./SpellCard";
 import styles from "./SpellPanel.module.css";
 import { WeaponCard } from "./WeaponCard";
 
 const allSpells = spellsData as Spell[];
 
-type PanelTab = "actions" | "spells";
+const ALL_CONDITIONS: DndCondition[] = [
+  "blinded",
+  "charmed",
+  "deafened",
+  "exhaustion",
+  "frightened",
+  "grappled",
+  "incapacitated",
+  "invisible",
+  "paralyzed",
+  "petrified",
+  "poisoned",
+  "prone",
+  "restrained",
+  "stunned",
+  "unconscious",
+];
+
+type PanelTab = "actions" | "spells" | "conditions";
 type SpellLevelFilter =
   | "all"
   | "cantrip"
@@ -90,6 +113,9 @@ export function SpellPanel({
     useState<SpellLevelFilter>("all");
   const [sourceFilter, setSourceFilter] = useState<SpellSourceFilter>("all");
   const [showCustomModal, setShowCustomModal] = useState(false);
+  const [conditionAffects, setConditionAffects] = useState<
+    "self" | "target" | "area"
+  >("target");
 
   const classDef = getClassDefinition(character.class);
   const maxSpellLevel = getMaxSpellLevel(
@@ -98,34 +124,40 @@ export function SpellPanel({
     character.level
   );
 
+  const monkMartialArtsDie = useMemo(() => {
+    if (character.class !== "monk") return null;
+    const lvl = character.level;
+    if (lvl >= 17) return "1d10";
+    if (lvl >= 11) return "1d8";
+    if (lvl >= 5) return "1d6";
+    return "1d4";
+  }, [character.class, character.level]);
+
   const loadoutWeapons = useMemo(() => {
     const result: Array<{ weapon: Weapon; hand: "main" | "off" }> = [];
     const loadout = character.loadout;
     if (!loadout) return result;
     const allWeapons = [...WEAPONS, ...customWeapons];
     if (loadout.mainHand) {
-      const w = allWeapons.find((x) => x.id === loadout.mainHand);
-      if (w) result.push({ weapon: w, hand: "main" });
+      let w = allWeapons.find((x) => x.id === loadout.mainHand);
+      if (w) {
+        if (w.id === "unarmed-strike" && monkMartialArtsDie) {
+          w = { ...w, damageDice: monkMartialArtsDie };
+        }
+        result.push({ weapon: w, hand: "main" });
+      }
     }
     if (loadout.offHand === "weapon" && loadout.offHandWeaponId) {
-      const w = allWeapons.find((x) => x.id === loadout.offHandWeaponId);
-      if (w) result.push({ weapon: w, hand: "off" });
+      let w = allWeapons.find((x) => x.id === loadout.offHandWeaponId);
+      if (w) {
+        if (w.id === "unarmed-strike" && monkMartialArtsDie) {
+          w = { ...w, damageDice: monkMartialArtsDie };
+        }
+        result.push({ weapon: w, hand: "off" });
+      }
     }
     return result;
-  }, [character.loadout, customWeapons]);
-
-  const filteredCustomWeapons = useMemo(() => {
-    const loadoutIds = new Set(loadoutWeapons.map(({ weapon }) => weapon.id));
-    const unassigned = customWeapons.filter((w) => !loadoutIds.has(w.id));
-    if (!search.trim()) return unassigned;
-    const q = search.toLowerCase();
-    return unassigned.filter(
-      (w) =>
-        w.name.toLowerCase().includes(q) ||
-        w.damageType.toLowerCase().includes(q) ||
-        w.properties.some((p) => p.toLowerCase().includes(q))
-    );
-  }, [customWeapons, loadoutWeapons, search]);
+  }, [character.loadout, customWeapons, monkMartialArtsDie]);
 
   const filteredLoadoutWeapons = useMemo(() => {
     if (!search.trim()) return loadoutWeapons;
@@ -140,16 +172,24 @@ export function SpellPanel({
 
   const classActions: ActionItem[] = useMemo(() => {
     if (!classDef) return [];
-    return classDef.classActions
-      .filter((a: ClassAction) => a.minLevel <= character.level)
-      .map((a: ClassAction) => ({
-        id: a.id,
-        name: a.name,
-        description: a.description,
-        actionType: a.actionType,
-        damageType: a.damageType,
-        source: "class" as const,
-      }));
+    const eligible = classDef.classActions.filter(
+      (a: ClassAction) => a.minLevel <= character.level
+    );
+    // For actions sharing the same name, keep only the highest-minLevel one
+    // (e.g. monk Unarmed Strike tiers — show only the current die size)
+    const best = new Map<string, ClassAction>();
+    for (const a of eligible) {
+      const prev = best.get(a.name);
+      if (!prev || a.minLevel > prev.minLevel) best.set(a.name, a);
+    }
+    return Array.from(best.values()).map((a: ClassAction) => ({
+      id: a.id,
+      name: a.name,
+      description: a.description,
+      actionType: a.actionType,
+      damageType: a.damageType,
+      source: "class" as const,
+    }));
   }, [classDef, character.level]);
 
   const filteredActions = useMemo(() => {
@@ -310,26 +350,30 @@ export function SpellPanel({
         </div>
       </div>
 
-      {/* Search */}
-      <div className={styles.searchWrapper}>
-        <Search size={14} className={styles.searchIcon} />
-        <input
-          type="text"
-          className={styles.searchInput}
-          placeholder="Search actions & spells..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        {search && (
-          <button
-            type="button"
-            className={styles.clearSearch}
-            onClick={() => setSearch("")}
-          >
-            <X size={12} />
-          </button>
-        )}
-      </div>
+      {/* Search — hidden on conditions tab */}
+      {activeTab !== "conditions" && (
+        <div className={styles.searchWrapper}>
+          <Search size={14} className={styles.searchIcon} />
+          <input
+            type="text"
+            className={styles.searchInput}
+            placeholder={
+              activeTab === "spells" ? "Search spells..." : "Search actions..."
+            }
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          {search && (
+            <button
+              type="button"
+              className={styles.clearSearch}
+              onClick={() => setSearch("")}
+            >
+              <X size={12} />
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Tabs */}
       <div className={styles.tabs}>
@@ -355,6 +399,16 @@ export function SpellPanel({
             Spells
           </button>
         )}
+        <button
+          type="button"
+          className={`${styles.tab} ${activeTab === "conditions" ? styles.activeTab : ""}`}
+          onClick={() => {
+            setActiveTab("conditions");
+          }}
+        >
+          <Icon src={conditionTabIcon} size={14} />
+          Conditions
+        </button>
       </div>
 
       {/* Spell level filter */}
@@ -477,13 +531,49 @@ export function SpellPanel({
                 <span className={styles.shieldAc}>+2 AC</span>
               </div>
             )}
-            {filteredCustomWeapons.map((weapon) => (
-              <WeaponCard
-                key={weapon.id}
-                weapon={weapon}
-                onDragStart={onDragStart}
-              />
-            ))}
+          </div>
+        )}
+
+        {activeTab === "conditions" && (
+          <div className={styles.conditionsTab}>
+            <div className={styles.conditionAffectsRow}>
+              <span className={styles.conditionAffectsRowLabel}>Affects:</span>
+              <div className={styles.conditionAffectsToggle}>
+                {(["target", "self", "area"] as const).map((a) => (
+                  <button
+                    key={a}
+                    type="button"
+                    className={`${styles.conditionAffectsBtn} ${conditionAffects === a ? styles.conditionAffectsBtnActive : ""}`}
+                    onClick={() => setConditionAffects(a)}
+                  >
+                    {a === "target" ? "Target" : a === "self" ? "Self" : "Area"}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className={styles.conditionChipsFull}>
+              {ALL_CONDITIONS.map((cond) => (
+                <div
+                  key={cond}
+                  className={styles.conditionChipFull}
+                  draggable
+                  title={`Drag to add a "${CONDITION_DISPLAY_NAMES[cond]}" condition node`}
+                  onDragStart={(e) =>
+                    handleTemplateDrag(e, "conditionStatusNode", {
+                      condition: cond,
+                      affects: conditionAffects,
+                    })
+                  }
+                >
+                  <span className={styles.conditionChipFullIcon}>
+                    <Icon src={CONDITION_ICONS[cond]} size={22} />
+                  </span>
+                  <span className={styles.conditionChipFullLabel}>
+                    {CONDITION_DISPLAY_NAMES[cond]}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 

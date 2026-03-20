@@ -18,6 +18,9 @@ declare const scoreLabel: string;
 declare const scoreInput: string;
 declare const modifier: string;
 declare const modifierPos: string;
+declare const levelRow: string;
+declare const levelLabel: string;
+declare const levelInput: string;
 declare const computedSection: string;
 declare const computedTitle: string;
 declare const computedRow: string;
@@ -38,6 +41,9 @@ export {
 	scoreInput,
 	modifier,
 	modifierPos,
+	levelRow,
+	levelLabel,
+	levelInput,
 	computedSection,
 	computedTitle,
 	computedRow,
@@ -59,6 +65,9 @@ declare const __default_export__: {
 	scoreInput: typeof scoreInput;
 	modifier: typeof modifier;
 	modifierPos: typeof modifierPos;
+	levelRow: typeof levelRow;
+	levelLabel: typeof levelLabel;
+	levelInput: typeof levelInput;
 	computedSection: typeof computedSection;
 	computedTitle: typeof computedTitle;
 	computedRow: typeof computedRow;

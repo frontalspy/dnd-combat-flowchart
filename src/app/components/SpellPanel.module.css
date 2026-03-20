@@ -6,7 +6,6 @@
   border-right: 1px solid var(--border-mid);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   position: relative;
 }
 
@@ -159,15 +158,20 @@
 .tabs {
   display: flex;
   border-bottom: 1px solid var(--border-dim);
+  overflow-x: auto;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .tab {
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
-  padding: 8px 4px;
+  padding: 8px 12px;
   font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--text-mid);
@@ -182,7 +186,6 @@
   letter-spacing: 0;
   text-transform: uppercase;
   white-space: nowrap;
-  overflow: hidden;
 }
 
 .tab:hover {
@@ -415,6 +418,173 @@
 .cardList::-webkit-scrollbar-thumb {
   background: var(--border-mid);
   border-radius: 1px;
+}
+
+/* Conditions section (in actions tab) */
+.conditionsSection {
+  border-bottom: 1px solid var(--border-dim);
+  margin-bottom: 4px;
+  padding-bottom: 8px;
+}
+
+.conditionsSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px 6px;
+}
+
+.conditionsSectionLabel {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.conditionAffectsToggle {
+  display: flex;
+  gap: 3px;
+}
+
+.conditionAffectsBtn {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border-dim);
+  background: var(--bg-raised);
+  color: var(--text-faint);
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  font-family: inherit;
+  transition:
+    background 0.12s,
+    border-color 0.12s,
+    color 0.12s;
+}
+
+.conditionAffectsBtn:hover {
+  background: var(--bg-surface);
+  color: var(--text-mid);
+}
+
+.conditionAffectsBtnActive {
+  background: rgba(192, 98, 42, 0.14);
+  border-color: #c0622a;
+  color: #e8904a;
+}
+
+.conditionChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 0 8px;
+}
+
+.conditionChip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  background: rgba(192, 98, 42, 0.07);
+  border: 1px solid rgba(192, 98, 42, 0.3);
+  border-radius: 12px;
+  cursor: grab;
+  user-select: none;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.conditionChip:hover {
+  background: rgba(192, 98, 42, 0.16);
+  border-color: rgba(192, 98, 42, 0.6);
+}
+
+.conditionChip:active {
+  cursor: grabbing;
+}
+
+.conditionChipIcon {
+  display: flex;
+  align-items: center;
+  opacity: 0.85;
+}
+
+.conditionChipLabel {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: #d88858;
+  letter-spacing: 0.3px;
+}
+
+/* Conditions tab (full-tab layout) */
+.conditionsTab {
+  padding: 10px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.conditionAffectsRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 2px;
+}
+
+.conditionAffectsRowLabel {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  flex-shrink: 0;
+}
+
+.conditionChipsFull {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.conditionChipFull {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(192, 98, 42, 0.06);
+  border: 1px solid rgba(192, 98, 42, 0.25);
+  border-radius: 4px;
+  cursor: grab;
+  user-select: none;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.conditionChipFull:hover {
+  background: rgba(192, 98, 42, 0.14);
+  border-color: rgba(192, 98, 42, 0.55);
+}
+
+.conditionChipFull:active {
+  cursor: grabbing;
+}
+
+.conditionChipFullIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.conditionChipFullLabel {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: #d88858;
+  letter-spacing: 0.4px;
 }
 
 .emptyState {

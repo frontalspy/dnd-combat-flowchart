@@ -319,6 +319,51 @@ export const CLASSES: ClassDefinition[] = [
     ],
     classActions: [
       {
+        id: "monk-unarmed-strike-d4",
+        name: "Unarmed Strike",
+        description:
+          "Make a melee attack roll. On a hit, deal 1d4 + Strength or Dexterity modifier bludgeoning damage (Martial Arts die).",
+        actionType: "action",
+        damageType: "bludgeoning",
+        minLevel: 1,
+      },
+      {
+        id: "monk-unarmed-strike-d6",
+        name: "Unarmed Strike",
+        description:
+          "Make a melee attack roll. On a hit, deal 1d6 + Strength or Dexterity modifier bludgeoning damage (Martial Arts die).",
+        actionType: "action",
+        damageType: "bludgeoning",
+        minLevel: 5,
+      },
+      {
+        id: "monk-unarmed-strike-d8",
+        name: "Unarmed Strike",
+        description:
+          "Make a melee attack roll. On a hit, deal 1d8 + Strength or Dexterity modifier bludgeoning damage (Martial Arts die).",
+        actionType: "action",
+        damageType: "bludgeoning",
+        minLevel: 11,
+      },
+      {
+        id: "monk-unarmed-strike-d10",
+        name: "Unarmed Strike",
+        description:
+          "Make a melee attack roll. On a hit, deal 1d10 + Strength or Dexterity modifier bludgeoning damage (Martial Arts die).",
+        actionType: "action",
+        damageType: "bludgeoning",
+        minLevel: 17,
+      },
+      {
+        id: "monk-martial-arts-bonus",
+        name: "Martial Arts (Bonus Strike)",
+        description:
+          "After using the Attack action with an unarmed strike or monk weapon, make one additional melee attack roll as a bonus action (no ki required).",
+        actionType: "bonus",
+        damageType: "bludgeoning",
+        minLevel: 1,
+      },
+      {
         id: "monk-flurry-of-blows",
         name: "Flurry of Blows",
         description:

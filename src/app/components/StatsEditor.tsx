@@ -16,7 +16,7 @@ import styles from "./StatsEditor.module.css";
 
 interface StatsEditorProps {
   character: Character;
-  onSave: (scores: AbilityScores) => void;
+  onSave: (scores: AbilityScores, level: number) => void;
   onClose: () => void;
 }
 
@@ -24,6 +24,12 @@ export function StatsEditor({ character, onSave, onClose }: StatsEditorProps) {
   const [scores, setScores] = useState<AbilityScores>(
     character.abilityScores ?? { ...DEFAULT_SCORES }
   );
+  const [level, setLevel] = useState(character.level);
+
+  const setLevelValue = (raw: string) => {
+    const n = Math.min(20, Math.max(1, Number.parseInt(raw, 10) || 1));
+    setLevel(n);
+  };
 
   const setScore = (key: keyof AbilityScores, raw: string) => {
     const n = Math.min(30, Math.max(1, Number.parseInt(raw, 10) || 1));
@@ -35,14 +41,12 @@ export function StatsEditor({ character, onSave, onClose }: StatsEditorProps) {
   const spellcastingScore = spellcastingAbility
     ? scores[spellcastingAbility]
     : null;
-  const prof = proficiencyBonus(character.level);
+  const prof = proficiencyBonus(level);
   const autoDC =
-    spellcastingScore !== null
-      ? spellSaveDC(character.level, spellcastingScore)
-      : null;
+    spellcastingScore !== null ? spellSaveDC(level, spellcastingScore) : null;
   const autoAttack =
     spellcastingScore !== null
-      ? spellAttackBonus(character.level, spellcastingScore)
+      ? spellAttackBonus(level, spellcastingScore)
       : null;
 
   const abilityKeys = Object.keys(scores) as (keyof AbilityScores)[];
@@ -58,6 +62,18 @@ export function StatsEditor({ character, onSave, onClose }: StatsEditorProps) {
         </div>
 
         <div className={styles.body}>
+          <div className={styles.levelRow}>
+            <span className={styles.levelLabel}>Character Level</span>
+            <input
+              type="number"
+              className={styles.levelInput}
+              min={1}
+              max={20}
+              value={level}
+              onChange={(e) => setLevelValue(e.target.value)}
+            />
+          </div>
+
           <div className={styles.scoresGrid}>
             {abilityKeys.map((key) => {
               const mod = abilityModifier(scores[key]);
@@ -119,7 +135,7 @@ export function StatsEditor({ character, onSave, onClose }: StatsEditorProps) {
             type="button"
             className={styles.saveBtn}
             onClick={() => {
-              onSave(scores);
+              onSave(scores, level);
               onClose();
             }}
           >

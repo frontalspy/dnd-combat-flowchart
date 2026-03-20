@@ -52,6 +52,7 @@ export function FlowchartBuilder() {
     getActiveFlowchart,
     setLoadout,
     setAbilityScores,
+    setCharacterLevel,
     spendSlot,
     restoreSlot,
     restoreSpellSlots,
@@ -778,8 +779,9 @@ export function FlowchartBuilder() {
       {showStatsPicker && character && (
         <StatsEditor
           character={character}
-          onSave={(scores) => {
+          onSave={(scores, level) => {
             setAbilityScores(scores);
+            setCharacterLevel(level);
             setShowStatsPicker(false);
           }}
           onClose={() => setShowStatsPicker(false)}

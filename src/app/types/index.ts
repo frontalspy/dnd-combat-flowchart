@@ -158,6 +158,30 @@ export interface NoteNodeData extends Record<string, unknown> {
   content: string;
 }
 
+export type DndCondition =
+  | "blinded"
+  | "charmed"
+  | "deafened"
+  | "exhaustion"
+  | "frightened"
+  | "grappled"
+  | "incapacitated"
+  | "invisible"
+  | "paralyzed"
+  | "petrified"
+  | "poisoned"
+  | "prone"
+  | "restrained"
+  | "stunned"
+  | "unconscious";
+
+export interface ConditionStatusNodeData extends Record<string, unknown> {
+  condition: DndCondition;
+  label?: string;
+  notes?: string;
+  affects: "self" | "target" | "area";
+}
+
 export interface SavedFlowchart {
   id: string;
   name: string;

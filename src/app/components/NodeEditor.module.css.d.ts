@@ -22,6 +22,9 @@ declare const fieldRow: string;
 declare const fieldInput: string;
 declare const pillRow: string;
 declare const infoPill: string;
+declare const infoPillActive: string;
+declare const conditionInfoRow: string;
+declare const conditionDisplayName: string;
 declare const descText: string;
 declare const notesTextarea: string;
 declare const footer: string;
@@ -67,6 +70,9 @@ export {
 	fieldInput,
 	pillRow,
 	infoPill,
+	infoPillActive,
+	conditionInfoRow,
+	conditionDisplayName,
 	descText,
 	notesTextarea,
 	footer,
@@ -113,6 +119,9 @@ declare const __default_export__: {
 	fieldInput: typeof fieldInput;
 	pillRow: typeof pillRow;
 	infoPill: typeof infoPill;
+	infoPillActive: typeof infoPillActive;
+	conditionInfoRow: typeof conditionInfoRow;
+	conditionDisplayName: typeof conditionDisplayName;
 	descText: typeof descText;
 	notesTextarea: typeof notesTextarea;
 	footer: typeof footer;

@@ -4,6 +4,8 @@ import { useCallback } from "react";
 import type {
   ActionNodeData,
   ConditionNodeData,
+  ConditionStatusNodeData,
+  DndCondition,
   EndNodeData,
   GroupNodeData,
   NoteNodeData,
@@ -82,6 +84,15 @@ export function useFlowDrop({
           collapsed: false,
         };
         newNode = { id: newId(), type: "groupNode", position, data };
+      } else if (nodeType === "conditionStatusNode") {
+        const data: ConditionStatusNodeData = {
+          condition: (item.condition as DndCondition) ?? "poisoned",
+          label: item.label as string | undefined,
+          affects:
+            (item.affects as ConditionStatusNodeData["affects"]) ?? "target",
+          notes: "",
+        };
+        newNode = { id: newId(), type: "conditionStatusNode", position, data };
       } else {
         const data: ActionNodeData = {
           label: (item.label as string) ?? "Action",

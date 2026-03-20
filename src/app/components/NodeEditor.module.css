@@ -148,6 +148,32 @@
   padding: 3px 8px;
   background: rgba(107, 76, 42, 0.08);
   border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: default;
+  font-family: inherit;
+  transition:
+    background 0.12s,
+    border-color 0.12s,
+    color 0.12s;
+}
+
+.infoPillActive {
+  background: rgba(192, 98, 42, 0.16);
+  border-color: #c0622a;
+  color: #e8904a;
+  cursor: default;
+}
+
+.conditionInfoRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.conditionDisplayName {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
 }
 
 .descText {

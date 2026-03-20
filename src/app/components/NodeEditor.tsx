@@ -16,9 +16,19 @@ import {
   spellAttackBonus,
   spellSaveDC,
 } from "../data/stats";
-import type { Character, GroupNodeData } from "../types";
+import type {
+  Character,
+  ConditionStatusNodeData,
+  DndCondition,
+  GroupNodeData,
+} from "../types";
 import { Icon } from "./Icon";
 import styles from "./NodeEditor.module.css";
+import {
+  CONDITION_DESCRIPTIONS,
+  CONDITION_DISPLAY_NAMES,
+  CONDITION_ICONS,
+} from "./nodes/ConditionStatusNode";
 import { VariantManager } from "./VariantManager";
 
 interface NodeEditorProps {
@@ -98,7 +108,9 @@ export function NodeEditor({
           ? "Start Node"
           : nodeType === "groupNode"
             ? "Group Node"
-            : "Note";
+            : nodeType === "conditionStatusNode"
+              ? "Condition Status"
+              : "Note";
 
   const descriptionText =
     typeof data.description === "string" ? data.description : null;
@@ -186,6 +198,56 @@ export function NodeEditor({
             )}
           </div>
         )}
+
+        {/* Condition Status Node — condition info + affects editor */}
+        {nodeType === "conditionStatusNode" &&
+          (() => {
+            const csData = data as unknown as ConditionStatusNodeData;
+            const cond = csData.condition as DndCondition;
+            const desc = CONDITION_DESCRIPTIONS[cond];
+            const iconSrc = CONDITION_ICONS[cond];
+            const displayName = CONDITION_DISPLAY_NAMES[cond];
+            return (
+              <>
+                <div className={styles.field}>
+                  <label className={styles.fieldLabel}>Condition</label>
+                  <div className={styles.conditionInfoRow}>
+                    <Icon src={iconSrc} size={20} alt={displayName} />
+                    <span className={styles.conditionDisplayName}>
+                      {displayName}
+                    </span>
+                  </div>
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.fieldLabel}>Affects</label>
+                  <div className={styles.pillRow}>
+                    {(["target", "self", "area"] as const).map((a) => (
+                      <button
+                        key={a}
+                        type="button"
+                        className={`${styles.infoPill} ${csData.affects === a ? styles.infoPillActive : ""}`}
+                        onClick={() =>
+                          updateNodeData(selectedNode!.id, { affects: a })
+                        }
+                      >
+                        {a === "target"
+                          ? "Target"
+                          : a === "self"
+                            ? "Self"
+                            : "Area"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {desc && (
+                  <div className={styles.field}>
+                    <label className={styles.fieldLabel}>Effect</label>
+                    <p className={styles.descText}>{desc}</p>
+                  </div>
+                )}
+              </>
+            );
+          })()}
 
         {/* Description */}
         {descriptionText && (

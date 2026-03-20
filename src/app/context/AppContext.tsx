@@ -36,6 +36,7 @@ type AppAction =
   | { type: "SET_ACTIVE_TAB"; payload: string }
   | { type: "SET_LOADOUT"; payload: WeaponLoadout }
   | { type: "SET_ABILITY_SCORES"; payload: AbilityScores }
+  | { type: "SET_CHARACTER_LEVEL"; payload: number }
   | { type: "USE_SLOT"; payload: number }
   | { type: "RESTORE_SLOT"; payload: number }
   | { type: "RESTORE_SLOTS" }
@@ -68,6 +69,19 @@ function appReducer(state: AppState, action: AppAction): AppState {
           ? { ...state.character, abilityScores: action.payload }
           : state.character,
       };
+    case "SET_CHARACTER_LEVEL": {
+      if (!state.character) return state;
+      const newCharacter = { ...state.character, level: action.payload };
+      return {
+        ...state,
+        character: newCharacter,
+        spellSlots: getSpellSlots(
+          newCharacter.class,
+          newCharacter.subclass,
+          newCharacter.level
+        ),
+      };
+    }
     case "USE_SLOT":
       return {
         ...state,
@@ -228,6 +242,7 @@ interface AppContextValue {
   setActiveTab: (id: string) => void;
   setLoadout: (loadout: WeaponLoadout) => void;
   setAbilityScores: (scores: AbilityScores) => void;
+  setCharacterLevel: (level: number) => void;
   useSpellSlot: (level: number) => void;
   spendSlot: (level: number) => void;
   restoreSlot: (level: number) => void;
@@ -313,6 +328,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: "SET_LOADOUT", payload: loadout });
   const setAbilityScores = (scores: AbilityScores) =>
     dispatch({ type: "SET_ABILITY_SCORES", payload: scores });
+  const setCharacterLevel = (level: number) =>
+    dispatch({ type: "SET_CHARACTER_LEVEL", payload: level });
   const useSpellSlot = (level: number) =>
     dispatch({ type: "USE_SLOT", payload: level });
   const spendSlot = useSpellSlot;
@@ -341,6 +358,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setActiveTab,
         setLoadout,
         setAbilityScores,
+        setCharacterLevel,
         useSpellSlot,
         spendSlot,
         restoreSlot,

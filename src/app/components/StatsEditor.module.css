@@ -120,6 +120,50 @@
   color: var(--gold-light);
 }
 
+.levelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.levelLabel {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text-mid);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.levelInput {
+  width: 64px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text);
+  font-size: var(--fs-xl);
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-align: center;
+  padding: 6px 4px;
+  appearance: textfield;
+  -moz-appearance: textfield;
+  transition: border-color 0.15s;
+}
+
+.levelInput::-webkit-outer-spin-button,
+.levelInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.levelInput:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
 .computedSection {
   border-top: 1px solid var(--border-dim);
   padding-top: 12px;
