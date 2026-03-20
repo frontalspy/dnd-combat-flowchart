@@ -7,17 +7,23 @@
  */
 
 declare const canvasWrapper: string;
+declare const concentrationWarning: string;
+declare const concentrationWarningIcon: string;
 declare const controls: string;
 declare const minimap: string;
 
 export {
 	canvasWrapper,
+	concentrationWarning,
+	concentrationWarningIcon,
 	controls,
 	minimap
 };
 
 declare const __default_export__: {
 	canvasWrapper: typeof canvasWrapper;
+	concentrationWarning: typeof concentrationWarning;
+	concentrationWarningIcon: typeof concentrationWarningIcon;
 	controls: typeof controls;
 	minimap: typeof minimap;
 };

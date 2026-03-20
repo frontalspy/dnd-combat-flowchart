@@ -252,3 +252,36 @@
   margin-bottom: 4px;
   font-style: italic;
 }
+
+/* Concentration badge — amber icon in the header badges row */
+.concentrationBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(200, 144, 28, 0.18);
+  border: 1px solid rgba(200, 144, 28, 0.6);
+  color: #c8901c;
+  font-size: 10px;
+  font-weight: 800;
+  flex-shrink: 0;
+  title: "Concentration";
+}
+
+/* Node-level conflict highlight — red glow when two concentration spells share a path */
+.concentrationConflict {
+  border-color: #c0392b !important;
+  box-shadow:
+    0 0 0 2px rgba(192, 57, 43, 0.55),
+    0 6px 20px rgba(192, 57, 43, 0.3) !important;
+}
+
+.concentrationConflict:hover,
+.concentrationConflict.selected {
+  border-color: #e57373 !important;
+  box-shadow:
+    0 0 0 2px rgba(229, 115, 115, 0.65),
+    0 8px 24px rgba(192, 57, 43, 0.4) !important;
+}

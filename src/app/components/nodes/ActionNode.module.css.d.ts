@@ -32,6 +32,8 @@ declare const savePill: string;
 declare const saveDCValue: string;
 declare const attackPill: string;
 declare const higherLevels: string;
+declare const concentrationBadge: string;
+declare const concentrationConflict: string;
 
 export {
 	actionNode,
@@ -59,7 +61,9 @@ export {
 	savePill,
 	saveDCValue as saveDcValue,
 	attackPill,
-	higherLevels
+	higherLevels,
+	concentrationBadge,
+	concentrationConflict
 };
 
 declare const __default_export__: {
@@ -89,5 +93,7 @@ declare const __default_export__: {
 	saveDcValue: typeof saveDCValue;
 	attackPill: typeof attackPill;
 	higherLevels: typeof higherLevels;
+	concentrationBadge: typeof concentrationBadge;
+	concentrationConflict: typeof concentrationConflict;
 };
 export default __default_export__;

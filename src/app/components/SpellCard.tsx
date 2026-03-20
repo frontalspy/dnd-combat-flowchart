@@ -120,6 +120,9 @@ export function SpellCard({ spell, onDragStart }: SpellCardProps) {
     saveAbility: extractSaveAbility(spell.description) ?? undefined,
     rollType: extractRollType(spell.description),
     higherLevels: spell.higher_levels ?? undefined,
+    concentration:
+      spell.concentration === true ||
+      spell.duration?.toLowerCase().includes("concentration") === true,
   };
 
   return (

@@ -117,6 +117,7 @@ export interface ActionNodeData extends Record<string, unknown> {
   rollType?: "attack" | "save" | "auto";
   higherLevels?: string;
   hand?: "main" | "off";
+  concentration?: boolean;
 }
 
 export interface ConditionNodeData extends Record<string, unknown> {

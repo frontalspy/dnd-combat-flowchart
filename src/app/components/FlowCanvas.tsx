@@ -19,11 +19,11 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import React, {
-  forwardRef,
   useCallback,
   useEffect,
-  useImperativeHandle,
+  useMemo,
   useRef,
+  useState,
 } from "react";
 import "@xyflow/react/dist/style.css";
 import { toJpeg, toPng } from "html-to-image";
@@ -31,7 +31,57 @@ import jsPDF from "jspdf";
 import { useClipboard } from "../hooks/useClipboard";
 import { useFlowDrop } from "../hooks/useFlowDrop";
 import { useFlowHistory } from "../hooks/useFlowHistory";
-import type { StartNodeData } from "../types";
+import type { ActionNodeData, StartNodeData } from "../types";
+
+/** Context providing the set of ActionNode IDs that are in a concentration conflict. */
+export const ConcentrationContext = React.createContext<Set<string>>(new Set());
+
+function findConcentrationConflicts(nodes: Node[], edges: Edge[]): Set<string> {
+  const adjacency = new Map<string, string[]>();
+  for (const node of nodes) {
+    adjacency.set(node.id, []);
+  }
+  for (const edge of edges) {
+    const existing = adjacency.get(edge.source);
+    if (existing) existing.push(edge.target);
+  }
+
+  const hasIncoming = new Set(edges.map((e) => e.target));
+  const roots = nodes.filter((n) => !hasIncoming.has(n.id));
+
+  const conflictIds = new Set<string>();
+
+  function dfs(nodeId: string, concPath: string[], visited: Set<string>): void {
+    if (visited.has(nodeId)) return;
+    const newVisited = new Set(visited);
+    newVisited.add(nodeId);
+
+    const node = nodes.find((n) => n.id === nodeId);
+    if (!node) return;
+
+    let newPath = concPath;
+    if (node.type === "actionNode") {
+      const data = node.data as ActionNodeData;
+      if (data.concentration) {
+        if (newPath.length > 0) {
+          for (const id of newPath) conflictIds.add(id);
+          conflictIds.add(nodeId);
+        }
+        newPath = [...newPath, nodeId];
+      }
+    }
+
+    for (const childId of adjacency.get(nodeId) ?? []) {
+      dfs(childId, newPath, newVisited);
+    }
+  }
+
+  for (const root of roots) {
+    dfs(root.id, [], new Set());
+  }
+  return conflictIds;
+}
+
 import { SnappedConnectionLine } from "./edges/SnappedConnectionLine";
 import { SnappedEdge } from "./edges/SnappedEdge";
 import styles from "./FlowCanvas.module.css";
@@ -59,6 +109,10 @@ interface FlowCanvasInnerProps {
   onSelectionChange?: (nodes: Node[]) => void;
   onExportReady: (fns: FlowCanvasExports) => void;
   onFlowChange: (nodes: Node[], edges: Edge[]) => void;
+  onConcentrationChange?: (
+    spells: Array<{ id: string; label: string }>,
+    conflictIds: string[]
+  ) => void;
   edgeStyle?: EdgeStyleType;
   animatedEdges?: boolean;
 }
@@ -81,6 +135,7 @@ function FlowCanvasInner({
   onSelectionChange,
   onExportReady,
   onFlowChange,
+  onConcentrationChange,
   edgeStyle = "smoothstep",
   animatedEdges = false,
 }: FlowCanvasInnerProps) {
@@ -208,6 +263,50 @@ function FlowCanvasInner({
   useEffect(() => {
     onFlowChange(nodes, edges);
   }, [nodes, edges, onFlowChange]);
+
+  // Compute concentration conflicts on every graph change
+  const [conflictNodeIds, setConflictNodeIds] = useState<Set<string>>(
+    () => new Set()
+  );
+  useEffect(() => {
+    const newConflicts = findConcentrationConflicts(nodes, edges);
+    setConflictNodeIds((prev) => {
+      const changed =
+        newConflicts.size !== prev.size ||
+        [...newConflicts].some((id) => !prev.has(id));
+      return changed ? newConflicts : prev;
+    });
+    if (onConcentrationChange) {
+      const concSpells = nodes
+        .filter(
+          (n) =>
+            n.type === "actionNode" && (n.data as ActionNodeData).concentration
+        )
+        .map((n) => ({
+          id: n.id,
+          label: (n.data as ActionNodeData).label as string,
+        }));
+      onConcentrationChange(concSpells, [...newConflicts]);
+    }
+  }, [nodes, edges, onConcentrationChange]);
+
+  // Build warning message for conflicting nodes
+  const conflictWarningText = useMemo(() => {
+    if (conflictNodeIds.size === 0) return null;
+    const conflictNames = nodes
+      .filter(
+        (n) =>
+          conflictNodeIds.has(n.id) &&
+          n.type === "actionNode" &&
+          (n.data as ActionNodeData).concentration
+      )
+      .map((n) => `"${(n.data as ActionNodeData).label}"`);
+    if (conflictNames.length === 0) return null;
+    if (conflictNames.length === 2) {
+      return `${conflictNames[0]} and ${conflictNames[1]} are both concentration spells on the same branch.`;
+    }
+    return `${conflictNames.join(", ")} are concentration spells on the same branch.`;
+  }, [conflictNodeIds, nodes]);
 
   // Expose export functions to parent
   useEffect(() => {
@@ -363,46 +462,54 @@ function FlowCanvasInner({
   );
 
   return (
-    <div ref={reactFlowWrapper} className={styles.canvasWrapper}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={wrappedOnNodesChange}
-        onEdgesChange={wrappedOnEdgesChange}
-        onConnect={onConnect}
-        onDrop={onDrop}
-        onDragOver={onDragOver}
-        onSelectionChange={handleSelectionChange}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        connectionLineComponent={SnappedConnectionLine}
-        fitView
-        deleteKeyCode={["Delete", "Backspace"]}
-        multiSelectionKeyCode={["Control", "Shift"]}
-        selectionOnDrag={true}
-        panOnDrag={[1, 2]}
-        selectionMode={SelectionMode.Partial}
-        defaultEdgeOptions={{
-          type: edgeStyle,
-          style: { stroke: "#8b949e", strokeWidth: 2 },
-          markerEnd: { type: "arrow" as const, color: "#8b949e" },
-        }}
-        proOptions={{ hideAttribution: true }}
-      >
-        <Background
-          variant={BackgroundVariant.Dots}
-          gap={20}
-          size={1}
-          color="#21262d"
-        />
-        <Controls className={styles.controls} />
-        <MiniMap
-          className={styles.minimap}
-          nodeColor={() => "#d4a017"}
-          maskColor="rgba(13, 17, 23, 0.7)"
-        />
-      </ReactFlow>
-    </div>
+    <ConcentrationContext.Provider value={conflictNodeIds}>
+      <div ref={reactFlowWrapper} className={styles.canvasWrapper}>
+        {conflictWarningText && (
+          <div className={styles.concentrationWarning} role="alert">
+            <span className={styles.concentrationWarningIcon}>⚠</span>
+            {conflictWarningText}
+          </div>
+        )}
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={wrappedOnNodesChange}
+          onEdgesChange={wrappedOnEdgesChange}
+          onConnect={onConnect}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          onSelectionChange={handleSelectionChange}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          connectionLineComponent={SnappedConnectionLine}
+          fitView
+          deleteKeyCode={["Delete", "Backspace"]}
+          multiSelectionKeyCode={["Control", "Shift"]}
+          selectionOnDrag={true}
+          panOnDrag={[1, 2]}
+          selectionMode={SelectionMode.Partial}
+          defaultEdgeOptions={{
+            type: edgeStyle,
+            style: { stroke: "#8b949e", strokeWidth: 2 },
+            markerEnd: { type: "arrow" as const, color: "#8b949e" },
+          }}
+          proOptions={{ hideAttribution: true }}
+        >
+          <Background
+            variant={BackgroundVariant.Dots}
+            gap={20}
+            size={1}
+            color="#21262d"
+          />
+          <Controls className={styles.controls} />
+          <MiniMap
+            className={styles.minimap}
+            nodeColor={() => "#d4a017"}
+            maskColor="rgba(13, 17, 23, 0.7)"
+          />
+        </ReactFlow>
+      </div>
+    </ConcentrationContext.Provider>
   );
 }
 
@@ -412,6 +519,10 @@ interface FlowCanvasProps {
   onSelectionChange?: (nodes: Node[]) => void;
   onExportReady: (fns: FlowCanvasExports) => void;
   onFlowChange: (nodes: Node[], edges: Edge[]) => void;
+  onConcentrationChange?: (
+    spells: Array<{ id: string; label: string }>,
+    conflictIds: string[]
+  ) => void;
   edgeStyle?: EdgeStyleType;
   animatedEdges?: boolean;
 }

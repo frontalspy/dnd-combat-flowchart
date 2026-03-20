@@ -100,6 +100,7 @@ export function useFlowDrop({
           rollType: item.rollType as ActionNodeData["rollType"],
           higherLevels: item.higherLevels as string | undefined,
           hand: item.hand as ActionNodeData["hand"],
+          concentration: (item.concentration as boolean | undefined) ?? false,
           notes: "",
         };
         newNode = { id: newId(), type: "actionNode", position, data };

@@ -33,6 +33,16 @@ declare const edgeStyleBtnActive: string;
 declare const topDivider: string;
 declare const loadoutChip: string;
 declare const loadoutChipArmed: string;
+declare const concentrationChipArmed: string;
+declare const concentrationChipConflict: string;
+declare const concentrationCount: string;
+declare const concentrationPopover: string;
+declare const concentrationPopoverHeader: string;
+declare const concentrationPopoverEmpty: string;
+declare const concentrationPopoverList: string;
+declare const concentrationPopoverItem: string;
+declare const concentrationPopoverItemConflict: string;
+declare const concentrationPopoverWarnIcon: string;
 declare const workspace: string;
 declare const hint: string;
 
@@ -64,6 +74,16 @@ export {
 	topDivider,
 	loadoutChip,
 	loadoutChipArmed,
+	concentrationChipArmed,
+	concentrationChipConflict,
+	concentrationCount,
+	concentrationPopover,
+	concentrationPopoverHeader,
+	concentrationPopoverEmpty,
+	concentrationPopoverList,
+	concentrationPopoverItem,
+	concentrationPopoverItemConflict,
+	concentrationPopoverWarnIcon,
 	workspace,
 	hint
 };
@@ -96,6 +116,16 @@ declare const __default_export__: {
 	topDivider: typeof topDivider;
 	loadoutChip: typeof loadoutChip;
 	loadoutChipArmed: typeof loadoutChipArmed;
+	concentrationChipArmed: typeof concentrationChipArmed;
+	concentrationChipConflict: typeof concentrationChipConflict;
+	concentrationCount: typeof concentrationCount;
+	concentrationPopover: typeof concentrationPopover;
+	concentrationPopoverHeader: typeof concentrationPopoverHeader;
+	concentrationPopoverEmpty: typeof concentrationPopoverEmpty;
+	concentrationPopoverList: typeof concentrationPopoverList;
+	concentrationPopoverItem: typeof concentrationPopoverItem;
+	concentrationPopoverItemConflict: typeof concentrationPopoverItemConflict;
+	concentrationPopoverWarnIcon: typeof concentrationPopoverWarnIcon;
 	workspace: typeof workspace;
 	hint: typeof hint;
 };

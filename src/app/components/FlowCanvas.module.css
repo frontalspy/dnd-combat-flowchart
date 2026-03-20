@@ -6,6 +6,35 @@
   position: relative;
 }
 
+.concentrationWarning {
+  position: absolute;
+  bottom: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: rgba(30, 15, 15, 0.92);
+  border: 1px solid #c0392b;
+  border-radius: 3px;
+  color: #e57373;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  max-width: 520px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  box-shadow: 0 2px 12px rgba(200, 50, 50, 0.25);
+}
+
+.concentrationWarningIcon {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
 .controls {
   background: var(--bg-raised) !important;
   border: 1px solid var(--border-mid) !important;

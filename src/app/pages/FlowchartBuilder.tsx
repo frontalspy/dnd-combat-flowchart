@@ -7,6 +7,7 @@ import {
   Download,
   Edit2,
   FileText,
+  Focus,
   Link2,
   Save,
   Sword,
@@ -55,6 +56,19 @@ export function FlowchartBuilder() {
   const [showLoadoutPicker, setShowLoadoutPicker] = useState(false);
   const [showStatsPicker, setShowStatsPicker] = useState(false);
   const [customWeapons, setCustomWeapons] = useState<Weapon[]>([]);
+  const [concentrationInfo, setConcentrationInfo] = useState<{
+    spells: Array<{ id: string; label: string }>;
+    conflictIds: string[];
+  }>({ spells: [], conflictIds: [] });
+  const [showConcentrationPopover, setShowConcentrationPopover] =
+    useState(false);
+
+  const handleConcentrationChange = useCallback(
+    (spells: Array<{ id: string; label: string }>, conflictIds: string[]) => {
+      setConcentrationInfo({ spells, conflictIds });
+    },
+    []
+  );
 
   const handleAddCustomWeapon = useCallback((weapon: Weapon) => {
     setCustomWeapons((prev) => [...prev, weapon]);
@@ -248,6 +262,65 @@ export function FlowchartBuilder() {
         </div>
 
         <div className={styles.topRight}>
+          {/* Concentration chip */}
+          <button
+            type="button"
+            className={`${styles.loadoutChip} ${
+              concentrationInfo.conflictIds.length > 0
+                ? styles.concentrationChipConflict
+                : concentrationInfo.spells.length > 0
+                  ? styles.concentrationChipArmed
+                  : ""
+            }`}
+            onClick={() => setShowConcentrationPopover((v) => !v)}
+            title="Concentration spells on this chart"
+          >
+            <Focus size={13} />
+            Concentration
+            {concentrationInfo.spells.length > 0 && (
+              <span className={styles.concentrationCount}>
+                {concentrationInfo.spells.length}
+              </span>
+            )}
+          </button>
+          {showConcentrationPopover && (
+            <div
+              className={styles.concentrationPopover}
+              onMouseLeave={() => setShowConcentrationPopover(false)}
+            >
+              <div className={styles.concentrationPopoverHeader}>
+                Concentration Spells
+              </div>
+              {concentrationInfo.spells.length === 0 ? (
+                <div className={styles.concentrationPopoverEmpty}>
+                  No concentration spells on this chart.
+                </div>
+              ) : (
+                <ul className={styles.concentrationPopoverList}>
+                  {concentrationInfo.spells.map((s) => (
+                    <li
+                      key={s.id}
+                      className={`${styles.concentrationPopoverItem} ${
+                        concentrationInfo.conflictIds.includes(s.id)
+                          ? styles.concentrationPopoverItemConflict
+                          : ""
+                      }`}
+                    >
+                      {concentrationInfo.conflictIds.includes(s.id) && (
+                        <span
+                          className={styles.concentrationPopoverWarnIcon}
+                          title="Conflict: another concentration spell is on the same branch"
+                        >
+                          ⚠
+                        </span>
+                      )}
+                      {s.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
           {/* Stats chip */}
           <button
             type="button"
@@ -380,6 +453,7 @@ export function FlowchartBuilder() {
             onSelectionChange={setSelectedNodes}
             onExportReady={handleExportReady}
             onFlowChange={handleFlowChange}
+            onConcentrationChange={handleConcentrationChange}
             edgeStyle={edgeStyle}
             animatedEdges={animatedEdges}
           />
