@@ -68,6 +68,19 @@ declare const economyPathNodes: string;
 declare const economyPathMore: string;
 declare const workspace: string;
 declare const hint: string;
+declare const slotsChipArmed: string;
+declare const slotsSpentBadge: string;
+declare const slotsPopover: string;
+declare const slotsPopoverHeader: string;
+declare const slotsRestoreBtn: string;
+declare const slotsLevelList: string;
+declare const slotsLevelRow: string;
+declare const slotsLevelLabel: string;
+declare const slotsCircles: string;
+declare const slotCircle: string;
+declare const slotCircleFilled: string;
+declare const slotCircleEmpty: string;
+declare const slotsCount: string;
 
 export {
 	page,
@@ -131,7 +144,20 @@ export {
 	economyPathNodes,
 	economyPathMore,
 	workspace,
-	hint
+	hint,
+	slotsChipArmed,
+	slotsSpentBadge,
+	slotsPopover,
+	slotsPopoverHeader,
+	slotsRestoreBtn,
+	slotsLevelList,
+	slotsLevelRow,
+	slotsLevelLabel,
+	slotsCircles,
+	slotCircle,
+	slotCircleFilled,
+	slotCircleEmpty,
+	slotsCount
 };
 
 declare const __default_export__: {
@@ -197,5 +223,18 @@ declare const __default_export__: {
 	economyPathMore: typeof economyPathMore;
 	workspace: typeof workspace;
 	hint: typeof hint;
+	slotsChipArmed: typeof slotsChipArmed;
+	slotsSpentBadge: typeof slotsSpentBadge;
+	slotsPopover: typeof slotsPopover;
+	slotsPopoverHeader: typeof slotsPopoverHeader;
+	slotsRestoreBtn: typeof slotsRestoreBtn;
+	slotsLevelList: typeof slotsLevelList;
+	slotsLevelRow: typeof slotsLevelRow;
+	slotsLevelLabel: typeof slotsLevelLabel;
+	slotsCircles: typeof slotsCircles;
+	slotCircle: typeof slotCircle;
+	slotCircleFilled: typeof slotCircleFilled;
+	slotCircleEmpty: typeof slotCircleEmpty;
+	slotsCount: typeof slotsCount;
 };
 export default __default_export__;

@@ -759,3 +759,138 @@ export function getClassDefinition(
 ): ClassDefinition | undefined {
   return CLASSES.find((c) => c.id === classId);
 }
+
+// Full caster slot table indexed by character level (0–20)
+const FULL_CASTER_SLOTS: Record<number, number>[] = [
+  {},
+  { 1: 2 },
+  { 1: 3 },
+  { 1: 4, 2: 2 },
+  { 1: 4, 2: 3 },
+  { 1: 4, 2: 3, 3: 2 },
+  { 1: 4, 2: 3, 3: 3 },
+  { 1: 4, 2: 3, 3: 3, 4: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 2 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 2 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1, 8: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1, 8: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1, 8: 1, 9: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 3, 6: 1, 7: 1, 8: 1, 9: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 3, 6: 2, 7: 1, 8: 1, 9: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 3, 6: 2, 7: 2, 8: 1, 9: 1 },
+];
+
+// Half caster slot table (paladin, ranger) indexed by character level (0–20)
+const HALF_CASTER_SLOTS: Record<number, number>[] = [
+  {},
+  {},
+  { 1: 2 },
+  { 1: 3 },
+  { 1: 3 },
+  { 1: 4, 2: 2 },
+  { 1: 4, 2: 2 },
+  { 1: 4, 2: 3 },
+  { 1: 4, 2: 3 },
+  { 1: 4, 2: 3, 3: 2 },
+  { 1: 4, 2: 3, 3: 2 },
+  { 1: 4, 2: 3, 3: 3 },
+  { 1: 4, 2: 3, 3: 3 },
+  { 1: 4, 2: 3, 3: 3, 4: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 2 },
+  { 1: 4, 2: 3, 3: 3, 4: 2 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 2 },
+  { 1: 4, 2: 3, 3: 3, 4: 3, 5: 2 },
+];
+
+// Third caster slot table (EK fighter, AT rogue) indexed by character level (0–20)
+const THIRD_CASTER_SLOTS: Record<number, number>[] = [
+  {},
+  {},
+  {},
+  { 1: 2 },
+  { 1: 3 },
+  { 1: 3 },
+  { 1: 3 },
+  { 1: 4, 2: 2 },
+  { 1: 4, 2: 2 },
+  { 1: 4, 2: 2 },
+  { 1: 4, 2: 3 },
+  { 1: 4, 2: 3 },
+  { 1: 4, 2: 3 },
+  { 1: 4, 2: 3, 3: 2 },
+  { 1: 4, 2: 3, 3: 2 },
+  { 1: 4, 2: 3, 3: 2 },
+  { 1: 4, 2: 3, 3: 3 },
+  { 1: 4, 2: 3, 3: 3 },
+  { 1: 4, 2: 3, 3: 3 },
+  { 1: 4, 2: 3, 3: 3, 4: 1 },
+  { 1: 4, 2: 3, 3: 3, 4: 1 },
+];
+
+// Warlock Pact Magic indexed by character level (0–20): { pactSlotLevel: slotCount }
+const WARLOCK_PACT_SLOTS: Record<number, number>[] = [
+  {},
+  { 1: 1 },
+  { 1: 2 },
+  { 2: 2 },
+  { 2: 2 },
+  { 3: 2 },
+  { 3: 2 },
+  { 4: 2 },
+  { 4: 2 },
+  { 5: 2 },
+  { 5: 2 },
+  { 5: 3 },
+  { 5: 3 },
+  { 5: 3 },
+  { 5: 3 },
+  { 5: 3 },
+  { 5: 3 },
+  { 5: 4 },
+  { 5: 4 },
+  { 5: 4 },
+  { 5: 4 },
+];
+
+/**
+ * Returns the maximum spell slot counts per level for a character.
+ * For warlocks, returns `{ [pactSlotLevel]: pactSlotCount }` (single entry).
+ * Returns an empty object for non-casters.
+ */
+export function getSpellSlots(
+  classId: DndClass,
+  subclassId: string,
+  characterLevel: number
+): Record<number, number> {
+  const classDef = CLASSES.find((c) => c.id === classId);
+  if (!classDef) return {};
+
+  let type = classDef.spellcastingType;
+  const subclass = classDef.subclasses.find((s) => s.id === subclassId);
+  if (subclass?.spellcastingTypeOverride) {
+    type = subclass.spellcastingTypeOverride;
+  }
+
+  const level = Math.min(Math.max(characterLevel, 0), 20);
+
+  switch (type) {
+    case "full":
+      return FULL_CASTER_SLOTS[level] ?? {};
+    case "half":
+      return HALF_CASTER_SLOTS[level] ?? {};
+    case "third":
+      return THIRD_CASTER_SLOTS[level] ?? {};
+    case "warlock":
+      return WARLOCK_PACT_SLOTS[level] ?? {};
+    default:
+      return {};
+  }
+}

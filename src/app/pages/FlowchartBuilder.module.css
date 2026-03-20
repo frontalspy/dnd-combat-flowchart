@@ -667,3 +667,151 @@
 .hint span {
   white-space: nowrap;
 }
+
+/* Spell Slots chip */
+.slotsChipArmed {
+  border-color: rgba(110, 168, 216, 0.55);
+  color: #6ea8d8;
+}
+
+.slotsChipArmed:hover {
+  border-color: #6ea8d8;
+  background: rgba(110, 168, 216, 0.08);
+}
+
+.slotsSpentBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: rgba(110, 168, 216, 0.25);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: #6ea8d8;
+}
+
+/* Spell Slots popover */
+.slotsPopover {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  z-index: 100;
+  min-width: 230px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-mid);
+  border-radius: 3px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.slotsPopoverHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 6px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text-mid);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.slotsRestoreBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: rgba(200, 144, 28, 0.1);
+  border: 1px solid rgba(200, 144, 28, 0.4);
+  border-radius: 2px;
+  color: var(--gold);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.slotsRestoreBtn:hover {
+  background: rgba(200, 144, 28, 0.18);
+  border-color: var(--gold);
+}
+
+.slotsLevelList {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 6px;
+}
+
+.slotsLevelRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 14px;
+}
+
+.slotsLevelRow:hover {
+  background: var(--bg-surface);
+}
+
+.slotsLevelLabel {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text-mid);
+  min-width: 32px;
+  flex-shrink: 0;
+}
+
+.slotsCircles {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+}
+
+.slotCircle {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-accent);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    border-color 0.12s,
+    background 0.12s,
+    opacity 0.12s;
+  flex-shrink: 0;
+}
+
+.slotCircleFilled {
+  background: #6ea8d8;
+  border-color: #6ea8d8;
+}
+
+.slotCircleFilled:hover {
+  background: #5596cc;
+  border-color: #5596cc;
+}
+
+.slotCircleEmpty {
+  background: transparent;
+  border-color: var(--border-mid);
+  opacity: 0.45;
+  cursor: default;
+}
+
+.slotsCount {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  min-width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}

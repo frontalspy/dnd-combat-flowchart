@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
+import { getSpellSlots } from "../data/classes";
 import type {
   AbilityScores,
   Character,
@@ -16,6 +17,7 @@ interface AppState {
   activeFlowchartId: string | null;
   openTabIds: string[];
   activeTabId: string | null;
+  spellSlots: Record<number, number>;
 }
 
 type AppAction =
@@ -29,14 +31,22 @@ type AppAction =
   | { type: "CLOSE_TAB"; payload: string }
   | { type: "SET_ACTIVE_TAB"; payload: string }
   | { type: "SET_LOADOUT"; payload: WeaponLoadout }
-  | { type: "SET_ABILITY_SCORES"; payload: AbilityScores };
+  | { type: "SET_ABILITY_SCORES"; payload: AbilityScores }
+  | { type: "USE_SLOT"; payload: number }
+  | { type: "RESTORE_SLOTS" };
 
 const STORAGE_KEY = "dnd-flowchart-app-state";
 
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
-    case "SET_CHARACTER":
-      return { ...state, character: action.payload };
+    case "SET_CHARACTER": {
+      const fullSlots = getSpellSlots(
+        action.payload.class,
+        action.payload.subclass,
+        action.payload.level
+      );
+      return { ...state, character: action.payload, spellSlots: fullSlots };
+    }
     case "SET_LOADOUT":
       return {
         ...state,
@@ -51,6 +61,28 @@ function appReducer(state: AppState, action: AppAction): AppState {
           ? { ...state.character, abilityScores: action.payload }
           : state.character,
       };
+    case "USE_SLOT":
+      return {
+        ...state,
+        spellSlots: {
+          ...state.spellSlots,
+          [action.payload]: Math.max(
+            0,
+            (state.spellSlots[action.payload] ?? 0) - 1
+          ),
+        },
+      };
+    case "RESTORE_SLOTS": {
+      if (!state.character) return state;
+      return {
+        ...state,
+        spellSlots: getSpellSlots(
+          state.character.class,
+          state.character.subclass,
+          state.character.level
+        ),
+      };
+    }
     case "SET_VIEW":
       return { ...state, view: action.payload };
     case "SAVE_FLOWCHART": {
@@ -140,6 +172,7 @@ const initialState: AppState = {
   activeFlowchartId: null,
   openTabIds: [],
   activeTabId: null,
+  spellSlots: {},
 };
 
 interface AppContextValue {
@@ -157,6 +190,9 @@ interface AppContextValue {
   setActiveTab: (id: string) => void;
   setLoadout: (loadout: WeaponLoadout) => void;
   setAbilityScores: (scores: AbilityScores) => void;
+  useSpellSlot: (level: number) => void;
+  spendSlot: (level: number) => void;
+  restoreSpellSlots: () => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -236,6 +272,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: "SET_LOADOUT", payload: loadout });
   const setAbilityScores = (scores: AbilityScores) =>
     dispatch({ type: "SET_ABILITY_SCORES", payload: scores });
+  const useSpellSlot = (level: number) =>
+    dispatch({ type: "USE_SLOT", payload: level });
+  const spendSlot = useSpellSlot;
+  const restoreSpellSlots = () => dispatch({ type: "RESTORE_SLOTS" });
 
   return (
     <AppContext.Provider
@@ -254,6 +294,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setActiveTab,
         setLoadout,
         setAbilityScores,
+        useSpellSlot,
+        spendSlot,
+        restoreSpellSlots,
       }}
     >
       {children}

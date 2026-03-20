@@ -9,6 +9,7 @@ import {
   Edit2,
   FileText,
   Focus,
+  Layers,
   Link2,
   Save,
   Sword,
@@ -34,7 +35,7 @@ import { SpellPanel } from "../components/SpellPanel";
 import { StatsEditor } from "../components/StatsEditor";
 import { TabBar } from "../components/TabBar";
 import { useApp } from "../context/AppContext";
-import { CLASSES } from "../data/classes";
+import { CLASSES, getSpellSlots } from "../data/classes";
 import { ACTION_TYPE_LABELS } from "../data/damageTypes";
 import type { Weapon } from "../data/weapons";
 import { WEAPONS } from "../data/weapons";
@@ -50,6 +51,8 @@ export function FlowchartBuilder() {
     getActiveFlowchart,
     setLoadout,
     setAbilityScores,
+    spendSlot,
+    restoreSpellSlots,
   } = useApp();
   const { character, activeTabId } = state;
 
@@ -67,6 +70,7 @@ export function FlowchartBuilder() {
   const [isCopied, setIsCopied] = useState(false);
   const [showLoadoutPicker, setShowLoadoutPicker] = useState(false);
   const [showStatsPicker, setShowStatsPicker] = useState(false);
+  const [showSlotsPopover, setShowSlotsPopover] = useState(false);
   const [customWeapons, setCustomWeapons] = useState<Weapon[]>([]);
   const [concentrationInfo, setConcentrationInfo] = useState<{
     spells: Array<{ id: string; label: string }>;
@@ -231,6 +235,22 @@ export function FlowchartBuilder() {
     });
   }, [activeChart, activeTabId, character, chartName]);
 
+  // Spell slot tracker — must be before early return to satisfy hooks ordering
+  const maxSlots = useMemo(
+    () =>
+      character
+        ? getSpellSlots(character.class, character.subclass, character.level)
+        : {},
+    [character]
+  );
+  const slotLevels = useMemo(
+    () =>
+      Object.keys(maxSlots)
+        .map(Number)
+        .sort((a, b) => a - b),
+    [maxSlots]
+  );
+
   const handleExportJpg = useCallback(async () => {
     await exportFnsRef.current?.exportJpg(chartName);
   }, [chartName]);
@@ -248,6 +268,15 @@ export function FlowchartBuilder() {
   const subclassDef = classDef?.subclasses.find(
     (s) => s.id === character.subclass
   );
+
+  // Spell slot tracker (character is guaranteed non-null here)
+  const hasSlotsToTrack = slotLevels.length > 0;
+  const isWarlock = character.class === "warlock";
+  const totalSlotsSpent = slotLevels.reduce((sum, lvl) => {
+    const max = maxSlots[lvl] ?? 0;
+    const remaining = state.spellSlots[lvl] ?? max;
+    return sum + (max - remaining);
+  }, 0);
 
   return (
     <div className={styles.page}>
@@ -465,6 +494,90 @@ export function FlowchartBuilder() {
                   )}
                 </>
               )}
+            </div>
+          )}
+          {/* Spell Slots chip */}
+          {hasSlotsToTrack && (
+            <button
+              type="button"
+              className={`${styles.loadoutChip} ${
+                totalSlotsSpent > 0 ? styles.slotsChipArmed : ""
+              }`}
+              onClick={() => setShowSlotsPopover((v) => !v)}
+              title="Spell slot tracker"
+            >
+              <Layers size={13} />
+              Slots
+              {totalSlotsSpent > 0 && (
+                <span className={styles.slotsSpentBadge}>
+                  {totalSlotsSpent}
+                </span>
+              )}
+            </button>
+          )}
+          {showSlotsPopover && hasSlotsToTrack && (
+            <div
+              className={styles.slotsPopover}
+              onMouseLeave={() => setShowSlotsPopover(false)}
+            >
+              <div className={styles.slotsPopoverHeader}>
+                <span>{isWarlock ? "Pact Magic" : "Spell Slots"}</span>
+                <button
+                  type="button"
+                  className={styles.slotsRestoreBtn}
+                  onClick={restoreSpellSlots}
+                  title={
+                    isWarlock
+                      ? "Short Rest — restore pact slots"
+                      : "Long Rest — restore all slots"
+                  }
+                >
+                  {isWarlock ? "Short Rest ↺" : "Long Rest ↺"}
+                </button>
+              </div>
+              <ul className={styles.slotsLevelList}>
+                {slotLevels.map((lvl) => {
+                  const max = maxSlots[lvl] ?? 0;
+                  const remaining = state.spellSlots[lvl] ?? max;
+                  const ordSuffix = [, "st", "nd", "rd"][lvl] ?? "th";
+                  return (
+                    <li key={lvl} className={styles.slotsLevelRow}>
+                      <span className={styles.slotsLevelLabel}>
+                        {isWarlock
+                          ? `${lvl}${ordSuffix} level`
+                          : `${lvl}${ordSuffix}`}
+                      </span>
+                      <span className={styles.slotsCircles}>
+                        {Array.from(
+                          { length: max },
+                          (_, ci) => `${lvl}-${ci + 1}`
+                        ).map((slotKey, ci) => {
+                          const filled = ci < remaining;
+                          return (
+                            <button
+                              key={slotKey}
+                              type="button"
+                              className={`${styles.slotCircle} ${filled ? styles.slotCircleFilled : styles.slotCircleEmpty}`}
+                              onClick={() => {
+                                if (filled) spendSlot(lvl);
+                              }}
+                              title={
+                                filled
+                                  ? `Use ${lvl}${ordSuffix}-level slot`
+                                  : "Spent"
+                              }
+                              disabled={!filled}
+                            />
+                          );
+                        })}
+                      </span>
+                      <span className={styles.slotsCount}>
+                        {remaining}/{max}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           )}
           {/* Concentration chip */}
