@@ -36,6 +36,21 @@ import type { ActionNodeData, StartNodeData } from "../types";
 /** Context providing the set of ActionNode IDs that are in a concentration conflict. */
 export const ConcentrationContext = React.createContext<Set<string>>(new Set());
 
+/** A single end-to-end path through the flowchart with its action economy spend. */
+export interface PathBudget {
+  pathId: string;
+  /** All node IDs on the path, in traversal order. */
+  nodeIds: string[];
+  /** Labels of ActionNodes that consume action/bonus/reaction on this path. */
+  nodeLabels: string[];
+  actions: number;
+  bonusActions: number;
+  reactions: number;
+}
+
+/** Context providing the set of ActionNode IDs that contribute to an over-budget path. */
+export const ActionEconomyContext = React.createContext<Set<string>>(new Set());
+
 function findConcentrationConflicts(nodes: Node[], edges: Edge[]): Set<string> {
   const adjacency = new Map<string, string[]>();
   for (const node of nodes) {
@@ -82,6 +97,76 @@ function findConcentrationConflicts(nodes: Node[], edges: Edge[]): Set<string> {
   return conflictIds;
 }
 
+function computePathBudgets(nodes: Node[], edges: Edge[]): PathBudget[] {
+  const adjacency = new Map<string, string[]>();
+  for (const node of nodes) {
+    adjacency.set(node.id, []);
+  }
+  for (const edge of edges) {
+    const neighbors = adjacency.get(edge.source);
+    if (neighbors) neighbors.push(edge.target);
+  }
+
+  const hasIncoming = new Set(edges.map((e) => e.target));
+  const roots = nodes.filter((n) => !hasIncoming.has(n.id));
+
+  const paths: PathBudget[] = [];
+  let counter = 0;
+
+  function dfs(
+    nodeId: string,
+    path: string[],
+    labels: string[],
+    budget: { a: number; b: number; r: number },
+    visited: Set<string>
+  ): void {
+    if (visited.has(nodeId)) return;
+    const vis = new Set(visited);
+    vis.add(nodeId);
+
+    const node = nodes.find((n) => n.id === nodeId);
+    let { a, b, r } = budget;
+    const newLabels = [...labels];
+
+    if (node?.type === "actionNode") {
+      const data = node.data as ActionNodeData;
+      const lbl = data.label as string;
+      if (data.actionType === "action") {
+        a++;
+        newLabels.push(lbl);
+      } else if (data.actionType === "bonus") {
+        b++;
+        newLabels.push(lbl);
+      } else if (data.actionType === "reaction") {
+        r++;
+        newLabels.push(lbl);
+      }
+    }
+
+    const newPath = [...path, nodeId];
+    const children = adjacency.get(nodeId) ?? [];
+    if (children.length === 0) {
+      paths.push({
+        pathId: `path-${counter++}`,
+        nodeIds: newPath,
+        nodeLabels: newLabels,
+        actions: a,
+        bonusActions: b,
+        reactions: r,
+      });
+    } else {
+      for (const child of children) {
+        dfs(child, newPath, newLabels, { a, b, r }, vis);
+      }
+    }
+  }
+
+  for (const root of roots) {
+    dfs(root.id, [], [], { a: 0, b: 0, r: 0 }, new Set());
+  }
+  return paths;
+}
+
 import { SnappedConnectionLine } from "./edges/SnappedConnectionLine";
 import { SnappedEdge } from "./edges/SnappedEdge";
 import styles from "./FlowCanvas.module.css";
@@ -113,6 +198,10 @@ interface FlowCanvasInnerProps {
     spells: Array<{ id: string; label: string }>,
     conflictIds: string[]
   ) => void;
+  onActionEconomyChange?: (
+    budgets: PathBudget[],
+    overBudgetNodeIds: string[]
+  ) => void;
   edgeStyle?: EdgeStyleType;
   animatedEdges?: boolean;
 }
@@ -136,6 +225,7 @@ function FlowCanvasInner({
   onExportReady,
   onFlowChange,
   onConcentrationChange,
+  onActionEconomyChange,
   edgeStyle = "smoothstep",
   animatedEdges = false,
 }: FlowCanvasInnerProps) {
@@ -289,7 +379,40 @@ function FlowCanvasInner({
       onConcentrationChange(concSpells, [...newConflicts]);
     }
   }, [nodes, edges, onConcentrationChange]);
-
+  // Compute action economy budgets on every graph change
+  const [overBudgetNodeIds, setOverBudgetNodeIds] = useState<Set<string>>(
+    () => new Set()
+  );
+  useEffect(() => {
+    const budgets = computePathBudgets(nodes, edges);
+    const overBudgetSet = new Set<string>();
+    for (const path of budgets) {
+      if (path.actions > 1 || path.bonusActions > 1 || path.reactions > 1) {
+        for (const nodeId of path.nodeIds) {
+          const node = nodes.find((n) => n.id === nodeId);
+          if (node?.type === "actionNode") {
+            const data = node.data as ActionNodeData;
+            if (
+              data.actionType === "action" ||
+              data.actionType === "bonus" ||
+              data.actionType === "reaction"
+            ) {
+              overBudgetSet.add(nodeId);
+            }
+          }
+        }
+      }
+    }
+    setOverBudgetNodeIds((prev) => {
+      const changed =
+        overBudgetSet.size !== prev.size ||
+        [...overBudgetSet].some((id) => !prev.has(id));
+      return changed ? overBudgetSet : prev;
+    });
+    if (onActionEconomyChange) {
+      onActionEconomyChange(budgets, [...overBudgetSet]);
+    }
+  }, [nodes, edges, onActionEconomyChange]);
   // Build warning message for conflicting nodes
   const conflictWarningText = useMemo(() => {
     if (conflictNodeIds.size === 0) return null;
@@ -462,54 +585,56 @@ function FlowCanvasInner({
   );
 
   return (
-    <ConcentrationContext.Provider value={conflictNodeIds}>
-      <div ref={reactFlowWrapper} className={styles.canvasWrapper}>
-        {conflictWarningText && (
-          <div className={styles.concentrationWarning} role="alert">
-            <span className={styles.concentrationWarningIcon}>⚠</span>
-            {conflictWarningText}
-          </div>
-        )}
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={wrappedOnNodesChange}
-          onEdgesChange={wrappedOnEdgesChange}
-          onConnect={onConnect}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          onSelectionChange={handleSelectionChange}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-          connectionLineComponent={SnappedConnectionLine}
-          fitView
-          deleteKeyCode={["Delete", "Backspace"]}
-          multiSelectionKeyCode={["Control", "Shift"]}
-          selectionOnDrag={true}
-          panOnDrag={[1, 2]}
-          selectionMode={SelectionMode.Partial}
-          defaultEdgeOptions={{
-            type: edgeStyle,
-            style: { stroke: "#8b949e", strokeWidth: 2 },
-            markerEnd: { type: "arrow" as const, color: "#8b949e" },
-          }}
-          proOptions={{ hideAttribution: true }}
-        >
-          <Background
-            variant={BackgroundVariant.Dots}
-            gap={20}
-            size={1}
-            color="#21262d"
-          />
-          <Controls className={styles.controls} />
-          <MiniMap
-            className={styles.minimap}
-            nodeColor={() => "#d4a017"}
-            maskColor="rgba(13, 17, 23, 0.7)"
-          />
-        </ReactFlow>
-      </div>
-    </ConcentrationContext.Provider>
+    <ActionEconomyContext.Provider value={overBudgetNodeIds}>
+      <ConcentrationContext.Provider value={conflictNodeIds}>
+        <div ref={reactFlowWrapper} className={styles.canvasWrapper}>
+          {conflictWarningText && (
+            <div className={styles.concentrationWarning} role="alert">
+              <span className={styles.concentrationWarningIcon}>⚠</span>
+              {conflictWarningText}
+            </div>
+          )}
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={wrappedOnNodesChange}
+            onEdgesChange={wrappedOnEdgesChange}
+            onConnect={onConnect}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            onSelectionChange={handleSelectionChange}
+            nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
+            connectionLineComponent={SnappedConnectionLine}
+            fitView
+            deleteKeyCode={["Delete", "Backspace"]}
+            multiSelectionKeyCode={["Control", "Shift"]}
+            selectionOnDrag={true}
+            panOnDrag={[1, 2]}
+            selectionMode={SelectionMode.Partial}
+            defaultEdgeOptions={{
+              type: edgeStyle,
+              style: { stroke: "#8b949e", strokeWidth: 2 },
+              markerEnd: { type: "arrow" as const, color: "#8b949e" },
+            }}
+            proOptions={{ hideAttribution: true }}
+          >
+            <Background
+              variant={BackgroundVariant.Dots}
+              gap={20}
+              size={1}
+              color="#21262d"
+            />
+            <Controls className={styles.controls} />
+            <MiniMap
+              className={styles.minimap}
+              nodeColor={() => "#d4a017"}
+              maskColor="rgba(13, 17, 23, 0.7)"
+            />
+          </ReactFlow>
+        </div>
+      </ConcentrationContext.Provider>
+    </ActionEconomyContext.Provider>
   );
 }
 
@@ -522,6 +647,10 @@ interface FlowCanvasProps {
   onConcentrationChange?: (
     spells: Array<{ id: string; label: string }>,
     conflictIds: string[]
+  ) => void;
+  onActionEconomyChange?: (
+    budgets: PathBudget[],
+    overBudgetNodeIds: string[]
   ) => void;
   edgeStyle?: EdgeStyleType;
   animatedEdges?: boolean;

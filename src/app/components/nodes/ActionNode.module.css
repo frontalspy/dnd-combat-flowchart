@@ -278,6 +278,11 @@
     0 6px 20px rgba(192, 57, 43, 0.3) !important;
 }
 
+/* Over-budget highlight — red left border when node sits on an over-budget path */
+.overBudget {
+  border-left: 3px solid rgba(239, 83, 80, 0.85) !important;
+}
+
 .concentrationConflict:hover,
 .concentrationConflict.selected {
   border-color: #e57373 !important;

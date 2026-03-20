@@ -418,6 +418,180 @@
   flex-shrink: 0;
 }
 
+/* Action Economy HUD chip variants */
+.economyChipActive {
+  border-color: rgba(110, 168, 216, 0.55);
+  color: #6ea8d8;
+}
+
+.economyChipActive:hover {
+  border-color: #6ea8d8;
+  background: rgba(110, 168, 216, 0.08);
+}
+
+.economyChipAlert {
+  border-color: #c0392b;
+  color: #e57373;
+  background: rgba(192, 57, 43, 0.1);
+}
+
+.economyChipAlert:hover {
+  border-color: #e57373;
+  background: rgba(192, 57, 43, 0.16);
+}
+
+.economyAlertBadge {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* Action Economy popover */
+.economyPopover {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  z-index: 100;
+  min-width: 280px;
+  max-width: 420px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-mid);
+  border-radius: 3px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.economyPopoverHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-mid);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.economyPopoverCloseBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0;
+  line-height: 1;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.economyPopoverCloseBtn:hover {
+  color: var(--text);
+  background: var(--bg-surface);
+}
+
+.economyPopoverEmpty {
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* Worst-case summary row */
+.economyWorstCase {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-dim);
+  background: var(--bg-base);
+}
+
+.economyBudgetStat {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.economyOk {
+  color: #66bb6a;
+}
+
+.economyOver {
+  color: #ef5350;
+  font-weight: 800;
+}
+
+/* Per-path list */
+.economyPathList {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.economyPathItem {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.economyPathItem:hover {
+  background: var(--bg-surface);
+}
+
+.economyPathItemOver {
+  background: rgba(192, 57, 43, 0.06);
+}
+
+.economyPathItemOver:hover {
+  background: rgba(192, 57, 43, 0.1);
+}
+
+.economyPathLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-faint);
+  min-width: 44px;
+  flex-shrink: 0;
+}
+
+.economyPathStat {
+  font-size: 12px;
+  font-weight: 700;
+  min-width: 28px;
+}
+
+.economyPathNodes {
+  font-size: 11px;
+  color: var(--text-mid);
+  font-style: italic;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.economyPathMore {
+  padding: 4px 12px 6px;
+  font-size: 11px;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
 /* Main workspace */
 .workspace {
   flex: 1;

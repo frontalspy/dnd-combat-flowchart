@@ -14,7 +14,7 @@ import d20Icon from "../../icons/dice/d20.svg";
 import timeIcon from "../../icons/entity/time.svg";
 import concentrationIcon from "../../icons/spell/concentration.svg";
 import type { ActionNodeData } from "../../types";
-import { ConcentrationContext } from "../FlowCanvas";
+import { ActionEconomyContext, ConcentrationContext } from "../FlowCanvas";
 import { Icon } from "../Icon";
 import styles from "./ActionNode.module.css";
 
@@ -25,6 +25,8 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
   const { state } = useApp();
   const conflictNodeIds = useContext(ConcentrationContext);
   const isConflict = conflictNodeIds.has(id);
+  const overBudgetNodeIds = useContext(ActionEconomyContext);
+  const isOverBudget = overBudgetNodeIds.has(id);
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesValue, setNotesValue] = useState(data.notes ?? "");
 
@@ -64,7 +66,7 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
 
   return (
     <div
-      className={`${styles.actionNode} ${selected ? styles.selected : ""} ${isConflict ? styles.concentrationConflict : ""}`}
+      className={`${styles.actionNode} ${selected ? styles.selected : ""} ${isConflict ? styles.concentrationConflict : ""} ${isOverBudget && !isConflict ? styles.overBudget : ""}`}
       style={{ borderColor }}
     >
       <Handle

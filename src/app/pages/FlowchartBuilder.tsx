@@ -1,6 +1,7 @@
 import type { Node } from "@xyflow/react";
 import { ReactFlowProvider } from "@xyflow/react";
 import {
+  Activity,
   BarChart2,
   Check,
   ChevronLeft,
@@ -13,9 +14,19 @@ import {
   Sword,
   Zap,
 } from "lucide-react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { FlowCanvasExports } from "../components/FlowCanvas";
-import { type EdgeStyleType, FlowCanvas } from "../components/FlowCanvas";
+import {
+  type EdgeStyleType,
+  FlowCanvas,
+  type PathBudget,
+} from "../components/FlowCanvas";
 import { LoadoutPicker } from "../components/LoadoutPicker";
 import { MultiSelectBar } from "../components/MultiSelectBar";
 import { NodeEditor } from "../components/NodeEditor";
@@ -62,6 +73,32 @@ export function FlowchartBuilder() {
   }>({ spells: [], conflictIds: [] });
   const [showConcentrationPopover, setShowConcentrationPopover] =
     useState(false);
+
+  const [actionEconomyInfo, setActionEconomyInfo] = useState<{
+    budgets: PathBudget[];
+    overBudgetNodeIds: string[];
+  }>({ budgets: [], overBudgetNodeIds: [] });
+  const [showEconomyPopover, setShowEconomyPopover] = useState(false);
+  const [economyHudHidden, setEconomyHudHidden] = useState(false);
+
+  const handleActionEconomyChange = useCallback(
+    (budgets: PathBudget[], overBudgetNodeIds: string[]) => {
+      setActionEconomyInfo({ budgets, overBudgetNodeIds });
+    },
+    []
+  );
+
+  // Worst-case budget across all paths
+  const worstCase = useMemo(() => {
+    if (actionEconomyInfo.budgets.length === 0) return null;
+    return {
+      actions: Math.max(...actionEconomyInfo.budgets.map((p) => p.actions)),
+      bonusActions: Math.max(
+        ...actionEconomyInfo.budgets.map((p) => p.bonusActions)
+      ),
+      reactions: Math.max(...actionEconomyInfo.budgets.map((p) => p.reactions)),
+    };
+  }, [actionEconomyInfo.budgets]);
 
   const handleConcentrationChange = useCallback(
     (spells: Array<{ id: string; label: string }>, conflictIds: string[]) => {
@@ -262,6 +299,161 @@ export function FlowchartBuilder() {
         </div>
 
         <div className={styles.topRight}>
+          {/* Action Economy HUD chip */}
+          {!economyHudHidden && (
+            <button
+              type="button"
+              className={`${styles.loadoutChip} ${
+                actionEconomyInfo.overBudgetNodeIds.length > 0
+                  ? styles.economyChipAlert
+                  : worstCase
+                    ? styles.economyChipActive
+                    : ""
+              }`}
+              onClick={() => setShowEconomyPopover((v) => !v)}
+              title="Action economy budget"
+            >
+              <Activity size={13} />
+              Economy
+              {actionEconomyInfo.overBudgetNodeIds.length > 0 && (
+                <span className={styles.economyAlertBadge}>⚠</span>
+              )}
+            </button>
+          )}
+          {economyHudHidden && (
+            <button
+              type="button"
+              className={`${styles.loadoutChip} ${
+                actionEconomyInfo.overBudgetNodeIds.length > 0
+                  ? styles.economyChipAlert
+                  : ""
+              }`}
+              onClick={() => setEconomyHudHidden(false)}
+              title="Show action economy HUD"
+            >
+              <Activity size={13} />
+            </button>
+          )}
+          {showEconomyPopover && !economyHudHidden && (
+            <div
+              className={styles.economyPopover}
+              onMouseLeave={() => setShowEconomyPopover(false)}
+            >
+              <div className={styles.economyPopoverHeader}>
+                <span>Turn Budget</span>
+                <button
+                  type="button"
+                  className={styles.economyPopoverCloseBtn}
+                  onClick={() => {
+                    setEconomyHudHidden(true);
+                    setShowEconomyPopover(false);
+                  }}
+                  title="Minimize HUD"
+                >
+                  ×
+                </button>
+              </div>
+              {!worstCase ? (
+                <div className={styles.economyPopoverEmpty}>
+                  Add action nodes to the canvas to track economy.
+                </div>
+              ) : (
+                <>
+                  <div className={styles.economyWorstCase}>
+                    <span
+                      className={`${styles.economyBudgetStat} ${
+                        worstCase.actions > 1
+                          ? styles.economyOver
+                          : styles.economyOk
+                      }`}
+                    >
+                      A: {worstCase.actions}/1{" "}
+                      {worstCase.actions > 1 ? "⚠" : "✓"}
+                    </span>
+                    <span
+                      className={`${styles.economyBudgetStat} ${
+                        worstCase.bonusActions > 1
+                          ? styles.economyOver
+                          : styles.economyOk
+                      }`}
+                    >
+                      B: {worstCase.bonusActions}/1{" "}
+                      {worstCase.bonusActions > 1 ? "⚠" : "✓"}
+                    </span>
+                    <span
+                      className={`${styles.economyBudgetStat} ${
+                        worstCase.reactions > 1
+                          ? styles.economyOver
+                          : styles.economyOk
+                      }`}
+                    >
+                      R: {worstCase.reactions}/1{" "}
+                      {worstCase.reactions > 1 ? "⚠" : "✓"}
+                    </span>
+                  </div>
+                  {actionEconomyInfo.budgets.length > 0 && (
+                    <ul className={styles.economyPathList}>
+                      {actionEconomyInfo.budgets.slice(0, 12).map((path, i) => {
+                        const isOverBudget =
+                          path.actions > 1 ||
+                          path.bonusActions > 1 ||
+                          path.reactions > 1;
+                        return (
+                          <li
+                            key={path.pathId}
+                            className={`${styles.economyPathItem} ${
+                              isOverBudget ? styles.economyPathItemOver : ""
+                            }`}
+                          >
+                            <span className={styles.economyPathLabel}>
+                              Path {i + 1}
+                            </span>
+                            <span
+                              className={`${styles.economyPathStat} ${
+                                path.actions > 1
+                                  ? styles.economyOver
+                                  : styles.economyOk
+                              }`}
+                            >
+                              A:{path.actions}
+                            </span>
+                            <span
+                              className={`${styles.economyPathStat} ${
+                                path.bonusActions > 1
+                                  ? styles.economyOver
+                                  : styles.economyOk
+                              }`}
+                            >
+                              B:{path.bonusActions}
+                            </span>
+                            <span
+                              className={`${styles.economyPathStat} ${
+                                path.reactions > 1
+                                  ? styles.economyOver
+                                  : styles.economyOk
+                              }`}
+                            >
+                              R:{path.reactions}
+                            </span>
+                            {path.nodeLabels.length > 0 && (
+                              <span className={styles.economyPathNodes}>
+                                {path.nodeLabels.join(" → ")}
+                              </span>
+                            )}
+                          </li>
+                        );
+                      })}
+                      {actionEconomyInfo.budgets.length > 12 && (
+                        <li className={styles.economyPathMore}>
+                          +{actionEconomyInfo.budgets.length - 12} more paths
+                        </li>
+                      )}
+                    </ul>
+                  )}
+                </>
+              )}
+            </div>
+          )}
           {/* Concentration chip */}
           <button
             type="button"
@@ -454,6 +646,7 @@ export function FlowchartBuilder() {
             onExportReady={handleExportReady}
             onFlowChange={handleFlowChange}
             onConcentrationChange={handleConcentrationChange}
+            onActionEconomyChange={handleActionEconomyChange}
             edgeStyle={edgeStyle}
             animatedEdges={animatedEdges}
           />

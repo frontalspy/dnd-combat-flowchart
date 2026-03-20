@@ -43,6 +43,24 @@ declare const concentrationPopoverList: string;
 declare const concentrationPopoverItem: string;
 declare const concentrationPopoverItemConflict: string;
 declare const concentrationPopoverWarnIcon: string;
+declare const economyChipActive: string;
+declare const economyChipAlert: string;
+declare const economyAlertBadge: string;
+declare const economyPopover: string;
+declare const economyPopoverHeader: string;
+declare const economyPopoverCloseBtn: string;
+declare const economyPopoverEmpty: string;
+declare const economyWorstCase: string;
+declare const economyBudgetStat: string;
+declare const economyOk: string;
+declare const economyOver: string;
+declare const economyPathList: string;
+declare const economyPathItem: string;
+declare const economyPathItemOver: string;
+declare const economyPathLabel: string;
+declare const economyPathStat: string;
+declare const economyPathNodes: string;
+declare const economyPathMore: string;
 declare const workspace: string;
 declare const hint: string;
 
@@ -84,6 +102,24 @@ export {
 	concentrationPopoverItem,
 	concentrationPopoverItemConflict,
 	concentrationPopoverWarnIcon,
+	economyChipActive,
+	economyChipAlert,
+	economyAlertBadge,
+	economyPopover,
+	economyPopoverHeader,
+	economyPopoverCloseBtn,
+	economyPopoverEmpty,
+	economyWorstCase,
+	economyBudgetStat,
+	economyOk,
+	economyOver,
+	economyPathList,
+	economyPathItem,
+	economyPathItemOver,
+	economyPathLabel,
+	economyPathStat,
+	economyPathNodes,
+	economyPathMore,
 	workspace,
 	hint
 };
@@ -126,6 +162,24 @@ declare const __default_export__: {
 	concentrationPopoverItem: typeof concentrationPopoverItem;
 	concentrationPopoverItemConflict: typeof concentrationPopoverItemConflict;
 	concentrationPopoverWarnIcon: typeof concentrationPopoverWarnIcon;
+	economyChipActive: typeof economyChipActive;
+	economyChipAlert: typeof economyChipAlert;
+	economyAlertBadge: typeof economyAlertBadge;
+	economyPopover: typeof economyPopover;
+	economyPopoverHeader: typeof economyPopoverHeader;
+	economyPopoverCloseBtn: typeof economyPopoverCloseBtn;
+	economyPopoverEmpty: typeof economyPopoverEmpty;
+	economyWorstCase: typeof economyWorstCase;
+	economyBudgetStat: typeof economyBudgetStat;
+	economyOk: typeof economyOk;
+	economyOver: typeof economyOver;
+	economyPathList: typeof economyPathList;
+	economyPathItem: typeof economyPathItem;
+	economyPathItemOver: typeof economyPathItemOver;
+	economyPathLabel: typeof economyPathLabel;
+	economyPathStat: typeof economyPathStat;
+	economyPathNodes: typeof economyPathNodes;
+	economyPathMore: typeof economyPathMore;
 	workspace: typeof workspace;
 	hint: typeof hint;
 };
