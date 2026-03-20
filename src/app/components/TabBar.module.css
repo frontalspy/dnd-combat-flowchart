@@ -1,4 +1,4 @@
-.tabBar {
+﻿.tabBar {
   display: flex;
   align-items: center;
   flex: 1;
@@ -51,7 +51,7 @@
 }
 
 .tabIcon {
-  font-size: 18px;
+  font-size: var(--fs-xl);
   flex-shrink: 0;
 }
 
@@ -63,7 +63,7 @@
 }
 
 .tabName {
-  font-size: 14px;
+  font-size: var(--fs-sm);
   font-weight: 700;
   color: var(--text);
   overflow: hidden;
@@ -71,7 +71,7 @@
 }
 
 .tabMeta {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   color: var(--text-mid);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -88,7 +88,7 @@
   border: none;
   color: var(--text-faint);
   cursor: pointer;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   flex-shrink: 0;
   transition:
     background 0.12s,
@@ -111,7 +111,7 @@
   border: 1px solid var(--border-mid);
   border-radius: 20px;
   color: var(--text-mid);
-  font-size: 18px;
+  font-size: var(--fs-xl);
   cursor: pointer;
   flex-shrink: 0;
   transition:
@@ -152,7 +152,7 @@
 
 .modalTitle {
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: var(--fs-lg);
   font-weight: 600;
   color: var(--gold);
   margin: 0;
@@ -187,7 +187,7 @@
 }
 
 .modalItemIcon {
-  font-size: 18px;
+  font-size: var(--fs-xl);
   flex-shrink: 0;
 }
 
@@ -198,7 +198,7 @@
 }
 
 .modalItemName {
-  font-size: 15px;
+  font-size: var(--fs-md);
   font-weight: 600;
   color: var(--text);
   white-space: nowrap;
@@ -207,12 +207,12 @@
 }
 
 .modalItemMeta {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--text-mid);
 }
 
 .modalEmpty {
-  font-size: 15px;
+  font-size: var(--fs-md);
   color: var(--text-mid);
   text-align: center;
   padding: 16px 0;
@@ -225,7 +225,7 @@
   border: 1px solid var(--border-mid);
   border-radius: 2px;
   color: var(--text-mid);
-  font-size: 14px;
+  font-size: var(--fs-sm);
   cursor: pointer;
   transition:
     background 0.12s,
@@ -268,7 +268,7 @@
 
 /* Section divider label */
 .modalDivider {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   letter-spacing: 0.8px;
   text-transform: uppercase;

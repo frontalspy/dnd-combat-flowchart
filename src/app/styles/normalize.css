@@ -1,4 +1,4 @@
-/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+﻿/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 /* ==========================================================================
    D&D Flowchart — Parchment & Ink Theme
    Aesthetic: Illuminated manuscript meets Middle-earth warmth
@@ -42,6 +42,17 @@
 
   --scrollbar-bg: var(--bg-base);
   --scrollbar-thumb: var(--border-dim);
+
+  /* Font sizes — minimum 14px throughout the UI */
+  --fs-xs: 14px; /* small labels / compact elements  — was 9–13 px */
+  --fs-sm: 14px; /* secondary / supporting text      — was 14 px   */
+  --fs-md: 15px; /* primary interactive text         — was 15 px   */
+  --fs-lg: 16px; /* large text / secondary headings  — was 16–17 px */
+  --fs-xl: 18px; /* section headings                 — was 18 px   */
+  --fs-2xl: 22px; /* panel titles                     — was 22 px   */
+  --fs-3xl: 26px; /* page section headings            — was 26 px   */
+  --fs-4xl: 32px; /* page headings                    — was 32 px   */
+  --fs-hero: 50px; /* display / hero text              — was 50 px   */
 }
 
 * {
@@ -80,7 +91,7 @@ body,
   stroke-width: 2;
 }
 .react-flow__edge-text {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   fill: var(--text);
 }

@@ -1,4 +1,4 @@
-.panel {
+﻿.panel {
   width: 260px;
   min-width: 260px;
   height: 100%;
@@ -26,7 +26,7 @@
 }
 
 .nodeTypeLabel {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   color: var(--text-mid);
   text-transform: uppercase;
@@ -34,7 +34,7 @@
 }
 
 .actionTypeBadge {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   padding: 2px 8px;
   border-radius: 10px;
@@ -82,7 +82,7 @@
 }
 
 .schoolChip {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   padding: 2px 8px;
   border: 1px solid currentColor;
@@ -90,7 +90,7 @@
 }
 
 .damageChip {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 10px;
@@ -106,7 +106,7 @@
 }
 
 .fieldLabel {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   color: var(--text-faint);
   text-transform: uppercase;
@@ -124,7 +124,7 @@
   border: 1px solid var(--border-mid);
   border-radius: 2px;
   color: var(--text);
-  font-size: 15px;
+  font-size: var(--fs-md);
   font-weight: 600;
   padding: 6px 8px;
   font-family: inherit;
@@ -143,7 +143,7 @@
 }
 
 .infoPill {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--text-mid);
   padding: 3px 8px;
   background: rgba(107, 76, 42, 0.08);
@@ -151,7 +151,7 @@
 }
 
 .descText {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--text-mid);
   line-height: 1.65;
   margin: 0;
@@ -162,7 +162,7 @@
   border: 1px solid var(--border-mid);
   border-radius: 2px;
   color: var(--text);
-  font-size: 14px;
+  font-size: var(--fs-sm);
   line-height: 1.5;
   padding: 8px;
   resize: vertical;
@@ -197,7 +197,7 @@
   border: 1px solid var(--red);
   border-radius: 2px;
   color: var(--red-light);
-  font-size: 14px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
@@ -209,7 +209,7 @@
 }
 
 .hint {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   color: var(--text-faint);
   text-align: center;
 }
@@ -231,7 +231,7 @@
   border: 1px solid var(--border-mid);
   border-radius: 2px;
   color: var(--text-mid);
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   padding: 2px 7px;
   cursor: pointer;
@@ -270,7 +270,7 @@
 }
 
 .variantItemLabel {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--text);
   flex: 1;
   white-space: nowrap;
@@ -287,7 +287,7 @@
 }
 
 .variantLevelBadge {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   color: var(--text-mid);
   padding: 1px 3px;
   background: rgba(107, 76, 42, 0.1);
@@ -295,7 +295,7 @@
 }
 
 .variantActionBadge {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 800;
   width: 16px;
   height: 16px;
@@ -311,7 +311,7 @@
 }
 
 .variantDamageBadge {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   padding: 1px 5px;
   border-radius: 8px;
@@ -351,7 +351,7 @@
   border: none;
   border-bottom: 1px solid var(--border-dim);
   color: var(--text);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   padding: 6px 8px;
   font-family: inherit;
   box-sizing: border-box;
@@ -409,7 +409,7 @@
 }
 
 .variantResultLabel {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--text);
   flex: 1;
   white-space: nowrap;
@@ -419,7 +419,7 @@
 }
 
 .variantResultBadge {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 800;
   width: 16px;
   height: 16px;
@@ -436,7 +436,7 @@
 
 .variantSearchEmpty {
   padding: 10px 8px;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   color: var(--text-faint);
   font-style: italic;
   text-align: center;
@@ -459,12 +459,12 @@
 }
 
 .computedKey {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   color: var(--text-faint);
 }
 
 .computedVal {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   color: var(--gold);
   font-family: var(--font-display);

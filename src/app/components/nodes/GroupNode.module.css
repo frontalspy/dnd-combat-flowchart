@@ -1,4 +1,4 @@
-.groupNode {
+﻿.groupNode {
   background: var(--bg-raised);
   border: 2px solid var(--border-mid);
   border-radius: 3px;
@@ -56,7 +56,7 @@
 }
 
 .headerLabel {
-  font-size: 14px;
+  font-size: var(--fs-sm);
   font-weight: 700;
   color: var(--text);
   flex: 1;
@@ -81,7 +81,7 @@
   border: 1px solid var(--gold);
   border-radius: 2px;
   color: var(--text);
-  font-size: 14px;
+  font-size: var(--fs-sm);
   font-weight: 700;
   padding: 3px 6px;
   font-family: inherit;
@@ -100,7 +100,7 @@
 }
 
 .countBadge {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   background: var(--gold);
   color: var(--bg-lift);
@@ -121,7 +121,7 @@
   color: var(--text-mid);
   cursor: pointer;
   padding: 0;
-  font-size: 9px;
+  font-size: var(--fs-xs);
   line-height: 1;
   transition:
     transform 0.2s,
@@ -155,7 +155,7 @@
 
 .emptyHint {
   padding: 8px 10px;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   color: var(--text-faint);
   font-style: italic;
   text-align: center;
@@ -181,13 +181,13 @@
 }
 
 .variantDot {
-  font-size: 9px;
+  font-size: var(--fs-xs);
   color: var(--gold);
   flex-shrink: 0;
 }
 
 .variantLabel {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--text);
   flex: 1;
   white-space: nowrap;
@@ -204,14 +204,14 @@
 }
 
 .schoolBadge {
-  font-size: 9px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 
 .levelBadge {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   color: var(--text-mid);
   padding: 1px 3px;
   background: rgba(107, 76, 42, 0.1);
@@ -219,7 +219,7 @@
 }
 
 .actionTypeBadge {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 800;
   width: 17px;
   height: 17px;
@@ -235,7 +235,7 @@
 }
 
 .damagePill {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   padding: 1px 5px;
   border-radius: 8px;
@@ -251,7 +251,7 @@
 }
 
 .variantDetailPill {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 500;
   padding: 1px 5px;
   border-radius: 3px;
@@ -261,7 +261,7 @@
 }
 
 .variantAttackPill {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   padding: 1px 5px;
   border-radius: 3px;
@@ -272,7 +272,7 @@
 }
 
 .variantSavePill {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   padding: 1px 5px;
   border-radius: 3px;

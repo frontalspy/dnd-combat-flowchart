@@ -1,4 +1,4 @@
-.actionNode {
+﻿.actionNode {
   background: var(--bg-raised);
   border: 1px solid var(--border-mid);
   border-radius: 3px;
@@ -56,7 +56,7 @@
 }
 
 .schoolBadge {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   letter-spacing: 1px;
   padding: 2px 5px;
@@ -66,7 +66,7 @@
 }
 
 .levelBadge {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   color: var(--text-mid);
   padding: 2px 4px;
   background: rgba(107, 76, 42, 0.1);
@@ -74,7 +74,7 @@
 }
 
 .handBadgeMH {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 800;
   color: #c8901c;
   background: rgba(200, 144, 28, 0.15);
@@ -85,7 +85,7 @@
 }
 
 .handBadgeOH {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 800;
   color: #6ea8d8;
   background: rgba(110, 168, 216, 0.15);
@@ -96,7 +96,7 @@
 }
 
 .actionTypeBadge {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 800;
   width: 20px;
   height: 20px;
@@ -115,7 +115,7 @@
 }
 
 .name {
-  font-size: 15px;
+  font-size: var(--fs-md);
   font-weight: 600;
   color: var(--text);
   margin-bottom: 6px;
@@ -130,7 +130,7 @@
 }
 
 .damagePill {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   padding: 2px 6px;
   border-radius: 10px;
@@ -140,7 +140,7 @@
 }
 
 .infoPill {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   color: var(--text-mid);
   padding: 2px 6px;
   background: rgba(107, 76, 42, 0.08);
@@ -170,7 +170,7 @@
 }
 
 .notesText {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--text-mid);
   line-height: 1.4;
   white-space: pre-wrap;
@@ -178,7 +178,7 @@
 }
 
 .notesPlaceholder {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--text-faint);
   font-style: italic;
 }
@@ -189,7 +189,7 @@
   border: 1px solid var(--gold-dim);
   border-radius: 2px;
   color: var(--text-mid);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   padding: 4px;
   resize: none;
   font-family: inherit;
@@ -210,7 +210,7 @@
 }
 
 .dicePill {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   background: var(--bg-lift);
   border: 1px solid var(--border-mid);
@@ -221,7 +221,7 @@
 }
 
 .savePill {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   background: rgba(90, 144, 72, 0.15);
   border: 1px solid var(--green);
@@ -236,7 +236,7 @@
 }
 
 .attackPill {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   background: rgba(200, 144, 28, 0.15);
   border: 1px solid var(--gold-dim);
@@ -246,7 +246,7 @@
 }
 
 .higherLevels {
-  font-size: 9px;
+  font-size: var(--fs-xs);
   color: var(--text-faint);
   margin-top: 2px;
   margin-bottom: 4px;
@@ -264,7 +264,7 @@
   background: rgba(200, 144, 28, 0.18);
   border: 1px solid rgba(200, 144, 28, 0.6);
   color: #c8901c;
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 800;
   flex-shrink: 0;
   title: "Concentration";

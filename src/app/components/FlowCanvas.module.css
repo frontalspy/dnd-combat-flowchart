@@ -1,4 +1,4 @@
-.canvasWrapper {
+﻿.canvasWrapper {
   flex: 1;
   height: 100%;
   background-color: var(--bg-deep);
@@ -20,7 +20,7 @@
   border: 1px solid #c0392b;
   border-radius: 3px;
   color: #e57373;
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   white-space: nowrap;
   max-width: 520px;
@@ -31,7 +31,7 @@
 }
 
 .concentrationWarningIcon {
-  font-size: 15px;
+  font-size: var(--fs-md);
   flex-shrink: 0;
 }
 

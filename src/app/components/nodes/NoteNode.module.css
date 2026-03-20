@@ -1,4 +1,4 @@
-/* Outer wrapper carries filter + transform. clip-path lives on the inner
+﻿/* Outer wrapper carries filter + transform. clip-path lives on the inner
    .noteNode div so that drop-shadow on the wrapper is applied to the already-
    clipped shape — this lets the gold ring follow the torn-paper silhouette.
    (clip-path is applied after filter on the same element, which would clip
@@ -123,11 +123,11 @@
 }
 
 .icon {
-  font-size: 13px;
+  font-size: var(--fs-xs);
 }
 
 .title {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--gold);
   text-transform: uppercase;
@@ -140,7 +140,7 @@
   background: transparent;
   border: none;
   color: var(--text);
-  font-size: 14px;
+  font-size: var(--fs-sm);
   line-height: 1.55;
   padding: 8px 10px;
   resize: none;

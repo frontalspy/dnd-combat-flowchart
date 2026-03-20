@@ -1,4 +1,4 @@
-.panel {
+﻿.panel {
   width: 260px;
   min-width: 260px;
   height: auto;
@@ -19,7 +19,7 @@
 }
 
 .label {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--text-mid);
 }
@@ -56,7 +56,7 @@
   color: #ef5350;
   border-radius: 3px;
   padding: 7px 12px;
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   cursor: pointer;
   width: 100%;
@@ -73,7 +73,7 @@
   color: var(--text-mid);
   border-radius: 3px;
   padding: 7px 12px;
-  font-size: 13px;
+  font-size: var(--fs-xs);
   cursor: pointer;
   width: 100%;
 }

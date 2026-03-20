@@ -1,4 +1,4 @@
-.panel {
+﻿.panel {
   width: 280px;
   min-width: 280px;
   height: 100%;
@@ -23,7 +23,7 @@
 }
 
 .classIcon {
-  font-size: 26px;
+  font-size: var(--fs-3xl);
 }
 
 .characterInfo {
@@ -33,14 +33,14 @@
 
 .characterClass {
   font-family: var(--font-display);
-  font-size: 15px;
+  font-size: var(--fs-md);
   font-weight: 600;
   color: var(--text);
   letter-spacing: 0.5px;
 }
 
 .characterLevel {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--text-mid);
 }
 
@@ -51,7 +51,7 @@
 }
 
 .templatesLabel {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--text-faint);
   text-transform: uppercase;
@@ -90,11 +90,11 @@
 }
 
 .templateIcon {
-  font-size: 16px;
+  font-size: var(--fs-lg);
 }
 
 .templateLabel {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--text-mid);
 }
@@ -121,7 +121,7 @@
   border: 1px solid var(--border-dim);
   border-radius: 2px;
   color: var(--text);
-  font-size: 14px;
+  font-size: var(--fs-sm);
   padding: 6px 26px 6px 30px;
   font-family: inherit;
   box-sizing: border-box;
@@ -168,7 +168,7 @@
   justify-content: center;
   gap: 5px;
   padding: 8px 4px;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--text-mid);
   background: none;
@@ -204,7 +204,7 @@
 }
 
 .levelChip {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   padding: 3px 7px;
   background: var(--bg-raised);
@@ -239,7 +239,7 @@
 }
 
 .sourceChip {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   padding: 2px 7px;
   background: var(--bg-raised);
@@ -274,7 +274,7 @@
 }
 
 .suggestedGroupsLabel {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--text-faint);
   text-transform: uppercase;
@@ -316,13 +316,13 @@
 
 .groupChipLabel {
   flex: 1;
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--text-mid);
 }
 
 .groupChipCount {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   color: var(--gold);
   background: rgba(200, 144, 28, 0.14);
@@ -364,7 +364,7 @@
 .emptyState {
   padding: 24px 12px;
   text-align: center;
-  font-size: 14px;
+  font-size: var(--fs-sm);
   color: var(--text-faint);
   line-height: 1.7;
 }
@@ -382,19 +382,19 @@
 }
 
 .shieldIcon {
-  font-size: 18px;
+  font-size: var(--fs-xl);
   flex-shrink: 0;
 }
 
 .shieldLabel {
-  font-size: 15px;
+  font-size: var(--fs-md);
   font-weight: 600;
   color: var(--text);
   flex: 1;
 }
 
 .shieldAc {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   color: #6ea8d8;
   background: rgba(110, 168, 216, 0.15);
@@ -420,7 +420,7 @@
   border: 1px dashed var(--gold-dim);
   border-radius: 2px;
   color: var(--gold);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
@@ -463,7 +463,7 @@
 
 .modalTitle {
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: var(--fs-lg);
   font-weight: 600;
   color: var(--gold);
   margin: 0;
@@ -497,7 +497,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--text-mid);
   letter-spacing: 0.5px;
@@ -511,7 +511,7 @@
   border: 1px solid var(--border-mid);
   border-radius: 2px;
   color: var(--text);
-  font-size: 15px;
+  font-size: var(--fs-md);
   padding: 7px 10px;
   font-family: inherit;
   transition: border-color 0.15s;
@@ -541,7 +541,7 @@
   border: 1px solid var(--border-mid);
   border-radius: 2px;
   color: var(--text-mid);
-  font-size: 15px;
+  font-size: var(--fs-md);
   cursor: pointer;
   font-family: inherit;
 }
@@ -557,7 +557,7 @@
   border: none;
   border-radius: 2px;
   color: var(--bg-deep);
-  font-size: 15px;
+  font-size: var(--fs-md);
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;

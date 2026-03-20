@@ -1,4 +1,4 @@
-.card {
+﻿.card {
   position: relative;
   background: var(--bg-raised);
   border: 1px solid var(--border-dim);
@@ -30,14 +30,14 @@
 }
 
 .categoryBadge {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   color: var(--text-mid);
   letter-spacing: 0.4px;
 }
 
 .martialTag {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--gold-dim);
   border: 1px solid var(--gold-dim);
@@ -47,7 +47,7 @@
 }
 
 .handBadgeMH {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 800;
   color: #c8901c;
   background: rgba(200, 144, 28, 0.15);
@@ -59,7 +59,7 @@
 }
 
 .handBadgeOH {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 800;
   color: #6ea8d8;
   background: rgba(110, 168, 216, 0.15);
@@ -78,7 +78,7 @@
 }
 
 .cardName {
-  font-size: 15px;
+  font-size: var(--fs-md);
   font-weight: 600;
   color: var(--text);
   line-height: 1.3;
@@ -96,7 +96,7 @@
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 8px;
@@ -105,7 +105,7 @@
 .rangePill {
   display: inline-flex;
   align-items: center;
-  font-size: 11px;
+  font-size: var(--fs-xs);
   font-weight: 500;
   color: var(--text-mid);
   background: var(--bg-base);
@@ -122,7 +122,7 @@
 }
 
 .propTag {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--text-faint);
   background: var(--bg-base);
@@ -158,7 +158,7 @@
 
 .tooltipName {
   font-family: var(--font-display);
-  font-size: 15px;
+  font-size: var(--fs-md);
   font-weight: 600;
   color: var(--gold);
   flex: 1;
@@ -166,7 +166,7 @@
 }
 
 .tooltipType {
-  font-size: 11px;
+  font-size: var(--fs-xs);
   color: var(--text-mid);
   flex-shrink: 0;
   text-align: right;
@@ -180,7 +180,7 @@
 }
 
 .tooltipMeta span {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--text-mid);
 }
 
