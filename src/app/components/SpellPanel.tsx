@@ -2,7 +2,7 @@ import { Plus, Search, X } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
 import { STANDARD_ACTIONS } from "../data/actions";
 import type { ClassAction } from "../data/classes";
-import { getClassDefinition, getMaxSpellLevel } from "../data/classes";
+import { CLASSES, getClassDefinition, getMaxSpellLevel } from "../data/classes";
 import { SPELL_SCHOOLS } from "../data/damageTypes";
 import { resolveGroupTemplates } from "../data/groupTemplates";
 import spellsData from "../data/spells.json";
@@ -17,7 +17,13 @@ import puzzleIcon from "../icons/game/puzzle.svg";
 import spellIcon from "../icons/game/spell.svg";
 import buildIcon from "../icons/util/build.svg";
 import swordIcon from "../icons/weapon/sword.svg";
-import type { ActionItem, Character, DndCondition, Spell } from "../types";
+import type {
+  ActionItem,
+  Character,
+  DndClass,
+  DndCondition,
+  Spell,
+} from "../types";
 import { CustomActionModal } from "./CustomActionModal";
 import { Icon } from "./Icon";
 import {
@@ -27,6 +33,22 @@ import {
 import { ActionCard, SpellCard } from "./SpellCard";
 import styles from "./SpellPanel.module.css";
 import { WeaponCard } from "./WeaponCard";
+
+/** 2–3-letter abbreviation for each class, used in multiclass spell source badges. */
+const CLASS_ABBR: Record<DndClass, string> = {
+  barbarian: "Bar",
+  bard: "Brd",
+  cleric: "Cle",
+  druid: "Dru",
+  fighter: "Ftr",
+  monk: "Mon",
+  paladin: "Pal",
+  ranger: "Rng",
+  rogue: "Rog",
+  sorcerer: "Sor",
+  warlock: "War",
+  wizard: "Wiz",
+};
 
 const allSpells = spellsData as Spell[];
 
@@ -118,20 +140,56 @@ export function SpellPanel({
   >("target");
 
   const classDef = getClassDefinition(character.class);
-  const maxSpellLevel = getMaxSpellLevel(
-    character.class,
-    character.subclass,
-    character.level
+  const isMulticlass = (character.secondaryClasses?.length ?? 0) > 0;
+
+  // All class entries (primary + secondary) as a flat array
+  const allCharClasses = useMemo(
+    () => [
+      {
+        classId: character.class,
+        subclassId: character.subclass,
+        level: character.level,
+      },
+      ...(character.secondaryClasses ?? []).map((sc) => ({
+        classId: sc.class,
+        subclassId: sc.subclass,
+        level: sc.level,
+      })),
+    ],
+    [
+      character.class,
+      character.subclass,
+      character.level,
+      character.secondaryClasses,
+    ]
+  );
+
+  const maxSpellLevel = useMemo(
+    () =>
+      Math.max(
+        0,
+        ...allCharClasses.map(({ classId, subclassId, level }) =>
+          getMaxSpellLevel(classId, subclassId, level)
+        )
+      ),
+    [allCharClasses]
   );
 
   const monkMartialArtsDie = useMemo(() => {
-    if (character.class !== "monk") return null;
-    const lvl = character.level;
-    if (lvl >= 17) return "1d10";
-    if (lvl >= 11) return "1d8";
-    if (lvl >= 5) return "1d6";
+    let monkLevel = 0;
+    if (character.class === "monk") monkLevel = character.level;
+    else {
+      const monkSec = character.secondaryClasses?.find(
+        (sc) => sc.class === "monk"
+      );
+      if (monkSec) monkLevel = monkSec.level;
+    }
+    if (!monkLevel) return null;
+    if (monkLevel >= 17) return "1d10";
+    if (monkLevel >= 11) return "1d8";
+    if (monkLevel >= 5) return "1d6";
     return "1d4";
-  }, [character.class, character.level]);
+  }, [character.class, character.level, character.secondaryClasses]);
 
   const loadoutWeapons = useMemo(() => {
     const result: Array<{ weapon: Weapon; hand: "main" | "off" }> = [];
@@ -171,26 +229,34 @@ export function SpellPanel({
   }, [loadoutWeapons, search]);
 
   const classActions: ActionItem[] = useMemo(() => {
-    if (!classDef) return [];
-    const eligible = classDef.classActions.filter(
-      (a: ClassAction) => a.minLevel <= character.level
-    );
-    // For actions sharing the same name, keep only the highest-minLevel one
-    // (e.g. monk Unarmed Strike tiers — show only the current die size)
-    const best = new Map<string, ClassAction>();
-    for (const a of eligible) {
-      const prev = best.get(a.name);
-      if (!prev || a.minLevel > prev.minLevel) best.set(a.name, a);
+    const resultMap = new Map<string, ActionItem>();
+    for (const { classId, level } of allCharClasses) {
+      const cd = getClassDefinition(classId);
+      if (!cd) continue;
+      const eligible = cd.classActions.filter(
+        (a: ClassAction) => a.minLevel <= level
+      );
+      // For same-name actions from the same class keep the highest-minLevel one
+      const best = new Map<string, ClassAction>();
+      for (const a of eligible) {
+        const prev = best.get(a.name);
+        if (!prev || a.minLevel > prev.minLevel) best.set(a.name, a);
+      }
+      for (const a of best.values()) {
+        if (!resultMap.has(a.id)) {
+          resultMap.set(a.id, {
+            id: a.id,
+            name: a.name,
+            description: a.description,
+            actionType: a.actionType,
+            damageType: a.damageType,
+            source: "class" as const,
+          });
+        }
+      }
     }
-    return Array.from(best.values()).map((a: ClassAction) => ({
-      id: a.id,
-      name: a.name,
-      description: a.description,
-      actionType: a.actionType,
-      damageType: a.damageType,
-      source: "class" as const,
-    }));
-  }, [classDef, character.level]);
+    return [...resultMap.values()];
+  }, [allCharClasses]);
 
   const filteredActions = useMemo(() => {
     const allActions = [...STANDARD_ACTIONS, ...classActions, ...customActions];
@@ -203,15 +269,36 @@ export function SpellPanel({
     );
   }, [classActions, customActions, search]);
 
-  const availableSpells = useMemo(() => {
-    if (maxSpellLevel === 0) return [];
-    return allSpells.filter((spell) => {
-      if (!spell.classes.includes(character.class)) return false;
-      if (spell.level === "cantrip") return true;
-      const spellLvl = parseInt(spell.level, 10);
-      return !isNaN(spellLvl) && spellLvl <= maxSpellLevel;
-    });
-  }, [character.class, maxSpellLevel]);
+  const { availableSpells, spellClassSources } = useMemo(() => {
+    // Build a map from spell name → { spell, sources[] }
+    const spellByName = new Map<
+      string,
+      { spell: Spell; sources: Set<DndClass> }
+    >();
+    for (const { classId, subclassId, level } of allCharClasses) {
+      const maxLvl = getMaxSpellLevel(classId, subclassId, level);
+      if (maxLvl === 0) continue;
+      for (const spell of allSpells) {
+        if (!spell.classes.includes(classId)) continue;
+        if (spell.level !== "cantrip") {
+          const sl = parseInt(spell.level, 10);
+          if (isNaN(sl) || sl > maxLvl) continue;
+        }
+        if (!spellByName.has(spell.name)) {
+          spellByName.set(spell.name, { spell, sources: new Set() });
+        }
+        spellByName.get(spell.name)!.sources.add(classId);
+      }
+    }
+
+    const spells: Spell[] = [];
+    const sourcesMap = new Map<string, DndClass[]>();
+    for (const { spell, sources } of spellByName.values()) {
+      spells.push(spell);
+      if (isMulticlass) sourcesMap.set(spell.name, [...sources]);
+    }
+    return { availableSpells: spells, spellClassSources: sourcesMap };
+  }, [allCharClasses, isMulticlass]);
 
   const filteredSpells = useMemo(() => {
     let spells = availableSpells;
@@ -278,12 +365,30 @@ export function SpellPanel({
             <Icon src={classDef?.icon ?? combatIcon} size={26} />
           </span>
           <div className={styles.characterInfo}>
-            <span className={styles.characterClass}>
-              {classDef?.name ?? character.class}
-            </span>
-            <span className={styles.characterLevel}>
-              Level {character.level}
-            </span>
+            {isMulticlass ? (
+              <>
+                <span className={styles.characterClass}>
+                  {allCharClasses
+                    .map(({ classId, level }) => {
+                      const cd = CLASSES.find((c) => c.id === classId);
+                      return `${cd?.name ?? classId} ${level}`;
+                    })
+                    .join(" / ")}
+                </span>
+                <span className={styles.characterLevel}>
+                  Lv {allCharClasses.reduce((s, c) => s + c.level, 0)} total
+                </span>
+              </>
+            ) : (
+              <>
+                <span className={styles.characterClass}>
+                  {classDef?.name ?? character.class}
+                </span>
+                <span className={styles.characterLevel}>
+                  Level {character.level}
+                </span>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -604,13 +709,25 @@ export function SpellPanel({
         )}
 
         {activeTab === "spells" &&
-          filteredSpells.map((spell) => (
-            <SpellCard
-              key={spell.name}
-              spell={spell}
-              onDragStart={onDragStart}
-            />
-          ))}
+          filteredSpells.map((spell) => {
+            const sources = spellClassSources.get(spell.name);
+            const classBadges =
+              isMulticlass && sources && sources.length > 1
+                ? sources.map((classId) => ({
+                    label: CLASS_ABBR[classId],
+                    color:
+                      CLASSES.find((c) => c.id === classId)?.color ?? "#888",
+                  }))
+                : undefined;
+            return (
+              <SpellCard
+                key={spell.name}
+                spell={spell}
+                onDragStart={onDragStart}
+                classBadges={classBadges}
+              />
+            );
+          })}
       </div>
 
       <div className={styles.panelFooter}>

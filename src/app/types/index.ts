@@ -78,12 +78,29 @@ export interface AbilityScores {
   cha: number;
 }
 
+export interface CharacterClass {
+  class: DndClass;
+  subclass: string;
+  level: number;
+}
+
 export interface Character {
   class: DndClass;
   subclass: string;
   level: number;
+  secondaryClasses?: CharacterClass[];
   loadout?: WeaponLoadout;
   abilityScores?: AbilityScores;
+}
+
+/** Returns the primary class entry as a CharacterClass object. */
+export function primaryClass(c: Character): CharacterClass {
+  return { class: c.class, subclass: c.subclass, level: c.level };
+}
+
+/** Returns all classes (primary + secondary) as CharacterClass array. */
+export function allCharacterClasses(c: Character): CharacterClass[] {
+  return [primaryClass(c), ...(c.secondaryClasses ?? [])];
 }
 
 export interface ActionItem {
@@ -138,6 +155,9 @@ export interface ActionNodeData extends Record<string, unknown> {
   hand?: "main" | "off";
   concentration?: boolean;
   resourceCost?: ResourceCost;
+  castAtLevel?: number;
+  baseDamageDice?: string;
+  baseDuration?: string;
 }
 
 export interface ConditionNodeData extends Record<string, unknown> {

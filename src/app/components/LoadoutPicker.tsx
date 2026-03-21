@@ -1,6 +1,6 @@
 import { Plus, X } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
-import { getClassDefinition } from "../data/classes";
+import { getCharacterWeaponProficiencies } from "../data/classes";
 import type { Weapon } from "../data/weapons";
 import { WEAPONS } from "../data/weapons";
 import type { Character, WeaponLoadout } from "../types";
@@ -42,15 +42,14 @@ export function LoadoutPicker({
   const [twoHanded, setTwoHanded] = useState(initial.twoHanded);
   const [showCustomWeaponModal, setShowCustomWeaponModal] = useState(false);
 
-  const classDef = getClassDefinition(character.class);
   const proficientWeapons = useMemo(() => {
-    const srdProficient = !classDef
-      ? WEAPONS
-      : WEAPONS.filter((w) =>
-          classDef.weaponProficiencies.includes(w.category)
-        );
+    const proficientCategories = getCharacterWeaponProficiencies(character);
+    const srdProficient =
+      proficientCategories.length === 0
+        ? WEAPONS
+        : WEAPONS.filter((w) => proficientCategories.includes(w.category));
     return [...srdProficient, ...customWeapons];
-  }, [classDef, customWeapons]);
+  }, [character, customWeapons]);
 
   const lightWeapons = useMemo(
     () => proficientWeapons.filter((w) => w.properties.includes("light")),

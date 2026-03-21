@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
-import { getSpellSlots } from "../data/classes";
+import { getMulticlassSpellSlots, getSpellSlots } from "../data/classes";
 import type { Weapon } from "../data/weapons";
 import type {
   AbilityScores,
@@ -48,11 +48,7 @@ const STORAGE_KEY = "dnd-flowchart-app-state";
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case "SET_CHARACTER": {
-      const fullSlots = getSpellSlots(
-        action.payload.class,
-        action.payload.subclass,
-        action.payload.level
-      );
+      const fullSlots = getMulticlassSpellSlots(action.payload);
       return { ...state, character: action.payload, spellSlots: fullSlots };
     }
     case "SET_LOADOUT":
@@ -75,11 +71,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         character: newCharacter,
-        spellSlots: getSpellSlots(
-          newCharacter.class,
-          newCharacter.subclass,
-          newCharacter.level
-        ),
+        spellSlots: getMulticlassSpellSlots(newCharacter),
       };
     }
     case "USE_SLOT":
@@ -96,11 +88,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
     case "RESTORE_SLOT": {
       if (!state.character) return state;
       const maxForLevel =
-        getSpellSlots(
-          state.character.class,
-          state.character.subclass,
-          state.character.level
-        )[action.payload] ?? 0;
+        getMulticlassSpellSlots(state.character)[action.payload] ?? 0;
       return {
         ...state,
         spellSlots: {
@@ -116,11 +104,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       if (!state.character) return state;
       return {
         ...state,
-        spellSlots: getSpellSlots(
-          state.character.class,
-          state.character.subclass,
-          state.character.level
-        ),
+        spellSlots: getMulticlassSpellSlots(state.character),
       };
     }
     case "ADD_CUSTOM_WEAPON":

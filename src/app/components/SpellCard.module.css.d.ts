@@ -15,6 +15,8 @@ declare const sourceBadge: string;
 declare const actionBadge: string;
 declare const cardName: string;
 declare const damageBadge: string;
+declare const classBadges: string;
+declare const classBadge: string;
 declare const tooltip: string;
 declare const tooltipHeader: string;
 declare const tooltipName: string;
@@ -35,6 +37,8 @@ export {
 	actionBadge,
 	cardName,
 	damageBadge,
+	classBadges,
+	classBadge,
 	tooltip,
 	tooltipHeader,
 	tooltipName,
@@ -56,6 +60,8 @@ declare const __default_export__: {
 	actionBadge: typeof actionBadge;
 	cardName: typeof cardName;
 	damageBadge: typeof damageBadge;
+	classBadges: typeof classBadges;
+	classBadge: typeof classBadge;
 	tooltip: typeof tooltip;
 	tooltipHeader: typeof tooltipHeader;
 	tooltipName: typeof tooltipName;

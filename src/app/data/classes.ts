@@ -10,7 +10,7 @@ import rogueIcon from "../icons/class/rogue.svg";
 import sorcererIcon from "../icons/class/sorcerer.svg";
 import warlockIcon from "../icons/class/warlock.svg";
 import wizardIcon from "../icons/class/wizard.svg";
-import type { ActionType, DamageType, DndClass } from "../types";
+import type { ActionType, Character, DamageType, DndClass } from "../types";
 import type { SpellcastingAbility } from "./stats";
 import type { WeaponCategory } from "./weapons";
 
@@ -938,4 +938,98 @@ export function getSpellSlots(
     default:
       return {};
   }
+}
+
+/** Returns the effective spellcasting type for a class/subclass combination. */
+export function getEffectiveCastingType(
+  classId: DndClass,
+  subclassId: string
+): SpellcastingType {
+  const classDef = CLASSES.find((c) => c.id === classId);
+  if (!classDef) return "none";
+  const subclass = classDef.subclasses.find((s) => s.id === subclassId);
+  return subclass?.spellcastingTypeOverride ?? classDef.spellcastingType;
+}
+
+/**
+ * Returns spell slots for a character using the PHB multiclass formula.
+ * - Full casters contribute their full level.
+ * - Half casters (Paladin, Ranger) contribute floor(level / 2).
+ * - Third casters (Arcane Trickster, Eldritch Knight) contribute floor(level / 3).
+ * - Warlocks contribute separate Pact Magic slots (not merged into the table).
+ * Falls back to single-class logic when no secondaryClasses are set.
+ */
+export function getMulticlassSpellSlots(
+  character: Character
+): Record<number, number> {
+  const { secondaryClasses } = character;
+  if (!secondaryClasses || secondaryClasses.length === 0) {
+    return getSpellSlots(character.class, character.subclass, character.level);
+  }
+
+  const allClasses = [
+    {
+      classId: character.class,
+      subclassId: character.subclass,
+      level: character.level,
+    },
+    ...secondaryClasses.map((sc) => ({
+      classId: sc.class,
+      subclassId: sc.subclass,
+      level: sc.level,
+    })),
+  ];
+
+  // Separate warlocks — their Pact Magic is never merged into the slot table
+  const warlockEntries = allClasses.filter(
+    (c) => getEffectiveCastingType(c.classId, c.subclassId) === "warlock"
+  );
+  const nonWarlockEntries = allClasses.filter(
+    (c) => getEffectiveCastingType(c.classId, c.subclassId) !== "warlock"
+  );
+
+  // Sum modified caster levels for non-warlock classes
+  let combinedLevel = 0;
+  for (const c of nonWarlockEntries) {
+    const type = getEffectiveCastingType(c.classId, c.subclassId);
+    if (type === "full") combinedLevel += c.level;
+    else if (type === "half") combinedLevel += Math.floor(c.level / 2);
+    else if (type === "third") combinedLevel += Math.floor(c.level / 3);
+    // "none" contributes 0
+  }
+  combinedLevel = Math.min(combinedLevel, 20);
+
+  // Look up combined level in the full caster table
+  const result: Record<number, number> =
+    combinedLevel > 0 ? { ...(FULL_CASTER_SLOTS[combinedLevel] ?? {}) } : {};
+
+  // Add Warlock Pact Magic on top
+  for (const w of warlockEntries) {
+    const pactSlots = WARLOCK_PACT_SLOTS[Math.min(w.level, 20)] ?? {};
+    for (const [lvl, count] of Object.entries(pactSlots)) {
+      const l = Number(lvl);
+      result[l] = (result[l] ?? 0) + (count as number);
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Returns the union of weapon proficiency categories across all classes
+ * (primary + secondary) the character has.
+ */
+export function getCharacterWeaponProficiencies(
+  character: Character
+): import("./weapons").WeaponCategory[] {
+  const seen = new Set<import("./weapons").WeaponCategory>();
+  const addFromClass = (classId: DndClass) => {
+    const def = CLASSES.find((c) => c.id === classId);
+    if (def) {
+      for (const cat of def.weaponProficiencies) seen.add(cat);
+    }
+  };
+  addFromClass(character.class);
+  for (const sc of character.secondaryClasses ?? []) addFromClass(sc.class);
+  return [...seen];
 }

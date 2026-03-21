@@ -120,6 +120,12 @@ export function useFlowDrop({
           duration: item.duration as string | undefined,
           source: (item.source as ActionNodeData["source"]) ?? "standard",
           damageDice: item.damageDice as string | undefined,
+          baseDamageDice:
+            (item.baseDamageDice as string | undefined) ??
+            (item.damageDice as string | undefined),
+          baseDuration:
+            (item.baseDuration as string | undefined) ??
+            (item.duration as string | undefined),
           saveDC: item.saveDC as string | undefined,
           saveAbility: item.saveAbility as string | undefined,
           rollType: item.rollType as ActionNodeData["rollType"],

@@ -45,6 +45,15 @@ export function TabBar() {
           const cls = chart
             ? CLASSES.find((c) => c.id === chart.character.class)
             : null;
+          const classLabel = chart
+            ? [
+                `${cls?.name ?? chart.character.class} ${chart.character.level}`,
+                ...(chart.character.secondaryClasses ?? []).map((sc) => {
+                  const sc2 = CLASSES.find((c) => c.id === sc.class);
+                  return `${sc2?.name ?? sc.class} ${sc.level}`;
+                }),
+              ].join(" / ")
+            : null;
           const isActive = id === activeTabId;
           return (
             <button
@@ -63,10 +72,8 @@ export function TabBar() {
                 <span className={styles.tabName}>
                   {chart?.name ?? "Unsaved Chart"}
                 </span>
-                {cls && (
-                  <span className={styles.tabMeta}>
-                    {cls.name} · Lv {chart?.character.level}
-                  </span>
+                {classLabel && (
+                  <span className={styles.tabMeta}>{classLabel}</span>
                 )}
               </div>
               <button
@@ -125,6 +132,13 @@ export function TabBar() {
             <div className={styles.modalList}>
               {availableCharts.map((chart) => {
                 const cls = CLASSES.find((c) => c.id === chart.character.class);
+                const modalClassLabel = [
+                  `${cls?.name ?? chart.character.class} ${chart.character.level}`,
+                  ...(chart.character.secondaryClasses ?? []).map((sc) => {
+                    const sc2 = CLASSES.find((c) => c.id === sc.class);
+                    return `${sc2?.name ?? sc.class} ${sc.level}`;
+                  }),
+                ].join(" / ");
                 return (
                   <button
                     key={chart.id}
@@ -138,8 +152,7 @@ export function TabBar() {
                     <div className={styles.modalItemInfo}>
                       <span className={styles.modalItemName}>{chart.name}</span>
                       <span className={styles.modalItemMeta}>
-                        {cls?.name ?? chart.character.class} · Lv{" "}
-                        {chart.character.level} ·{" "}
+                        {modalClassLabel} ·{" "}
                         {new Date(chart.updatedAt).toLocaleDateString()}
                       </span>
                     </div>

@@ -2,7 +2,7 @@ import type { Node, NodeProps } from "@xyflow/react";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
 import React, { useCallback, useContext, useState } from "react";
 import { useApp } from "../../context/AppContext";
-import { getClassDefinition } from "../../data/classes";
+import { getClassDefinition, getMaxSpellLevel } from "../../data/classes";
 import {
   ACTION_TYPE_LABELS,
   DAMAGE_TYPES,
@@ -31,6 +31,11 @@ import spellIcon from "../../icons/game/spell.svg";
 import concentrationIcon from "../../icons/spell/concentration.svg";
 import starIcon from "../../icons/util/star.svg";
 import type { ActionNodeData, ResourceType } from "../../types";
+import {
+  getScaledDamageDice,
+  getScaledDuration,
+  toOrdinal,
+} from "../../utils/spellScaling";
 import { ActionEconomyContext, ConcentrationContext } from "../FlowCanvas";
 import { Icon } from "../Icon";
 import styles from "./ActionNode.module.css";
@@ -67,7 +72,7 @@ type ActionNodeType = Node<ActionNodeData, "actionNode">;
 
 export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
   const { updateNodeData } = useReactFlow();
-  const { state } = useApp();
+  const { state, getActiveFlowchart } = useApp();
   const conflictNodeIds = useContext(ConcentrationContext);
   const isConflict = conflictNodeIds.has(id);
   const overBudgetNodeIds = useContext(ActionEconomyContext);
@@ -184,6 +189,17 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
               OH
             </span>
           )}
+          {(() => {
+            const baseLevel = parseInt(data.spellLevel ?? "0", 10);
+            return data.castAtLevel && data.castAtLevel > baseLevel ? (
+              <span
+                className={styles.upcastBadge}
+                title={`Upcast at ${toOrdinal(data.castAtLevel)} level`}
+              >
+                ↑ {toOrdinal(data.castAtLevel)}
+              </span>
+            ) : null;
+          })()}
         </div>
         <span
           className={styles.actionTypeBadge}
@@ -281,25 +297,112 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
           </div>
         )}
 
+        {(() => {
+          const baseLevel = parseInt(data.spellLevel ?? "0", 10);
+          const isLevelledSpell = data.source === "spell" && baseLevel >= 1;
+          if (!isLevelledSpell) return null;
+          // Prefer the active chart's stored character so the pill range
+          // stays correct after switching tabs (each tab has its own character).
+          const activeCharacter = getActiveFlowchart()?.character ?? character;
+          const maxLevel = activeCharacter
+            ? getMaxSpellLevel(
+                activeCharacter.class,
+                activeCharacter.subclass,
+                activeCharacter.level
+              ) || 9
+            : 9;
+          const effectiveMax = Math.max(maxLevel, baseLevel);
+          const activeCastLevel = data.castAtLevel ?? baseLevel;
+          return (
+            <div className={styles.castLevelRow}>
+              {Array.from(
+                { length: effectiveMax - baseLevel + 1 },
+                (_, i) => baseLevel + i
+              ).map((lvl) => (
+                <button
+                  type="button"
+                  key={lvl}
+                  className={`${styles.castLevelPill}${
+                    activeCastLevel === lvl
+                      ? ` ${styles.castLevelPillActive}`
+                      : ""
+                  }`}
+                  onClick={() => {
+                    if (lvl === baseLevel) {
+                      updateNodeData(id, {
+                        castAtLevel: undefined,
+                        damageDice: data.baseDamageDice,
+                        duration: data.baseDuration ?? data.duration,
+                        resourceCost: data.resourceCost
+                          ? { ...data.resourceCost, amount: baseLevel }
+                          : undefined,
+                      });
+                    } else {
+                      updateNodeData(id, {
+                        castAtLevel: lvl,
+                        damageDice: data.baseDamageDice
+                          ? getScaledDamageDice(
+                              data.baseDamageDice,
+                              data.higherLevels,
+                              baseLevel,
+                              lvl
+                            )
+                          : data.damageDice,
+                        duration: getScaledDuration(
+                          data.baseDuration ?? data.duration,
+                          data.higherLevels,
+                          lvl
+                        ),
+                        resourceCost: data.resourceCost
+                          ? { ...data.resourceCost, amount: lvl }
+                          : undefined,
+                      });
+                    }
+                  }}
+                >
+                  {lvl}
+                </button>
+              ))}
+            </div>
+          );
+        })()}
+
         {data.resourceCost && (
           <div className={styles.resourceCostRow}>
             <span
               className={styles.resourceCostBadge}
-              title={`Resource cost: ${data.resourceCost.label || RESOURCE_SHORT_LABELS[data.resourceCost.type] || data.resourceCost.type}`}
+              title={`Resource cost: ${
+                data.resourceCost.type === "spell-slot"
+                  ? `${toOrdinal(data.resourceCost.amount ?? 1)} lvl spl slot`
+                  : data.resourceCost.label ||
+                    RESOURCE_SHORT_LABELS[data.resourceCost.type] ||
+                    data.resourceCost.type
+              }`}
             >
               <Icon
                 src={RESOURCE_ICONS[data.resourceCost.type]}
                 size={11}
                 alt=""
               />
-              {data.resourceCost.amount !== undefined && (
-                <span className={styles.resourceCostAmount}>
-                  {data.resourceCost.amount}
-                </span>
+              {data.resourceCost.type === "spell-slot" ? (
+                <>
+                  <span className={styles.resourceCostAmount}>
+                    {toOrdinal(data.resourceCost.amount ?? 1)}
+                  </span>
+                  lvl spl slot
+                </>
+              ) : (
+                <>
+                  {data.resourceCost.amount !== undefined && (
+                    <span className={styles.resourceCostAmount}>
+                      {data.resourceCost.amount}
+                    </span>
+                  )}
+                  {data.resourceCost.label
+                    ? data.resourceCost.label
+                    : RESOURCE_SHORT_LABELS[data.resourceCost.type]}
+                </>
               )}
-              {data.resourceCost.label
-                ? data.resourceCost.label
-                : RESOURCE_SHORT_LABELS[data.resourceCost.type]}
             </span>
           </div>
         )}

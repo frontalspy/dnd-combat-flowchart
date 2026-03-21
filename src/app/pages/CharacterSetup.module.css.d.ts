@@ -42,6 +42,16 @@ declare const abilityCell: string;
 declare const abilityLabel: string;
 declare const abilityInput: string;
 declare const abilityMod: string;
+declare const addClassBtn: string;
+declare const secondClassSection: string;
+declare const secondClassHeader: string;
+declare const secondClassTitle: string;
+declare const removeClassBtn: string;
+declare const totalLevelRow: string;
+declare const totalLevelLabel: string;
+declare const totalLevelBadge: string;
+declare const totalLevelBadgeError: string;
+declare const totalLevelWarning: string;
 
 export {
 	page,
@@ -79,7 +89,17 @@ export {
 	abilityCell,
 	abilityLabel,
 	abilityInput,
-	abilityMod
+	abilityMod,
+	addClassBtn,
+	secondClassSection,
+	secondClassHeader,
+	secondClassTitle,
+	removeClassBtn,
+	totalLevelRow,
+	totalLevelLabel,
+	totalLevelBadge,
+	totalLevelBadgeError,
+	totalLevelWarning
 };
 
 declare const __default_export__: {
@@ -119,5 +139,15 @@ declare const __default_export__: {
 	abilityLabel: typeof abilityLabel;
 	abilityInput: typeof abilityInput;
 	abilityMod: typeof abilityMod;
+	addClassBtn: typeof addClassBtn;
+	secondClassSection: typeof secondClassSection;
+	secondClassHeader: typeof secondClassHeader;
+	secondClassTitle: typeof secondClassTitle;
+	removeClassBtn: typeof removeClassBtn;
+	totalLevelRow: typeof totalLevelRow;
+	totalLevelLabel: typeof totalLevelLabel;
+	totalLevelBadge: typeof totalLevelBadge;
+	totalLevelBadgeError: typeof totalLevelBadgeError;
+	totalLevelWarning: typeof totalLevelWarning;
 };
 export default __default_export__;

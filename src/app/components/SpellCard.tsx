@@ -91,9 +91,10 @@ function ActionTooltip({ action, visible, top, left }: ActionTooltipProps) {
 interface SpellCardProps {
   spell: Spell;
   onDragStart: (e: React.DragEvent, data: unknown) => void;
+  classBadges?: Array<{ label: string; color: string }>;
 }
 
-export function SpellCard({ spell, onDragStart }: SpellCardProps) {
+export function SpellCard({ spell, onDragStart, classBadges }: SpellCardProps) {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -129,6 +130,8 @@ export function SpellCard({ spell, onDragStart }: SpellCardProps) {
     duration: spell.duration,
     source: "spell" as const,
     damageDice: extractDamageDice(spell.description) ?? undefined,
+    baseDamageDice: extractDamageDice(spell.description) ?? undefined,
+    baseDuration: spell.duration,
     saveDC: extractSaveDC(spell.description) ?? undefined,
     saveAbility: extractSaveAbility(spell.description) ?? undefined,
     rollType: extractRollType(spell.description),
@@ -191,6 +194,21 @@ export function SpellCard({ spell, onDragStart }: SpellCardProps) {
           />{" "}
           {damageInfo.label}
         </span>
+      )}
+
+      {classBadges && classBadges.length > 0 && (
+        <div className={styles.classBadges}>
+          {classBadges.map((b) => (
+            <span
+              key={b.label}
+              className={styles.classBadge}
+              style={{ borderColor: b.color, color: b.color }}
+              title={`Available from ${b.label}`}
+            >
+              {b.label}
+            </span>
+          ))}
+        </div>
       )}
 
       <SpellTooltip

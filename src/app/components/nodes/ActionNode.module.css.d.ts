@@ -39,6 +39,10 @@ declare const overBudget: string;
 declare const resourceCostRow: string;
 declare const resourceCostBadge: string;
 declare const resourceCostAmount: string;
+declare const castLevelRow: string;
+declare const castLevelPill: string;
+declare const castLevelPillActive: string;
+declare const upcastBadge: string;
 
 export {
 	actionNode,
@@ -73,7 +77,11 @@ export {
 	overBudget,
 	resourceCostRow,
 	resourceCostBadge,
-	resourceCostAmount
+	resourceCostAmount,
+	castLevelRow,
+	castLevelPill,
+	castLevelPillActive,
+	upcastBadge
 };
 
 declare const __default_export__: {
@@ -110,5 +118,9 @@ declare const __default_export__: {
 	resourceCostRow: typeof resourceCostRow;
 	resourceCostBadge: typeof resourceCostBadge;
 	resourceCostAmount: typeof resourceCostAmount;
+	castLevelRow: typeof castLevelRow;
+	castLevelPill: typeof castLevelPill;
+	castLevelPillActive: typeof castLevelPillActive;
+	upcastBadge: typeof upcastBadge;
 };
 export default __default_export__;

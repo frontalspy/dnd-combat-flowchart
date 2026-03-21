@@ -322,3 +322,52 @@
     0 0 0 2px rgba(229, 115, 115, 0.65),
     0 8px 24px rgba(192, 57, 43, 0.4) !important;
 }
+
+/* Cast level selector */
+.castLevelRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0;
+}
+
+.castLevelPill {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--bg-lift);
+  border: 1px solid var(--border-mid);
+  color: var(--text-mid);
+  cursor: pointer;
+  line-height: 1.4;
+  transition:
+    background 0.1s,
+    border-color 0.1s;
+}
+
+.castLevelPill:hover {
+  border-color: var(--gold-dim);
+  color: var(--text);
+}
+
+.castLevelPillActive {
+  background: var(--gold-mid, #b8860b);
+  border-color: var(--gold, #c8901c);
+  color: #0d1117;
+  font-weight: 800;
+}
+
+/* Upcast indicator in node header */
+.upcastBadge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--bg-lift);
+  border: 1px solid rgba(200, 144, 28, 0.55);
+  color: var(--gold-light, #e0a030);
+  letter-spacing: 0.2px;
+}

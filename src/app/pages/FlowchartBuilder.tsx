@@ -40,7 +40,11 @@ import { SpellPanel } from "../components/SpellPanel";
 import { StatsEditor } from "../components/StatsEditor";
 import { TabBar } from "../components/TabBar";
 import { useApp } from "../context/AppContext";
-import { CLASSES, getSpellSlots } from "../data/classes";
+import {
+  CLASSES,
+  getMulticlassSpellSlots,
+  getSpellSlots,
+} from "../data/classes";
 import { ACTION_TYPE_LABELS } from "../data/damageTypes";
 import type { Weapon } from "../data/weapons";
 import { WEAPONS } from "../data/weapons";
@@ -63,9 +67,10 @@ export function FlowchartBuilder() {
     addCustomWeapon,
     addCustomAction,
   } = useApp();
-  const { character, activeTabId, customWeapons } = state;
+  const { character: globalCharacter, activeTabId, customWeapons } = state;
 
   const activeChart = getActiveFlowchart();
+  const character = activeChart?.character ?? globalCharacter;
 
   // Per-tab state: name, saved flash, editing name
   const [chartName, setChartName] = useState(
@@ -295,10 +300,7 @@ export function FlowchartBuilder() {
 
   // Spell slot tracker — must be before early return to satisfy hooks ordering
   const maxSlots = useMemo(
-    () =>
-      character
-        ? getSpellSlots(character.class, character.subclass, character.level)
-        : {},
+    () => (character ? getMulticlassSpellSlots(character) : {}),
     [character]
   );
   const slotLevels = useMemo(
@@ -337,7 +339,9 @@ export function FlowchartBuilder() {
 
   // Spell slot tracker (character is guaranteed non-null here)
   const hasSlotsToTrack = slotLevels.length > 0;
-  const isWarlock = character.class === "warlock";
+  const isWarlock =
+    character.class === "warlock" ||
+    (character.secondaryClasses ?? []).some((sc) => sc.class === "warlock");
   const totalSlotsSpent = slotLevels.reduce((sum, lvl) => {
     const max = maxSlots[lvl] ?? 0;
     const remaining = state.spellSlots[lvl] ?? max;
@@ -908,9 +912,19 @@ export function FlowchartBuilder() {
           chartName={chartName}
           characterLabel={
             character
-              ? `${classDef?.name ?? ""}${
-                  subclassDef?.name ? ` (${subclassDef.name})` : ""
-                } Lv. ${character.level}`
+              ? (() => {
+                  const parts = [
+                    `${classDef?.name ?? ""}${subclassDef?.name ? ` (${subclassDef.name})` : ""} Lv. ${character.level}`,
+                    ...(character.secondaryClasses ?? []).map((sc) => {
+                      const sc2Def = CLASSES.find((c) => c.id === sc.class);
+                      const sc2SubDef = sc2Def?.subclasses.find(
+                        (s) => s.id === sc.subclass
+                      );
+                      return `${sc2Def?.name ?? sc.class}${sc2SubDef ? ` (${sc2SubDef.name})` : ""} Lv. ${sc.level}`;
+                    }),
+                  ];
+                  return parts.join(" / ");
+                })()
               : ""
           }
         />
