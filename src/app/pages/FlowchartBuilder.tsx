@@ -11,6 +11,7 @@ import {
   Edit2,
   FileText,
   Focus,
+  GitMerge,
   Layers,
   Link2,
   MoreHorizontal,
@@ -82,6 +83,7 @@ export function FlowchartBuilder() {
   const [isSaved, setIsSaved] = useState(false);
   const [edgeStyle] = useState<EdgeStyleType>("step");
   const [animatedEdges, setAnimatedEdges] = useState(false);
+  const [bundleEdges, setBundleEdges] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [showLoadoutPicker, setShowLoadoutPicker] = useState(false);
   const [showStatsPicker, setShowStatsPicker] = useState(false);
@@ -970,6 +972,18 @@ export function FlowchartBuilder() {
                     <span className={styles.exportMenuItemCheck}>✓</span>
                   )}
                 </button>
+                <button
+                  type="button"
+                  className={`${styles.exportMenuItem} ${bundleEdges ? styles.exportMenuItemActive : ""}`}
+                  onClick={() => setBundleEdges((v) => !v)}
+                  title="Merge near-parallel edges into a single bundled edge with a count badge"
+                >
+                  <GitMerge size={14} />
+                  Bundle Edges
+                  {bundleEdges && (
+                    <span className={styles.exportMenuItemCheck}>✓</span>
+                  )}
+                </button>
               </div>
             )}
           </div>
@@ -1025,6 +1039,7 @@ export function FlowchartBuilder() {
             edgeStyle={edgeStyle}
             animatedEdges={animatedEdges}
             selectionGroups={selectionGroups}
+            bundleEdges={bundleEdges}
           />
 
           {selectedNodes.length === 1 && (

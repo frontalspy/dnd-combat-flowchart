@@ -173,6 +173,8 @@ function computePathBudgets(nodes: Node[], edges: Edge[]): PathBudget[] {
 }
 
 import type { SelectionGroup } from "../types";
+import { computeBundles } from "../utils/edgeBundling";
+import { BundleEdge } from "./edges/BundleEdge";
 import { SnappedConnectionLine } from "./edges/SnappedConnectionLine";
 import { SnappedEdge } from "./edges/SnappedEdge";
 import styles from "./FlowCanvas.module.css";
@@ -187,7 +189,7 @@ export const GROUP_COLORS = [
   "#db2777",
 ];
 
-const edgeTypes = { snappedEdge: SnappedEdge };
+const edgeTypes = { snappedEdge: SnappedEdge, bundleEdge: BundleEdge };
 
 export interface FlowCanvasExports {
   exportJpg: (name: string) => Promise<void>;
@@ -222,6 +224,7 @@ interface FlowCanvasInnerProps {
   edgeStyle?: EdgeStyleType;
   animatedEdges?: boolean;
   selectionGroups?: SelectionGroup[];
+  bundleEdges?: boolean;
 }
 
 const DEFAULT_START_NODE: Node<StartNodeData, "startNode"> = {
@@ -247,6 +250,7 @@ function FlowCanvasInner({
   edgeStyle = "smoothstep",
   animatedEdges = false,
   selectionGroups = [],
+  bundleEdges = false,
 }: FlowCanvasInnerProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { fitView, getNodes, getEdges, screenToFlowPosition, addNodes } =
@@ -645,6 +649,56 @@ function FlowCanvasInner({
     return map;
   }, [selectionGroups]);
 
+  // Bundle edge computation — only runs when bundleEdges is on
+  const bundleData = useMemo(() => {
+    if (!bundleEdges) return null;
+    const groups = computeBundles(nodes, edges);
+    const bundledEdgeIds = new Set<string>();
+    const syntheticEdges: Edge[] = [];
+    for (let i = 0; i < groups.length; i++) {
+      const group = groups[i];
+      const nodeIdSet = new Set<string>();
+      for (const me of group.memberEdges) {
+        bundledEdgeIds.add(me.id);
+        nodeIdSet.add(me.source);
+        nodeIdSet.add(me.target);
+      }
+      const rep = group.representativeEdge;
+      const memberEdgeInfo = group.memberEdges.map((me) => {
+        const srcNode = nodes.find((n) => n.id === me.source);
+        const tgtNode = nodes.find((n) => n.id === me.target);
+        const srcLabel =
+          (srcNode?.data as { label?: string })?.label ?? me.source;
+        const tgtLabel =
+          (tgtNode?.data as { label?: string })?.label ?? me.target;
+        return { id: me.id, sourceLabel: srcLabel, targetLabel: tgtLabel };
+      });
+      syntheticEdges.push({
+        ...rep,
+        id: `bundle-${i}`,
+        type: "bundleEdge",
+        data: {
+          memberEdges: memberEdgeInfo,
+          memberEdgeIds: group.memberEdges.map((e) => e.id),
+          memberNodeIds: [...nodeIdSet],
+        },
+        selectable: false,
+        hidden: false,
+      } as Edge);
+    }
+    return { bundledEdgeIds, syntheticEdges };
+  }, [bundleEdges, nodes, edges]);
+
+  const displayEdges = useMemo(() => {
+    if (!bundleData) return edges;
+    return [
+      ...edges.map((e) =>
+        bundleData.bundledEdgeIds.has(e.id) ? { ...e, hidden: true } : e
+      ),
+      ...bundleData.syntheticEdges,
+    ];
+  }, [edges, bundleData]);
+
   return (
     <ActionEconomyContext.Provider value={overBudgetNodeIds}>
       <ConcentrationContext.Provider value={conflictNodeIds}>
@@ -658,7 +712,7 @@ function FlowCanvasInner({
             )}
             <ReactFlow
               nodes={nodes}
-              edges={edges}
+              edges={displayEdges}
               onNodeClick={handleNodeClick}
               onNodesChange={wrappedOnNodesChange}
               onEdgesChange={wrappedOnEdgesChange}
@@ -719,6 +773,7 @@ interface FlowCanvasProps {
   edgeStyle?: EdgeStyleType;
   animatedEdges?: boolean;
   selectionGroups?: SelectionGroup[];
+  bundleEdges?: boolean;
 }
 
 export function FlowCanvas(props: FlowCanvasProps) {
