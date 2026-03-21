@@ -377,6 +377,8 @@ function FlowCanvasInner({
     onFlowChange(nodes, edges);
   }, [nodes, edges, onFlowChange]);
 
+  const [minimapCollapsed, setMinimapCollapsed] = useState(false);
+
   // Compute concentration conflicts on every graph change
   const [conflictNodeIds, setConflictNodeIds] = useState<Set<string>>(
     () => new Set()
@@ -743,11 +745,32 @@ function FlowCanvasInner({
                 color="#21262d"
               />
               <Controls className={styles.controls} />
-              <MiniMap
-                className={styles.minimap}
-                nodeColor={() => "#d4a017"}
-                maskColor="rgba(13, 17, 23, 0.7)"
-              />
+              <div
+                className={`${styles.minimapWrapper}${
+                  minimapCollapsed ? ` ${styles.minimapCollapsed}` : ""
+                }`}
+              >
+                <button
+                  type="button"
+                  className={styles.minimapToggle}
+                  onClick={() => setMinimapCollapsed((c) => !c)}
+                  title={minimapCollapsed ? "Show minimap" : "Hide minimap"}
+                  aria-label={
+                    minimapCollapsed ? "Show minimap" : "Hide minimap"
+                  }
+                >
+                  {minimapCollapsed ? "›" : "‹"}
+                </button>
+                {!minimapCollapsed && (
+                  <MiniMap
+                    className={styles.minimap}
+                    nodeColor={() => "#d4a017"}
+                    maskColor="rgba(13, 17, 23, 0.7)"
+                    pannable
+                    zoomable
+                  />
+                )}
+              </div>
             </ReactFlow>
           </div>
         </SelectionGroupContext.Provider>
