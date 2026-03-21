@@ -1,6 +1,6 @@
 import type { Node, NodeProps } from "@xyflow/react";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 // Lazy icon imports — indexed by condition key
 import blindedIcon from "../../icons/condition/blinded.svg";
 import charmedIcon from "../../icons/condition/charmed.svg";
@@ -18,6 +18,7 @@ import restrainedIcon from "../../icons/condition/restrained.svg";
 import stunnedIcon from "../../icons/condition/stunned.svg";
 import unconsciousIcon from "../../icons/condition/unconscious.svg";
 import type { ConditionStatusNodeData, DndCondition } from "../../types";
+import { SelectionGroupContext } from "../FlowCanvas";
 import { Icon } from "../Icon";
 import styles from "./ConditionStatusNode.module.css";
 
@@ -104,6 +105,8 @@ export function ConditionStatusNode({
   const [labelValue, setLabelValue] = useState(
     data.label ?? CONDITION_DISPLAY_NAMES[data.condition]
   );
+  const groupColorMap = useContext(SelectionGroupContext);
+  const groupColor = groupColorMap.get(id);
 
   const displayName = data.label || CONDITION_DISPLAY_NAMES[data.condition];
   const icon = CONDITION_ICONS[data.condition];
@@ -130,6 +133,7 @@ export function ConditionStatusNode({
     <div
       className={`${styles.node} ${affectsStyleMap[data.affects]} ${selected ? styles.selected : ""}`}
       data-condition={data.condition}
+      style={{ position: "relative" }}
     >
       <Handle
         type="target"
@@ -181,6 +185,23 @@ export function ConditionStatusNode({
         className={styles.handle}
         title="Immune / not affected"
       />
+      {groupColor && (
+        <span
+          aria-label="Selection group member"
+          style={{
+            position: "absolute",
+            bottom: 4,
+            left: 4,
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            background: groupColor,
+            boxShadow: "0 0 0 2px #0d1117",
+            pointerEvents: "none",
+            zIndex: 10,
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -30,6 +30,7 @@ import type { FlowCanvasExports } from "../components/FlowCanvas";
 import {
   type EdgeStyleType,
   FlowCanvas,
+  GROUP_COLORS,
   type PathBudget,
 } from "../components/FlowCanvas";
 import { LoadoutPicker } from "../components/LoadoutPicker";
@@ -48,7 +49,7 @@ import {
 import { ACTION_TYPE_LABELS } from "../data/damageTypes";
 import type { Weapon } from "../data/weapons";
 import { WEAPONS } from "../data/weapons";
-import type { SavedFlowchart, WeaponLoadout } from "../types";
+import type { SavedFlowchart, SelectionGroup, WeaponLoadout } from "../types";
 import { encodeFlowchart, SHARE_PARAM } from "../utils/shareUrl";
 import styles from "./FlowchartBuilder.module.css";
 
@@ -86,6 +87,9 @@ export function FlowchartBuilder() {
   const [showStatsPicker, setShowStatsPicker] = useState(false);
   const [showSlotsPopover, setShowSlotsPopover] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const [selectionGroups, setSelectionGroups] = useState<SelectionGroup[]>(
+    () => activeChart?.selectionGroups ?? []
+  );
   const [printData, setPrintData] = useState<{
     nodes: Node[];
     edges: unknown[];
@@ -104,6 +108,7 @@ export function FlowchartBuilder() {
   }>({ budgets: [], overBudgetNodeIds: [] });
   const [showEconomyPopover, setShowEconomyPopover] = useState(false);
   const [economyHudHidden, setEconomyHudHidden] = useState(false);
+  const [showGroupsPopover, setShowGroupsPopover] = useState(false);
 
   const handleActionEconomyChange = useCallback(
     (budgets: PathBudget[], overBudgetNodeIds: string[]) => {
@@ -138,13 +143,15 @@ export function FlowchartBuilder() {
     [setLoadout]
   );
 
-  // Keep chart name in sync when active tab changes
+  // Keep chart + group state in sync when active tab changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally only sync on tab switch, not on every chart data change
   useEffect(() => {
     setChartName(activeChart?.name ?? "My Combat Flow");
+    setSelectionGroups(activeChart?.selectionGroups ?? []);
     setEditingName(false);
     setSelectedNodes([]);
     setIsSaved(false);
-  }, [activeChart?.name]);
+  }, [activeTabId]);
 
   const exportFnsRef = useRef<FlowCanvasExports | null>(null);
   const exportMenuRef = useRef<HTMLDivElement>(null);
@@ -179,6 +186,65 @@ export function FlowchartBuilder() {
   const handleFlowChange = useCallback((nodes: Node[], edges: unknown[]) => {
     flowDataRef.current = { nodes, edges };
     setIsSaved(false);
+    // Prune groups whose members were deleted
+    setSelectionGroups((prev) => {
+      const nodeIdSet = new Set(nodes.map((n: Node) => n.id));
+      const pruned = prev
+        .map((g) => ({
+          ...g,
+          nodeIds: g.nodeIds.filter((id) => nodeIdSet.has(id)),
+        }))
+        .filter((g) => g.nodeIds.length >= 2);
+      return pruned.length === prev.length &&
+        pruned.every((g, i) => g.nodeIds.length === prev[i].nodeIds.length)
+        ? prev
+        : pruned;
+    });
+  }, []);
+
+  const handleCreateGroup = useCallback((nodeIds: string[], name: string) => {
+    setSelectionGroups((prev) => {
+      // Remove those nodes from any existing group first
+      const cleaned = prev
+        .map((g) => ({
+          ...g,
+          nodeIds: g.nodeIds.filter((id) => !nodeIds.includes(id)),
+        }))
+        .filter((g) => g.nodeIds.length >= 2);
+      return [
+        ...cleaned,
+        {
+          id: `sg-${Date.now()}`,
+          label: name,
+          nodeIds,
+        },
+      ];
+    });
+  }, []);
+
+  const handleDisbandGroup = useCallback((groupId: string) => {
+    setSelectionGroups((prev) => prev.filter((g) => g.id !== groupId));
+  }, []);
+
+  const handleRemoveFromGroup = useCallback(
+    (nodeId: string, groupId: string) => {
+      setSelectionGroups((prev) =>
+        prev
+          .map((g) =>
+            g.id === groupId
+              ? { ...g, nodeIds: g.nodeIds.filter((id) => id !== nodeId) }
+              : g
+          )
+          .filter((g) => g.nodeIds.length >= 2)
+      );
+    },
+    []
+  );
+
+  const handleRenameGroup = useCallback((groupId: string, name: string) => {
+    setSelectionGroups((prev) =>
+      prev.map((g) => (g.id === groupId ? { ...g, label: name } : g))
+    );
   }, []);
 
   const handleSave = useCallback(() => {
@@ -190,13 +256,21 @@ export function FlowchartBuilder() {
       character,
       nodes: flowDataRef.current.nodes,
       edges: flowDataRef.current.edges,
+      selectionGroups,
       createdAt: activeChart?.createdAt ?? Date.now(),
       updatedAt: Date.now(),
     };
     saveFlowchart(chart);
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
-  }, [activeChart, activeTabId, character, chartName, saveFlowchart]);
+  }, [
+    activeChart,
+    activeTabId,
+    character,
+    chartName,
+    saveFlowchart,
+    selectionGroups,
+  ]);
 
   // Keyboard shortcuts — placed after handleSave so the closure captures it correctly
   useEffect(() => {
@@ -287,6 +361,7 @@ export function FlowchartBuilder() {
       character,
       nodes: flowDataRef.current.nodes,
       edges: flowDataRef.current.edges,
+      selectionGroups,
       createdAt: activeChart?.createdAt ?? Date.now(),
       updatedAt: Date.now(),
     };
@@ -296,7 +371,7 @@ export function FlowchartBuilder() {
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     });
-  }, [activeChart, activeTabId, character, chartName]);
+  }, [activeChart, activeTabId, character, chartName, selectionGroups]);
 
   // Spell slot tracker — must be before early return to satisfy hooks ordering
   const maxSlots = useMemo(
@@ -653,6 +728,71 @@ export function FlowchartBuilder() {
           {/* Concentration chip */}
           <button
             type="button"
+            className={`${styles.loadoutChip} ${selectionGroups.length > 0 ? styles.groupsChipArmed : ""}`}
+            onClick={() => setShowGroupsPopover((v) => !v)}
+            title="Active selection groups"
+          >
+            <Layers size={13} />
+            Groups
+            {selectionGroups.length > 0 && (
+              <span className={styles.groupsCount}>
+                {selectionGroups.length}
+              </span>
+            )}
+          </button>
+          {showGroupsPopover && (
+            <div
+              className={styles.groupsPopover}
+              onMouseLeave={() => setShowGroupsPopover(false)}
+            >
+              <div className={styles.groupsPopoverHeader}>Selection Groups</div>
+              {selectionGroups.length === 0 ? (
+                <div className={styles.groupsPopoverEmpty}>
+                  No groups yet. Multi-select nodes and click &ldquo;Group
+                  Selection&rdquo;.
+                </div>
+              ) : (
+                <ul className={styles.groupsPopoverList}>
+                  {selectionGroups.map((group, idx) => {
+                    const color = GROUP_COLORS[idx % GROUP_COLORS.length];
+                    return (
+                      <li key={group.id} className={styles.groupsPopoverItem}>
+                        <span
+                          className={styles.groupsColorDot}
+                          style={{ background: color }}
+                        />
+                        <button
+                          type="button"
+                          className={styles.groupsSelectBtn}
+                          onClick={() => {
+                            exportFnsRef.current?.focusNodes(group.nodeIds);
+                            setShowGroupsPopover(false);
+                          }}
+                          title="Click to select all nodes in this group"
+                        >
+                          {group.label}
+                        </button>
+                        <span className={styles.groupsMemberCount}>
+                          {group.nodeIds.length} nodes
+                        </span>
+                        <button
+                          type="button"
+                          className={styles.groupsDisbandBtn}
+                          onClick={() => handleDisbandGroup(group.id)}
+                          title="Disband group"
+                        >
+                          ✕
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          )}
+          {/* Concentration chip */}
+          <button
+            type="button"
             className={`${styles.loadoutChip} ${
               concentrationInfo.conflictIds.length > 0
                 ? styles.concentrationChipConflict
@@ -884,6 +1024,7 @@ export function FlowchartBuilder() {
             onActionEconomyChange={handleActionEconomyChange}
             edgeStyle={edgeStyle}
             animatedEdges={animatedEdges}
+            selectionGroups={selectionGroups}
           />
 
           {selectedNodes.length === 1 && (
@@ -892,12 +1033,19 @@ export function FlowchartBuilder() {
               onClose={() => setSelectedNodes([])}
               character={character}
               customWeapons={customWeapons}
+              selectionGroups={selectionGroups}
+              onRemoveFromGroup={handleRemoveFromGroup}
+              onDisbandGroup={handleDisbandGroup}
+              onRenameGroup={handleRenameGroup}
             />
           )}
           {selectedNodes.length > 1 && (
             <MultiSelectBar
               selectedNodes={selectedNodes}
               onDeselect={() => setSelectedNodes([])}
+              selectionGroups={selectionGroups}
+              onCreateGroup={handleCreateGroup}
+              onDisbandGroup={handleDisbandGroup}
             />
           )}
         </div>

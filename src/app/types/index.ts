@@ -222,12 +222,19 @@ export interface ConditionStatusNodeData extends Record<string, unknown> {
   affects: "self" | "target" | "area";
 }
 
+export interface SelectionGroup {
+  id: string;
+  label: string;
+  nodeIds: string[];
+}
+
 export interface SavedFlowchart {
   id: string;
   name: string;
   character: Character;
   nodes: unknown[];
   edges: unknown[];
+  selectionGroups?: SelectionGroup[];
   createdAt: number;
   updatedAt: number;
 }

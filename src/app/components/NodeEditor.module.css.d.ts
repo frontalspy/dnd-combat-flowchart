@@ -55,6 +55,10 @@ declare const computedRows: string;
 declare const computedRow: string;
 declare const computedKey: string;
 declare const computedVal: string;
+declare const groupMemberCount: string;
+declare const groupActions: string;
+declare const removeFromGroupBtn: string;
+declare const disbandGroupBtn: string;
 
 export {
 	panel,
@@ -105,7 +109,11 @@ export {
 	computedRows,
 	computedRow,
 	computedKey,
-	computedVal
+	computedVal,
+	groupMemberCount,
+	groupActions,
+	removeFromGroupBtn,
+	disbandGroupBtn
 };
 
 declare const __default_export__: {
@@ -158,5 +166,9 @@ declare const __default_export__: {
 	computedRow: typeof computedRow;
 	computedKey: typeof computedKey;
 	computedVal: typeof computedVal;
+	groupMemberCount: typeof groupMemberCount;
+	groupActions: typeof groupActions;
+	removeFromGroupBtn: typeof removeFromGroupBtn;
+	disbandGroupBtn: typeof disbandGroupBtn;
 };
 export default __default_export__;

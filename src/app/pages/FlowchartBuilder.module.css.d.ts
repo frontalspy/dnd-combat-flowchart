@@ -34,6 +34,17 @@ declare const topDivider: string;
 declare const loadoutChip: string;
 declare const loadoutChipArmed: string;
 declare const concentrationChipArmed: string;
+declare const groupsChipArmed: string;
+declare const groupsCount: string;
+declare const groupsPopover: string;
+declare const groupsPopoverHeader: string;
+declare const groupsPopoverEmpty: string;
+declare const groupsPopoverList: string;
+declare const groupsPopoverItem: string;
+declare const groupsColorDot: string;
+declare const groupsSelectBtn: string;
+declare const groupsMemberCount: string;
+declare const groupsDisbandBtn: string;
 declare const concentrationChipConflict: string;
 declare const concentrationCount: string;
 declare const concentrationPopover: string;
@@ -119,6 +130,17 @@ export {
 	loadoutChip,
 	loadoutChipArmed,
 	concentrationChipArmed,
+	groupsChipArmed,
+	groupsCount,
+	groupsPopover,
+	groupsPopoverHeader,
+	groupsPopoverEmpty,
+	groupsPopoverList,
+	groupsPopoverItem,
+	groupsColorDot,
+	groupsSelectBtn,
+	groupsMemberCount,
+	groupsDisbandBtn,
 	concentrationChipConflict,
 	concentrationCount,
 	concentrationPopover,
@@ -205,6 +227,17 @@ declare const __default_export__: {
 	loadoutChip: typeof loadoutChip;
 	loadoutChipArmed: typeof loadoutChipArmed;
 	concentrationChipArmed: typeof concentrationChipArmed;
+	groupsChipArmed: typeof groupsChipArmed;
+	groupsCount: typeof groupsCount;
+	groupsPopover: typeof groupsPopover;
+	groupsPopoverHeader: typeof groupsPopoverHeader;
+	groupsPopoverEmpty: typeof groupsPopoverEmpty;
+	groupsPopoverList: typeof groupsPopoverList;
+	groupsPopoverItem: typeof groupsPopoverItem;
+	groupsColorDot: typeof groupsColorDot;
+	groupsSelectBtn: typeof groupsSelectBtn;
+	groupsMemberCount: typeof groupsMemberCount;
+	groupsDisbandBtn: typeof groupsDisbandBtn;
 	concentrationChipConflict: typeof concentrationChipConflict;
 	concentrationCount: typeof concentrationCount;
 	concentrationPopover: typeof concentrationPopover;

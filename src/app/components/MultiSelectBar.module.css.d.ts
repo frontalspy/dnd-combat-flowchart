@@ -13,6 +13,12 @@ declare const closeBtn: string;
 declare const actions: string;
 declare const deleteBtn: string;
 declare const deselectBtn: string;
+declare const groupSection: string;
+declare const groupNameInput: string;
+declare const groupBtn: string;
+declare const groupInfo: string;
+declare const groupInfoLabel: string;
+declare const disbandBtn: string;
 
 export {
 	panel,
@@ -21,7 +27,13 @@ export {
 	closeBtn,
 	actions,
 	deleteBtn,
-	deselectBtn
+	deselectBtn,
+	groupSection,
+	groupNameInput,
+	groupBtn,
+	groupInfo,
+	groupInfoLabel,
+	disbandBtn
 };
 
 declare const __default_export__: {
@@ -32,5 +44,11 @@ declare const __default_export__: {
 	actions: typeof actions;
 	deleteBtn: typeof deleteBtn;
 	deselectBtn: typeof deselectBtn;
+	groupSection: typeof groupSection;
+	groupNameInput: typeof groupNameInput;
+	groupBtn: typeof groupBtn;
+	groupInfo: typeof groupInfo;
+	groupInfoLabel: typeof groupInfoLabel;
+	disbandBtn: typeof disbandBtn;
 };
 export default __default_export__;

@@ -36,7 +36,11 @@ import {
   getScaledDuration,
   toOrdinal,
 } from "../../utils/spellScaling";
-import { ActionEconomyContext, ConcentrationContext } from "../FlowCanvas";
+import {
+  ActionEconomyContext,
+  ConcentrationContext,
+  SelectionGroupContext,
+} from "../FlowCanvas";
 import { Icon } from "../Icon";
 import styles from "./ActionNode.module.css";
 
@@ -77,6 +81,8 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
   const isConflict = conflictNodeIds.has(id);
   const overBudgetNodeIds = useContext(ActionEconomyContext);
   const isOverBudget = overBudgetNodeIds.has(id);
+  const groupColorMap = useContext(SelectionGroupContext);
+  const groupColor = groupColorMap.get(id);
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesValue, setNotesValue] = useState(data.notes ?? "");
 
@@ -137,7 +143,7 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
   return (
     <div
       className={`${styles.actionNode} ${selected ? styles.selected : ""} ${isConflict ? styles.concentrationConflict : ""} ${isOverBudget && !isConflict ? styles.overBudget : ""}`}
-      style={{ borderColor }}
+      style={{ borderColor, position: "relative" }}
     >
       <Handle
         type="target"
@@ -449,6 +455,23 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
         className={styles.handle}
         style={{ top: "50%" }}
       />
+      {groupColor && (
+        <span
+          aria-label="Selection group member"
+          style={{
+            position: "absolute",
+            bottom: 4,
+            left: 4,
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            background: groupColor,
+            boxShadow: "0 0 0 2px #0d1117",
+            pointerEvents: "none",
+            zIndex: 10,
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import type { Node, NodeProps } from "@xyflow/react";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import puzzleIcon from "../../icons/game/puzzle.svg";
 import type { ConditionNodeData } from "../../types";
+import { SelectionGroupContext } from "../FlowCanvas";
 import { Icon } from "../Icon";
 import styles from "./ConditionNode.module.css";
 
@@ -16,6 +17,8 @@ export function ConditionNode({
   const { updateNodeData } = useReactFlow();
   const [editing, setEditing] = useState(false);
   const [labelValue, setLabelValue] = useState(data.label);
+  const groupColorMap = useContext(SelectionGroupContext);
+  const groupColor = groupColorMap.get(id);
 
   const handleBlur = useCallback(() => {
     setEditing(false);
@@ -25,6 +28,7 @@ export function ConditionNode({
   return (
     <div
       className={`${styles.conditionNode} ${selected ? styles.selected : ""}`}
+      style={{ position: "relative" }}
     >
       <Handle
         type="target"
@@ -89,6 +93,23 @@ export function ConditionNode({
         id="default"
         className={styles.handle}
       />
+      {groupColor && (
+        <span
+          aria-label="Selection group member"
+          style={{
+            position: "absolute",
+            bottom: 4,
+            left: 4,
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            background: groupColor,
+            boxShadow: "0 0 0 2px #0d1117",
+            pointerEvents: "none",
+            zIndex: 10,
+          }}
+        />
+      )}
     </div>
   );
 }

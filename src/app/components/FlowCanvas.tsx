@@ -36,6 +36,11 @@ import type { ActionNodeData, StartNodeData } from "../types";
 /** Context providing the set of ActionNode IDs that are in a concentration conflict. */
 export const ConcentrationContext = React.createContext<Set<string>>(new Set());
 
+/** Context providing a map of nodeId → group badge colour for selection groups. */
+export const SelectionGroupContext = React.createContext<Map<string, string>>(
+  new Map()
+);
+
 /** A single end-to-end path through the flowchart with its action economy spend. */
 export interface PathBudget {
   pathId: string;
@@ -167,10 +172,20 @@ function computePathBudgets(nodes: Node[], edges: Edge[]): PathBudget[] {
   return paths;
 }
 
+import type { SelectionGroup } from "../types";
 import { SnappedConnectionLine } from "./edges/SnappedConnectionLine";
 import { SnappedEdge } from "./edges/SnappedEdge";
 import styles from "./FlowCanvas.module.css";
 import { nodeTypes } from "./nodes/nodeTypes";
+
+export const GROUP_COLORS = [
+  "#7c3aed",
+  "#2563eb",
+  "#059669",
+  "#d97706",
+  "#dc2626",
+  "#db2777",
+];
 
 const edgeTypes = { snappedEdge: SnappedEdge };
 
@@ -184,6 +199,8 @@ export interface FlowCanvasExports {
   undo: () => void;
   redo: () => void;
   selectAll: () => void;
+  selectNodes: (ids: string[]) => void;
+  focusNodes: (ids: string[]) => void;
 }
 
 export type EdgeStyleType = "smoothstep" | "step" | "straight";
@@ -204,6 +221,7 @@ interface FlowCanvasInnerProps {
   ) => void;
   edgeStyle?: EdgeStyleType;
   animatedEdges?: boolean;
+  selectionGroups?: SelectionGroup[];
 }
 
 const DEFAULT_START_NODE: Node<StartNodeData, "startNode"> = {
@@ -228,6 +246,7 @@ function FlowCanvasInner({
   onActionEconomyChange,
   edgeStyle = "smoothstep",
   animatedEdges = false,
+  selectionGroups = [],
 }: FlowCanvasInnerProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { fitView, getNodes, getEdges, screenToFlowPosition, addNodes } =
@@ -515,6 +534,22 @@ function FlowCanvasInner({
       setEdges(e);
       setTimeout(() => fitView({ padding: 0.1 }), 100);
     };
+    const selectNodes = (ids: string[]) => {
+      const id_set = new Set(ids);
+      setNodes((nds) => nds.map((n) => ({ ...n, selected: id_set.has(n.id) })));
+    };
+    const focusNodes = (ids: string[]) => {
+      selectNodes(ids);
+      setTimeout(
+        () =>
+          fitView({
+            nodes: ids.map((id) => ({ id })),
+            padding: 0.25,
+            duration: 500,
+          }),
+        50
+      );
+    };
 
     onExportReady({
       exportJpg,
@@ -526,6 +561,8 @@ function FlowCanvasInner({
       undo: handleUndo,
       redo: handleRedo,
       selectAll: handleSelectAll,
+      selectNodes,
+      focusNodes,
     });
   }, [
     fitView,
@@ -584,55 +621,82 @@ function FlowCanvasInner({
     [onSelectionChange]
   );
 
+  const handleNodeClick = useCallback(
+    (event: React.MouseEvent, node: Node) => {
+      if (event.ctrlKey || event.metaKey || event.shiftKey) return;
+      const group = selectionGroups.find((g) => g.nodeIds.includes(node.id));
+      if (!group) return;
+      const groupNodeIds = new Set(group.nodeIds);
+      setNodes((nds) =>
+        nds.map((n) => ({ ...n, selected: groupNodeIds.has(n.id) }))
+      );
+    },
+    [selectionGroups, setNodes]
+  );
+
+  const nodeGroupColorMap = useMemo(() => {
+    const map = new Map<string, string>();
+    selectionGroups.forEach((group, idx) => {
+      const color = GROUP_COLORS[idx % GROUP_COLORS.length];
+      for (const nodeId of group.nodeIds) {
+        map.set(nodeId, color);
+      }
+    });
+    return map;
+  }, [selectionGroups]);
+
   return (
     <ActionEconomyContext.Provider value={overBudgetNodeIds}>
       <ConcentrationContext.Provider value={conflictNodeIds}>
-        <div ref={reactFlowWrapper} className={styles.canvasWrapper}>
-          {conflictWarningText && (
-            <div className={styles.concentrationWarning} role="alert">
-              <span className={styles.concentrationWarningIcon}>⚠</span>
-              {conflictWarningText}
-            </div>
-          )}
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={wrappedOnNodesChange}
-            onEdgesChange={wrappedOnEdgesChange}
-            onConnect={onConnect}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            onSelectionChange={handleSelectionChange}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            connectionLineComponent={SnappedConnectionLine}
-            fitView
-            deleteKeyCode={["Delete", "Backspace"]}
-            multiSelectionKeyCode={["Control", "Shift"]}
-            selectionOnDrag={true}
-            panOnDrag={[1, 2]}
-            selectionMode={SelectionMode.Partial}
-            defaultEdgeOptions={{
-              type: edgeStyle,
-              style: { stroke: "#8b949e", strokeWidth: 2 },
-              markerEnd: { type: "arrow" as const, color: "#8b949e" },
-            }}
-            proOptions={{ hideAttribution: true }}
-          >
-            <Background
-              variant={BackgroundVariant.Dots}
-              gap={20}
-              size={1}
-              color="#21262d"
-            />
-            <Controls className={styles.controls} />
-            <MiniMap
-              className={styles.minimap}
-              nodeColor={() => "#d4a017"}
-              maskColor="rgba(13, 17, 23, 0.7)"
-            />
-          </ReactFlow>
-        </div>
+        <SelectionGroupContext.Provider value={nodeGroupColorMap}>
+          <div ref={reactFlowWrapper} className={styles.canvasWrapper}>
+            {conflictWarningText && (
+              <div className={styles.concentrationWarning} role="alert">
+                <span className={styles.concentrationWarningIcon}>⚠</span>
+                {conflictWarningText}
+              </div>
+            )}
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              onNodeClick={handleNodeClick}
+              onNodesChange={wrappedOnNodesChange}
+              onEdgesChange={wrappedOnEdgesChange}
+              onConnect={onConnect}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              onSelectionChange={handleSelectionChange}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+              connectionLineComponent={SnappedConnectionLine}
+              fitView
+              deleteKeyCode={["Delete", "Backspace"]}
+              multiSelectionKeyCode={["Control", "Shift"]}
+              selectionOnDrag={true}
+              panOnDrag={[1, 2]}
+              selectionMode={SelectionMode.Partial}
+              defaultEdgeOptions={{
+                type: edgeStyle,
+                style: { stroke: "#8b949e", strokeWidth: 2 },
+                markerEnd: { type: "arrow" as const, color: "#8b949e" },
+              }}
+              proOptions={{ hideAttribution: true }}
+            >
+              <Background
+                variant={BackgroundVariant.Dots}
+                gap={20}
+                size={1}
+                color="#21262d"
+              />
+              <Controls className={styles.controls} />
+              <MiniMap
+                className={styles.minimap}
+                nodeColor={() => "#d4a017"}
+                maskColor="rgba(13, 17, 23, 0.7)"
+              />
+            </ReactFlow>
+          </div>
+        </SelectionGroupContext.Provider>
       </ConcentrationContext.Provider>
     </ActionEconomyContext.Provider>
   );
@@ -654,6 +718,7 @@ interface FlowCanvasProps {
   ) => void;
   edgeStyle?: EdgeStyleType;
   animatedEdges?: boolean;
+  selectionGroups?: SelectionGroup[];
 }
 
 export function FlowCanvas(props: FlowCanvasProps) {

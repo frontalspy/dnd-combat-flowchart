@@ -541,3 +541,51 @@
   color: var(--gold);
   font-family: var(--font-display);
 }
+
+/* ── Selection Group section ─────────────────────────── */
+
+.groupMemberCount {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  margin: 4px 0;
+}
+
+.groupActions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.removeFromGroupBtn {
+  background: none;
+  border: 1px solid var(--border-mid);
+  color: var(--text-mid);
+  border-radius: 3px;
+  padding: 5px 10px;
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
+}
+
+.removeFromGroupBtn:hover {
+  background: var(--bg-surface);
+  color: var(--text-high);
+}
+
+.disbandGroupBtn {
+  background: none;
+  border: 1px solid rgba(239, 83, 80, 0.4);
+  color: #ef5350;
+  border-radius: 3px;
+  padding: 5px 10px;
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
+}
+
+.disbandGroupBtn:hover {
+  background: rgba(239, 83, 80, 0.1);
+}

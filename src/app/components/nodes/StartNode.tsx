@@ -1,8 +1,9 @@
 import type { Node, NodeProps } from "@xyflow/react";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import combatIcon from "../../icons/game/combat.svg";
 import type { StartNodeData } from "../../types";
+import { SelectionGroupContext } from "../FlowCanvas";
 import { Icon } from "../Icon";
 import styles from "./StartNode.module.css";
 
@@ -12,6 +13,8 @@ export function StartNode({ id, data, selected }: NodeProps<StartNodeType>) {
   const { updateNodeData } = useReactFlow();
   const [editing, setEditing] = useState(false);
   const [labelValue, setLabelValue] = useState(data.label);
+  const groupColorMap = useContext(SelectionGroupContext);
+  const groupColor = groupColorMap.get(id);
 
   const handleBlur = useCallback(() => {
     setEditing(false);
@@ -19,7 +22,10 @@ export function StartNode({ id, data, selected }: NodeProps<StartNodeType>) {
   }, [id, labelValue, updateNodeData]);
 
   return (
-    <div className={`${styles.startNode} ${selected ? styles.selected : ""}`}>
+    <div
+      className={`${styles.startNode} ${selected ? styles.selected : ""}`}
+      style={{ position: "relative" }}
+    >
       <div className={styles.inner}>
         <span className={styles.icon}>
           <Icon src={combatIcon} size={17} />
@@ -57,6 +63,23 @@ export function StartNode({ id, data, selected }: NodeProps<StartNodeType>) {
         id="source-right"
         className={styles.handle}
       />
+      {groupColor && (
+        <span
+          aria-label="Selection group member"
+          style={{
+            position: "absolute",
+            bottom: 4,
+            left: 4,
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            background: groupColor,
+            boxShadow: "0 0 0 2px #0d1117",
+            pointerEvents: "none",
+            zIndex: 10,
+          }}
+        />
+      )}
     </div>
   );
 }

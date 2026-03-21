@@ -1,6 +1,6 @@
 import type { Node } from "@xyflow/react";
 import { useReactFlow, useStore } from "@xyflow/react";
-import { Trash2, X } from "lucide-react";
+import { Layers, Trash2, X } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { getClassDefinition } from "../data/classes";
 import {
@@ -24,6 +24,7 @@ import type {
   GroupNodeData,
   ResourceCost,
   ResourceType,
+  SelectionGroup,
 } from "../types";
 import { Icon } from "./Icon";
 import styles from "./NodeEditor.module.css";
@@ -91,6 +92,10 @@ interface NodeEditorProps {
   onClose: () => void;
   character?: Character;
   customWeapons?: import("../data/weapons").Weapon[];
+  selectionGroups?: SelectionGroup[];
+  onRemoveFromGroup?: (nodeId: string, groupId: string) => void;
+  onDisbandGroup?: (groupId: string) => void;
+  onRenameGroup?: (groupId: string, name: string) => void;
 }
 
 export function NodeEditor({
@@ -98,6 +103,10 @@ export function NodeEditor({
   onClose,
   character,
   customWeapons = [],
+  selectionGroups = [],
+  onRemoveFromGroup,
+  onDisbandGroup,
+  onRenameGroup,
 }: NodeEditorProps) {
   const { updateNodeData, deleteElements, getNode } = useReactFlow();
 
@@ -492,6 +501,60 @@ export function NodeEditor({
             customWeapons={customWeapons}
           />
         )}
+
+        {/* ── Selection Group section ── */}
+        {(() => {
+          const memberGroup = selectionGroups.find((g) =>
+            g.nodeIds.includes(selectedNode.id)
+          );
+          if (!memberGroup) return null;
+          return (
+            <div className={styles.field}>
+              <label className={styles.fieldLabel}>
+                <Layers
+                  size={12}
+                  style={{ verticalAlign: "middle", marginRight: 4 }}
+                />
+                Selection Group
+              </label>
+              <input
+                className={styles.fieldInput}
+                defaultValue={memberGroup.label}
+                onBlur={(e) => onRenameGroup?.(memberGroup.id, e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter")
+                    onRenameGroup?.(
+                      memberGroup.id,
+                      (e.target as HTMLInputElement).value
+                    );
+                }}
+                key={memberGroup.id}
+              />
+              <p className={styles.groupMemberCount}>
+                {memberGroup.nodeIds.length} node
+                {memberGroup.nodeIds.length !== 1 ? "s" : ""} in this group
+              </p>
+              <div className={styles.groupActions}>
+                <button
+                  type="button"
+                  className={styles.removeFromGroupBtn}
+                  onClick={() =>
+                    onRemoveFromGroup?.(selectedNode.id, memberGroup.id)
+                  }
+                >
+                  Remove from group
+                </button>
+                <button
+                  type="button"
+                  className={styles.disbandGroupBtn}
+                  onClick={() => onDisbandGroup?.(memberGroup.id)}
+                >
+                  Disband group
+                </button>
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
       <div className={styles.footer}>

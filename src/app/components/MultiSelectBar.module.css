@@ -82,3 +82,83 @@
   background: var(--bg-surface);
   color: var(--text-high);
 }
+
+.groupSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 12px 12px;
+  border-top: 1px solid var(--border-dim);
+  padding-top: 10px;
+}
+
+.groupNameInput {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-mid);
+  border-radius: 3px;
+  color: var(--text-high);
+  font-size: var(--fs-xs);
+  padding: 5px 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.groupNameInput:focus {
+  outline: none;
+  border-color: var(--gold-dim);
+}
+
+.groupBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.4);
+  color: #a78bfa;
+  border-radius: 3px;
+  padding: 7px 12px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  justify-content: center;
+}
+
+.groupBtn:hover {
+  background: rgba(124, 58, 237, 0.22);
+}
+
+.groupInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  color: var(--text-mid);
+}
+
+.groupInfoLabel {
+  font-weight: 600;
+  color: #a78bfa;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.disbandBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--border-mid);
+  color: var(--text-mid);
+  border-radius: 3px;
+  padding: 6px 12px;
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  width: 100%;
+}
+
+.disbandBtn:hover {
+  background: var(--bg-surface);
+  color: var(--text-high);
+}
