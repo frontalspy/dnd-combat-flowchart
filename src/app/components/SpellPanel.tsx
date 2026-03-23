@@ -4,7 +4,6 @@ import { STANDARD_ACTIONS } from "../data/actions";
 import type { ClassAction } from "../data/classes";
 import { CLASSES, getClassDefinition, getMaxSpellLevel } from "../data/classes";
 import { SPELL_SCHOOLS } from "../data/damageTypes";
-import { resolveGroupTemplates } from "../data/groupTemplates";
 import spellsData from "../data/spells.json";
 import type { Weapon } from "../data/weapons";
 import { WEAPONS } from "../data/weapons";
@@ -15,7 +14,6 @@ import combatIcon from "../icons/game/combat.svg";
 import conditionTabIcon from "../icons/game/hazard.svg";
 import puzzleIcon from "../icons/game/puzzle.svg";
 import spellIcon from "../icons/game/spell.svg";
-import buildIcon from "../icons/util/build.svg";
 import swordIcon from "../icons/weapon/sword.svg";
 import type {
   ActionItem,
@@ -323,11 +321,6 @@ export function SpellPanel({
     return spells;
   }, [availableSpells, spellLevelFilter, search, sourceFilter]);
 
-  const suggestedGroups = useMemo(
-    () => resolveGroupTemplates(character.class, character.level),
-    [character.class, character.level]
-  );
-
   const handleAddCustom = useCallback(
     (action: ActionItem) => {
       onAddCustomAction(action);
@@ -441,17 +434,6 @@ export function SpellPanel({
               })
             }
           />
-          <DragTemplate
-            icon={buildIcon}
-            label="Group"
-            description="Add a variant group node (e.g. smite options)"
-            onDragStart={(e) =>
-              handleTemplateDrag(e, "groupNode", {
-                type: "groupNode",
-                label: "Action Group",
-              })
-            }
-          />
         </div>
       </div>
 
@@ -558,39 +540,6 @@ export function SpellPanel({
 
       {/* Card list */}
       <div className={styles.cardList} key={activeTab}>
-        {activeTab === "actions" &&
-          suggestedGroups.length > 0 &&
-          !search.trim() && (
-            <div className={styles.suggestedGroups}>
-              <div className={styles.suggestedGroupsLabel}>
-                Suggested Groups
-              </div>
-              <div className={styles.suggestedGroupsList}>
-                {suggestedGroups.map((group) => (
-                  <div
-                    key={group.label}
-                    className={styles.groupChip}
-                    draggable
-                    title={`${group.variants.length} variants — drag to canvas`}
-                    onDragStart={(e) =>
-                      handleTemplateDrag(e, "groupNode", {
-                        label: group.label,
-                        variants: group.variants,
-                        collapsed: false,
-                      })
-                    }
-                  >
-                    <Icon src={buildIcon} size={14} />
-                    <span className={styles.groupChipLabel}>{group.label}</span>
-                    <span className={styles.groupChipCount}>
-                      {group.variants.length}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
         {/* Weapons — shown below suggested groups in actions tab */}
         {activeTab === "actions" && (
           <div className={styles.weaponsSection}>

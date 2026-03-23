@@ -165,27 +165,6 @@ export interface ConditionNodeData extends Record<string, unknown> {
   notes?: string;
 }
 
-export interface GroupVariant {
-  id: string;
-  label: string;
-  actionType: ActionType;
-  damageType?: DamageType;
-  school?: string;
-  spellLevel?: string;
-  description?: string;
-  damageDice?: string;
-  saveAbility?: string;
-  rollType?: "attack" | "save" | "auto";
-  range?: string;
-  duration?: string;
-}
-
-export interface GroupNodeData extends Record<string, unknown> {
-  label: string;
-  variants: GroupVariant[];
-  collapsed: boolean;
-}
-
 export interface StartNodeData extends Record<string, unknown> {
   label: string;
 }

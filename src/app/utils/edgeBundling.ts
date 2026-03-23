@@ -15,7 +15,6 @@ const DEFAULT_NODE_W: Record<string, number> = {
   startNode: 155,
   noteNode: 160,
   conditionStatusNode: 160,
-  groupNode: 200,
 };
 
 const DEFAULT_NODE_H: Record<string, number> = {
@@ -24,7 +23,6 @@ const DEFAULT_NODE_H: Record<string, number> = {
   startNode: 48,
   noteNode: 80,
   conditionStatusNode: 68,
-  groupNode: 100,
 };
 
 function getHandlePos(
@@ -38,11 +36,7 @@ function getHandlePos(
 
   if (isSource) {
     const handle = handleId ?? "";
-    if (
-      handle === "yes" ||
-      handle === "source-right" ||
-      handle.startsWith("source-variant-")
-    ) {
+    if (handle === "yes" || handle === "source-right") {
       return { x: x + w, y: y + h / 2 };
     }
     // Default: bottom-center

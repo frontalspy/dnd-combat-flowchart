@@ -19,7 +19,6 @@ import type {
   ActionNodeData,
   ConditionNodeData,
   ConditionStatusNodeData,
-  GroupNodeData,
   NoteNodeData,
   StartNodeData,
 } from "../types";
@@ -47,7 +46,6 @@ const FLOW_W: Record<string, number> = {
   startNode: 155,
   noteNode: 160,
   conditionStatusNode: 160,
-  groupNode: 200,
 };
 const FLOW_H: Record<string, number> = {
   actionNode: 110,
@@ -55,7 +53,6 @@ const FLOW_H: Record<string, number> = {
   startNode: 48,
   noteNode: 80,
   conditionStatusNode: 68,
-  groupNode: 100,
 };
 
 // ─── Printed node sizes ───────────────────────────────────────────────────────
@@ -71,8 +68,6 @@ const PN = {
   noteH: 50,
   statusW: 136,
   statusH: 42,
-  groupW: 154,
-  groupH: 64,
 };
 
 // ─── Coordinate transform ─────────────────────────────────────────────────────
@@ -151,7 +146,7 @@ function printedSize(
     case "conditionStatusNode":
       return { w: cap(PN.statusW), h: cap(PN.statusH) };
     default:
-      return { w: cap(PN.groupW), h: cap(PN.groupH) };
+      return { w: cap(PN.statusW), h: cap(PN.statusH) };
   }
 }
 
@@ -166,11 +161,7 @@ function getSourcePt(
   ph: number
 ): { x: number; y: number } {
   const handle = sourceHandle ?? "";
-  if (
-    handle === "yes" ||
-    handle === "source-right" ||
-    handle.startsWith("source-variant-")
-  ) {
+  if (handle === "yes" || handle === "source-right") {
     return { x: px + pw, y: py + ph / 2 };
   }
   // Default: bottom-center
@@ -511,70 +502,6 @@ function RenderConditionStatusNode({
       >
         {displayName}
       </span>
-    </div>
-  );
-}
-
-function RenderGroupNode({
-  node,
-  x,
-  y,
-  w,
-  h,
-}: {
-  node: Node;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}) {
-  const data = node.data as GroupNodeData;
-  const fontSize = Math.max(9, Math.min(12, w / 14));
-
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: x,
-        top: y,
-        width: w,
-        height: h,
-        background: "#fff",
-        border: "1.5px solid #222",
-        borderRadius: 4,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-        boxSizing: "border-box",
-      }}
-    >
-      <div
-        style={{
-          background: "#ddd",
-          borderBottom: "1px solid #bbb",
-          padding: "3px 6px",
-          fontSize: Math.max(7, fontSize - 2),
-          fontWeight: 700,
-          color: "#111",
-          fontFamily: "Georgia, serif",
-        }}
-      >
-        GROUP
-      </div>
-      <div
-        style={{
-          padding: "3px 6px",
-          fontSize: fontSize,
-          fontWeight: 700,
-          color: "#111",
-          fontFamily: "Georgia, 'Times New Roman', serif",
-          flex: 1,
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        {data.label as string}
-      </div>
     </div>
   );
 }
@@ -944,16 +871,7 @@ export const PrintLayout = forwardRef<HTMLDivElement, PrintLayoutProps>(
                     />
                   );
                 default:
-                  return (
-                    <RenderGroupNode
-                      key={node.id}
-                      node={node}
-                      x={px}
-                      y={py}
-                      w={pw}
-                      h={ph}
-                    />
-                  );
+                  return null;
               }
             })}
           </div>

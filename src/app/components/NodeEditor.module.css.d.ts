@@ -33,24 +33,6 @@ declare const amountInput: string;
 declare const footer: string;
 declare const deleteBtn: string;
 declare const hint: string;
-declare const variantsHeader: string;
-declare const addVariantBtn: string;
-declare const variantsList: string;
-declare const variantItem: string;
-declare const variantItemLabel: string;
-declare const variantItemBadges: string;
-declare const variantLevelBadge: string;
-declare const variantActionBadge: string;
-declare const variantDamageBadge: string;
-declare const removeVariantBtn: string;
-declare const variantSearch: string;
-declare const variantSearchInput: string;
-declare const variantSearchResults: string;
-declare const variantResultRow: string;
-declare const variantResultAdded: string;
-declare const variantResultLabel: string;
-declare const variantResultBadge: string;
-declare const variantSearchEmpty: string;
 declare const computedRows: string;
 declare const computedRow: string;
 declare const computedKey: string;
@@ -88,24 +70,6 @@ export {
 	footer,
 	deleteBtn,
 	hint,
-	variantsHeader,
-	addVariantBtn,
-	variantsList,
-	variantItem,
-	variantItemLabel,
-	variantItemBadges,
-	variantLevelBadge,
-	variantActionBadge,
-	variantDamageBadge,
-	removeVariantBtn,
-	variantSearch,
-	variantSearchInput,
-	variantSearchResults,
-	variantResultRow,
-	variantResultAdded,
-	variantResultLabel,
-	variantResultBadge,
-	variantSearchEmpty,
 	computedRows,
 	computedRow,
 	computedKey,
@@ -144,24 +108,6 @@ declare const __default_export__: {
 	footer: typeof footer;
 	deleteBtn: typeof deleteBtn;
 	hint: typeof hint;
-	variantsHeader: typeof variantsHeader;
-	addVariantBtn: typeof addVariantBtn;
-	variantsList: typeof variantsList;
-	variantItem: typeof variantItem;
-	variantItemLabel: typeof variantItemLabel;
-	variantItemBadges: typeof variantItemBadges;
-	variantLevelBadge: typeof variantLevelBadge;
-	variantActionBadge: typeof variantActionBadge;
-	variantDamageBadge: typeof variantDamageBadge;
-	removeVariantBtn: typeof removeVariantBtn;
-	variantSearch: typeof variantSearch;
-	variantSearchInput: typeof variantSearchInput;
-	variantSearchResults: typeof variantSearchResults;
-	variantResultRow: typeof variantResultRow;
-	variantResultAdded: typeof variantResultAdded;
-	variantResultLabel: typeof variantResultLabel;
-	variantResultBadge: typeof variantResultBadge;
-	variantSearchEmpty: typeof variantSearchEmpty;
 	computedRows: typeof computedRows;
 	computedRow: typeof computedRow;
 	computedKey: typeof computedKey;

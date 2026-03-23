@@ -1,5 +1,5 @@
 import type { Node } from "@xyflow/react";
-import { useReactFlow, useStore } from "@xyflow/react";
+import { useReactFlow } from "@xyflow/react";
 import { Layers, Trash2, X } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { getClassDefinition } from "../data/classes";
@@ -21,7 +21,6 @@ import type {
   ConditionStatusNodeData,
   DndClass,
   DndCondition,
-  GroupNodeData,
   ResourceCost,
   ResourceType,
   SelectionGroup,
@@ -33,7 +32,6 @@ import {
   CONDITION_DISPLAY_NAMES,
   CONDITION_ICONS,
 } from "./nodes/ConditionStatusNode";
-import { VariantManager } from "./VariantManager";
 
 const RESOURCE_LABELS: Record<ResourceType, string> = {
   "spell-slot": "Spell Slot",
@@ -108,15 +106,8 @@ export function NodeEditor({
   onDisbandGroup,
   onRenameGroup,
 }: NodeEditorProps) {
-  const { updateNodeData, deleteElements, getNode } = useReactFlow();
+  const { updateNodeData, deleteElements } = useReactFlow();
 
-  // Reactively subscribe to the selected node's data so the panel re-renders
-  // whenever updateNodeData fires (getNode() is imperative and does not trigger re-renders).
-  const liveGroupData = useStore((s) => {
-    if (!selectedNode || selectedNode.type !== "groupNode") return null;
-    const node = s.nodeLookup.get(selectedNode.id);
-    return node ? (node.data as GroupNodeData) : null;
-  });
   const [notes, setNotes] = useState("");
   const [label, setLabel] = useState("");
   const [rcType, setRcType] = useState<ResourceType | "">("");
@@ -215,11 +206,9 @@ export function NodeEditor({
         ? "Condition"
         : nodeType === "startNode"
           ? "Start Node"
-          : nodeType === "groupNode"
-            ? "Group Node"
-            : nodeType === "conditionStatusNode"
-              ? "Condition Status"
-              : "Note";
+          : nodeType === "conditionStatusNode"
+            ? "Condition Status"
+            : "Note";
 
   const descriptionText =
     typeof data.description === "string" ? data.description : null;
@@ -278,8 +267,7 @@ export function NodeEditor({
         {/* Name / label editing */}
         {(nodeType === "actionNode" ||
           nodeType === "conditionNode" ||
-          nodeType === "startNode" ||
-          nodeType === "groupNode") && (
+          nodeType === "startNode") && (
           <div className={styles.field}>
             <label className={styles.fieldLabel}>Name</label>
             <div className={styles.fieldRow}>
@@ -425,21 +413,19 @@ export function NodeEditor({
           })()}
 
         {/* Notes */}
-        {nodeType !== "noteNode" &&
-          nodeType !== "startNode" &&
-          nodeType !== "groupNode" && (
-            <div className={styles.field}>
-              <label className={styles.fieldLabel}>Notes</label>
-              <textarea
-                className={styles.notesTextarea}
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                onBlur={handleSaveNotes}
-                placeholder="Add personal notes, reminders, or conditions..."
-                rows={4}
-              />
-            </div>
-          )}
+        {nodeType !== "noteNode" && nodeType !== "startNode" && (
+          <div className={styles.field}>
+            <label className={styles.fieldLabel}>Notes</label>
+            <textarea
+              className={styles.notesTextarea}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              onBlur={handleSaveNotes}
+              placeholder="Add personal notes, reminders, or conditions..."
+              rows={4}
+            />
+          </div>
+        )}
 
         {/* Computed character stats */}
         {nodeType === "actionNode" &&
@@ -491,16 +477,6 @@ export function NodeEditor({
               </div>
             );
           })()}
-
-        {/* ── Variant management (groupNode only) ── */}
-        {nodeType === "groupNode" && liveGroupData && (
-          <VariantManager
-            selectedNodeId={selectedNode.id}
-            groupData={liveGroupData}
-            character={character}
-            customWeapons={customWeapons}
-          />
-        )}
 
         {/* ── Selection Group section ── */}
         {(() => {
