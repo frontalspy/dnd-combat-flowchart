@@ -83,6 +83,9 @@ declare const formTextarea: string;
 declare const formActions: string;
 declare const cancelBtn: string;
 declare const submitBtn: string;
+declare const dragHandle: string;
+declare const dragHandleBar: string;
+declare const panelOpen: string;
 
 export {
 	panel,
@@ -161,7 +164,10 @@ export {
 	formTextarea,
 	formActions,
 	cancelBtn,
-	submitBtn
+	submitBtn,
+	dragHandle,
+	dragHandleBar,
+	panelOpen
 };
 
 declare const __default_export__: {
@@ -242,5 +248,8 @@ declare const __default_export__: {
 	formActions: typeof formActions;
 	cancelBtn: typeof cancelBtn;
 	submitBtn: typeof submitBtn;
+	dragHandle: typeof dragHandle;
+	dragHandleBar: typeof dragHandleBar;
+	panelOpen: typeof panelOpen;
 };
 export default __default_export__;

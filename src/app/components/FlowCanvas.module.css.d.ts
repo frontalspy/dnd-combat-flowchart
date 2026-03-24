@@ -14,6 +14,7 @@ declare const minimapWrapper: string;
 declare const minimapCollapsed: string;
 declare const minimap: string;
 declare const minimapToggle: string;
+declare const minimapResponsive: string;
 
 export {
 	canvasWrapper,
@@ -23,7 +24,8 @@ export {
 	minimapWrapper,
 	minimapCollapsed,
 	minimap,
-	minimapToggle
+	minimapToggle,
+	minimapResponsive
 };
 
 declare const __default_export__: {
@@ -35,5 +37,6 @@ declare const __default_export__: {
 	minimapCollapsed: typeof minimapCollapsed;
 	minimap: typeof minimap;
 	minimapToggle: typeof minimapToggle;
+	minimapResponsive: typeof minimapResponsive;
 };
 export default __default_export__;

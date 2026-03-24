@@ -93,3 +93,10 @@
   stroke: var(--gold-mid);
   stroke-width: 1px;
 }
+
+/* ── Responsive: hide minimap on phone (≤ 600 px) ─────────────── */
+@media (max-width: 600px) {
+  .minimapResponsive {
+    display: none;
+  }
+}

@@ -100,6 +100,13 @@ declare const exportMenuItemSuccess: string;
 declare const exportMenuItemKbd: string;
 declare const exportMenuItemCheck: string;
 declare const exportMenuDivider: string;
+declare const panelToggleBtn: string;
+declare const panelToggleBtnActive: string;
+declare const drawerOverlay: string;
+declare const libraryFab: string;
+declare const selectModeToggle: string;
+declare const hintHidden: string;
+declare const selectModeToggleActive: string;
 
 export {
 	page,
@@ -195,7 +202,14 @@ export {
 	exportMenuItemSuccess,
 	exportMenuItemKbd,
 	exportMenuItemCheck,
-	exportMenuDivider
+	exportMenuDivider,
+	panelToggleBtn,
+	panelToggleBtnActive,
+	drawerOverlay,
+	libraryFab,
+	selectModeToggle,
+	hintHidden,
+	selectModeToggleActive
 };
 
 declare const __default_export__: {
@@ -293,5 +307,12 @@ declare const __default_export__: {
 	exportMenuItemKbd: typeof exportMenuItemKbd;
 	exportMenuItemCheck: typeof exportMenuItemCheck;
 	exportMenuDivider: typeof exportMenuDivider;
+	panelToggleBtn: typeof panelToggleBtn;
+	panelToggleBtnActive: typeof panelToggleBtnActive;
+	drawerOverlay: typeof drawerOverlay;
+	libraryFab: typeof libraryFab;
+	selectModeToggle: typeof selectModeToggle;
+	hintHidden: typeof hintHidden;
+	selectModeToggleActive: typeof selectModeToggleActive;
 };
 export default __default_export__;

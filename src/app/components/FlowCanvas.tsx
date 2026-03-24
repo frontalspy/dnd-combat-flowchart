@@ -225,6 +225,8 @@ interface FlowCanvasInnerProps {
   animatedEdges?: boolean;
   selectionGroups?: SelectionGroup[];
   bundleEdges?: boolean;
+  /** When true, pan is disabled and every drag gesture performs box selection. */
+  selectMode?: boolean;
 }
 
 const DEFAULT_START_NODE: Node<StartNodeData, "startNode"> = {
@@ -251,6 +253,7 @@ function FlowCanvasInner({
   animatedEdges = false,
   selectionGroups = [],
   bundleEdges = false,
+  selectMode = false,
 }: FlowCanvasInnerProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { fitView, getNodes, getEdges, screenToFlowPosition, addNodes } =
@@ -729,7 +732,7 @@ function FlowCanvasInner({
               deleteKeyCode={["Delete", "Backspace"]}
               multiSelectionKeyCode={["Control", "Shift"]}
               selectionOnDrag={true}
-              panOnDrag={[1, 2]}
+              panOnDrag={selectMode ? false : [1, 2]}
               selectionMode={SelectionMode.Partial}
               defaultEdgeOptions={{
                 type: edgeStyle,
@@ -746,9 +749,7 @@ function FlowCanvasInner({
               />
               <Controls className={styles.controls} />
               <div
-                className={`${styles.minimapWrapper}${
-                  minimapCollapsed ? ` ${styles.minimapCollapsed}` : ""
-                }`}
+                className={`${styles.minimapWrapper}${minimapCollapsed ? ` ${styles.minimapCollapsed}` : ""}${" "}${styles.minimapResponsive}`}
               >
                 <button
                   type="button"
@@ -797,6 +798,8 @@ interface FlowCanvasProps {
   animatedEdges?: boolean;
   selectionGroups?: SelectionGroup[];
   bundleEdges?: boolean;
+  /** When true, pan is disabled and every drag gesture performs box selection. */
+  selectMode?: boolean;
 }
 
 export function FlowCanvas(props: FlowCanvasProps) {

@@ -118,6 +118,10 @@ interface SpellPanelProps {
   customActions: ActionItem[];
   onAddCustomAction: (action: ActionItem) => void;
   onDragStart: (e: React.DragEvent, data: unknown) => void;
+  /** Whether the panel is open (used on mobile/tablet drawer layouts). Ignored on desktop. */
+  isOpen?: boolean;
+  /** Called when the user dismisses the panel (mobile close button / drag handle tap). */
+  onClose?: () => void;
 }
 
 export function SpellPanel({
@@ -126,6 +130,8 @@ export function SpellPanel({
   customActions,
   onAddCustomAction,
   onDragStart,
+  isOpen = true,
+  onClose,
 }: SpellPanelProps) {
   const [activeTab, setActiveTab] = useState<PanelTab>("actions");
   const [search, setSearch] = useState("");
@@ -350,7 +356,21 @@ export function SpellPanel({
   ];
 
   return (
-    <aside className={styles.panel}>
+    <aside className={`${styles.panel}${isOpen ? ` ${styles.panelOpen}` : ""}`}>
+      {/* Mobile drag handle — tap to close on phone/tablet */}
+      <div
+        className={styles.dragHandle}
+        onClick={onClose}
+        role="button"
+        aria-label="Close library"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") onClose?.();
+        }}
+      >
+        <span className={styles.dragHandleBar} />
+      </div>
+
       {/* Header */}
       <div className={styles.panelHeader}>
         <div className={styles.characterChip}>

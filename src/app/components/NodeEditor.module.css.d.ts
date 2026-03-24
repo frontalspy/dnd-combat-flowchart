@@ -41,6 +41,9 @@ declare const groupMemberCount: string;
 declare const groupActions: string;
 declare const removeFromGroupBtn: string;
 declare const disbandGroupBtn: string;
+declare const sheetHandle: string;
+declare const sheetHandleBar: string;
+declare const panelSheet: string;
 
 export {
 	panel,
@@ -77,7 +80,10 @@ export {
 	groupMemberCount,
 	groupActions,
 	removeFromGroupBtn,
-	disbandGroupBtn
+	disbandGroupBtn,
+	sheetHandle,
+	sheetHandleBar,
+	panelSheet
 };
 
 declare const __default_export__: {
@@ -116,5 +122,8 @@ declare const __default_export__: {
 	groupActions: typeof groupActions;
 	removeFromGroupBtn: typeof removeFromGroupBtn;
 	disbandGroupBtn: typeof disbandGroupBtn;
+	sheetHandle: typeof sheetHandle;
+	sheetHandleBar: typeof sheetHandleBar;
+	panelSheet: typeof panelSheet;
 };
 export default __default_export__;

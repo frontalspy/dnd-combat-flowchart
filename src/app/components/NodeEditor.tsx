@@ -94,6 +94,8 @@ interface NodeEditorProps {
   onRemoveFromGroup?: (nodeId: string, groupId: string) => void;
   onDisbandGroup?: (groupId: string) => void;
   onRenameGroup?: (groupId: string, name: string) => void;
+  /** When true the panel renders as a bottom-sheet overlay (phone layout). */
+  isSheet?: boolean;
 }
 
 export function NodeEditor({
@@ -105,6 +107,7 @@ export function NodeEditor({
   onRemoveFromGroup,
   onDisbandGroup,
   onRenameGroup,
+  isSheet = false,
 }: NodeEditorProps) {
   const { updateNodeData, deleteElements } = useReactFlow();
 
@@ -216,7 +219,24 @@ export function NodeEditor({
   const durationText = typeof data.duration === "string" ? data.duration : null;
 
   return (
-    <aside className={styles.panel}>
+    <aside
+      className={`${styles.panel}${isSheet ? ` ${styles.panelSheet}` : ""}`}
+    >
+      {/* Mobile drag handle — shown in bottom-sheet layout */}
+      {isSheet && (
+        <div
+          className={styles.sheetHandle}
+          onClick={onClose}
+          role="button"
+          aria-label="Close panel"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") onClose();
+          }}
+        >
+          <span className={styles.sheetHandleBar} />
+        </div>
+      )}
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <span className={styles.nodeTypeLabel}>{typeLabel}</span>

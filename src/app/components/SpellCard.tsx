@@ -98,6 +98,7 @@ export function SpellCard({ spell, onDragStart, classBadges }: SpellCardProps) {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const damageType = detectDamageType(spell.description, spell.name);
   const damageInfo = damageType ? DAMAGE_TYPES[damageType] : null;
@@ -116,6 +117,22 @@ export function SpellCard({ spell, onDragStart, classBadges }: SpellCardProps) {
   const handleMouseLeave = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setTooltipVisible(false);
+  }, []);
+
+  // Long-press for touch devices (400 ms) — mirrors hover tooltip behaviour
+  const handleTouchStart = useCallback(() => {
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      // On phone the tooltip is positioned above the card
+      setTooltipPos({ top: Math.max(8, rect.top - 160), left: 8 });
+    }
+    longPressRef.current = setTimeout(() => setTooltipVisible(true), 400);
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (longPressRef.current) clearTimeout(longPressRef.current);
+    // Dismiss after a short readable delay so the user can read it
+    setTimeout(() => setTooltipVisible(false), 2000);
   }, []);
 
   const dragData = {
@@ -149,6 +166,8 @@ export function SpellCard({ spell, onDragStart, classBadges }: SpellCardProps) {
       onDragStart={(e) => onDragStart(e, dragData)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       style={{ borderLeftColor: schoolInfo?.color ?? "#30363d" }}
     >
       <div className={styles.cardTop}>
@@ -230,6 +249,7 @@ export function ActionCard({ action, onDragStart }: ActionCardProps) {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const damageInfo = action.damageType ? DAMAGE_TYPES[action.damageType] : null;
   const actionInfo =
@@ -245,6 +265,20 @@ export function ActionCard({ action, onDragStart }: ActionCardProps) {
   const handleMouseLeave = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setTooltipVisible(false);
+  }, []);
+
+  // Long-press for touch devices (400 ms)
+  const handleTouchStart = useCallback(() => {
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      setTooltipPos({ top: Math.max(8, rect.top - 120), left: 8 });
+    }
+    longPressRef.current = setTimeout(() => setTooltipVisible(true), 400);
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (longPressRef.current) clearTimeout(longPressRef.current);
+    setTimeout(() => setTooltipVisible(false), 2000);
   }, []);
 
   const dragData = {
@@ -270,6 +304,8 @@ export function ActionCard({ action, onDragStart }: ActionCardProps) {
       onDragStart={(e) => onDragStart(e, dragData)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       style={{ borderLeftColor: actionInfo.color }}
     >
       <div className={styles.cardTop}>

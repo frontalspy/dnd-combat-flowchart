@@ -1015,3 +1015,158 @@
   background: var(--border-dim);
   margin: 3px 0;
 }
+
+/* ── Tablet panel-toggle button in top bar ─────────────────────── */
+.panelToggleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  color: var(--text-mid);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.panelToggleBtn:hover {
+  background: var(--bg-surface);
+  color: var(--text);
+}
+
+.panelToggleBtnActive {
+  background: rgba(184, 144, 26, 0.1);
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+/* ── Floating elements inside .workspace ──────────────────────── */
+
+/* Dimmer overlay behind open drawers */
+.drawerOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(42, 26, 10, 0.45);
+  z-index: 40;
+}
+
+/* Library FAB — phone only (hidden on ≥ 601 px via CSS) */
+.libraryFab {
+  display: none; /* hidden on desktop by default */
+}
+
+/* Select-mode toggle — phone & tablet only */
+.selectModeToggle {
+  display: none; /* hidden on desktop by default */
+}
+
+/* ── Responsive: hide hint bar on phone ──────────────────────── */
+.hintHidden {
+  display: none;
+}
+
+/* ── Responsive: tablet (601–899 px) ─────────────────────────── */
+@media (max-width: 899px) {
+  /* Let topLeft shrink to content so topCenter (chart name) keeps space */
+  .topLeft {
+    flex: 0 0 auto;
+  }
+
+  /* Increase tap target size on all top-bar action buttons */
+  .actionBtn,
+  .backBtn,
+  .panelToggleBtn,
+  .loadoutChip {
+    min-height: 44px;
+  }
+
+  /* Show select-mode toggle inside the workspace */
+  .selectModeToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 80px;
+    right: 12px;
+    z-index: 30;
+    width: 44px;
+    height: 44px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-mid);
+    border-radius: 50%;
+    color: var(--text-mid);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition:
+      background 0.15s,
+      color 0.15s,
+      border-color 0.15s;
+  }
+
+  .selectModeToggle:hover {
+    background: var(--bg-surface);
+    color: var(--text);
+  }
+
+  .selectModeToggleActive {
+    background: rgba(184, 144, 26, 0.15);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+}
+
+/* ── Responsive: phone (≤ 600 px) ────────────────────────────── */
+@media (max-width: 600px) {
+  /* Library FAB */
+  .libraryFab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: absolute;
+    bottom: 20px;
+    right: 12px;
+    z-index: 30;
+    padding: 10px 16px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-mid);
+    border-radius: 24px;
+    color: var(--text);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    transition:
+      background 0.15s,
+      box-shadow 0.15s;
+  }
+
+  .libraryFab:hover {
+    background: var(--bg-surface);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Move select-mode toggle above the FAB */
+  .selectModeToggle {
+    bottom: 76px;
+    right: 12px;
+  }
+
+  /* Hide secondary top-bar chips on phone to save space */
+  .loadoutChip,
+  .topDivider,
+  .edgeStyleGroup {
+    display: none;
+  }
+
+  /* Keep only the most essential chips visible */
+  .actionBtn {
+    min-height: 44px;
+  }
+}

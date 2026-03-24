@@ -5,6 +5,7 @@ import jsPDF from "jspdf";
 import {
   Activity,
   BarChart2,
+  BookOpen,
   Check,
   ChevronLeft,
   Download,
@@ -14,7 +15,9 @@ import {
   GitMerge,
   Layers,
   Link2,
+  Menu,
   MoreHorizontal,
+  MousePointer2,
   Printer,
   Save,
   Sword,
@@ -50,6 +53,7 @@ import {
 import { ACTION_TYPE_LABELS } from "../data/damageTypes";
 import type { Weapon } from "../data/weapons";
 import { WEAPONS } from "../data/weapons";
+import { useViewportWidth } from "../hooks/useViewportWidth";
 import type { SavedFlowchart, SelectionGroup, WeaponLoadout } from "../types";
 import { encodeFlowchart, SHARE_PARAM } from "../utils/shareUrl";
 import styles from "./FlowchartBuilder.module.css";
@@ -89,6 +93,8 @@ export function FlowchartBuilder() {
   const [showStatsPicker, setShowStatsPicker] = useState(false);
   const [showSlotsPopover, setShowSlotsPopover] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const [spellPanelOpen, setSpellPanelOpen] = useState(false);
+  const [selectMode, setSelectMode] = useState(false);
   const [selectionGroups, setSelectionGroups] = useState<SelectionGroup[]>(
     () => activeChart?.selectionGroups ?? []
   );
@@ -404,6 +410,10 @@ export function FlowchartBuilder() {
     setShowExportMenu(false);
   }, []);
 
+  const viewportWidth = useViewportWidth();
+  const isPhone = viewportWidth <= 600;
+  const isTablet = viewportWidth >= 601 && viewportWidth <= 899;
+
   if (!character) {
     goToSetup();
     return null;
@@ -438,6 +448,19 @@ export function FlowchartBuilder() {
           >
             <ChevronLeft size={16} />
           </button>
+          {isTablet && (
+            <button
+              type="button"
+              className={`${styles.panelToggleBtn} ${
+                spellPanelOpen ? styles.panelToggleBtnActive : ""
+              }`}
+              onClick={() => setSpellPanelOpen((v) => !v)}
+              title={spellPanelOpen ? "Close library" : "Open library"}
+              aria-label="Toggle spell library"
+            >
+              <Menu size={14} />
+            </button>
+          )}
           <TabBar />
         </div>
 
@@ -1017,12 +1040,23 @@ export function FlowchartBuilder() {
       {/* Main layout */}
       <ReactFlowProvider>
         <div className={styles.workspace}>
+          {/* Dimmer overlay — tapping outside the drawer closes it on mobile/tablet */}
+          {(isPhone || isTablet) && spellPanelOpen && (
+            <div
+              className={styles.drawerOverlay}
+              onClick={() => setSpellPanelOpen(false)}
+              aria-hidden="true"
+            />
+          )}
+
           <SpellPanel
             character={character}
             customWeapons={customWeapons}
             customActions={state.customActions}
             onAddCustomAction={addCustomAction}
             onDragStart={handleDragStart}
+            isOpen={isPhone || isTablet ? spellPanelOpen : true}
+            onClose={() => setSpellPanelOpen(false)}
           />
 
           <FlowCanvas
@@ -1040,7 +1074,41 @@ export function FlowchartBuilder() {
             animatedEdges={animatedEdges}
             selectionGroups={selectionGroups}
             bundleEdges={bundleEdges}
+            selectMode={selectMode}
           />
+
+          {/* Library FAB — phone only */}
+          {isPhone && (
+            <button
+              type="button"
+              className={styles.libraryFab}
+              onClick={() => setSpellPanelOpen(true)}
+              title="Open spell library"
+              aria-label="Open spell library"
+            >
+              <BookOpen size={20} />
+              <span>Library</span>
+            </button>
+          )}
+
+          {/* Select mode toggle — phone and tablet */}
+          {(isPhone || isTablet) && (
+            <button
+              type="button"
+              className={`${styles.selectModeToggle} ${
+                selectMode ? styles.selectModeToggleActive : ""
+              }`}
+              onClick={() => setSelectMode((v) => !v)}
+              title={
+                selectMode ? "Switch to pan mode" : "Switch to select mode"
+              }
+              aria-label={
+                selectMode ? "Switch to pan mode" : "Switch to select mode"
+              }
+            >
+              <MousePointer2 size={16} />
+            </button>
+          )}
 
           {selectedNodes.length === 1 && (
             <NodeEditor
@@ -1052,6 +1120,7 @@ export function FlowchartBuilder() {
               onRemoveFromGroup={handleRemoveFromGroup}
               onDisbandGroup={handleDisbandGroup}
               onRenameGroup={handleRenameGroup}
+              isSheet={isPhone}
             />
           )}
           {selectedNodes.length > 1 && (
@@ -1093,8 +1162,10 @@ export function FlowchartBuilder() {
         />
       )}
 
-      {/* Keyboard hint */}
-      <div className={styles.hint}>
+      {/* Keyboard hint — hidden on phone (keyboard shortcuts don't apply to touch) */}
+      <div
+        className={`${styles.hint}${isPhone ? ` ${styles.hintHidden}` : ""}`}
+      >
         <span>Drag items from the left panel onto the canvas</span>
         <span>·</span>
         <span>Connect nodes by dragging from their handles</span>

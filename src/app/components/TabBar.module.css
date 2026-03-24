@@ -275,3 +275,38 @@
   color: var(--text-faint);
   padding: 4px 2px 0;
 }
+
+/* ── Responsive: tablet (601–899 px) ─────────────────────────── */
+@media (max-width: 899px) {
+  .tabMeta {
+    display: none;
+  }
+  .tab {
+    max-width: 140px;
+  }
+}
+
+/* ── Responsive: phone (≤ 600 px) ────────────────────────────── */
+@media (max-width: 600px) {
+  .tabBar {
+    flex: 0 0 auto;
+    gap: 4px;
+    padding: 0 2px;
+  }
+  .tabInfo {
+    display: none;
+  }
+  .tabClose {
+    display: none;
+  }
+  .tab {
+    max-width: 40px;
+    min-width: 40px;
+    padding: 4px;
+    justify-content: center;
+    gap: 0;
+  }
+  .addTabBtn {
+    display: none;
+  }
+}

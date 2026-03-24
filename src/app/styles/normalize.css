@@ -53,10 +53,20 @@
   --fs-3xl: 26px; /* page section headings            — was 26 px   */
   --fs-4xl: 32px; /* page headings                    — was 32 px   */
   --fs-hero: 50px; /* display / hero text              — was 50 px   */
+
+  /* Responsive breakpoints */
+  --breakpoint-tablet: 899px; /* ≤ 899 px  → tablet layout */
+  --breakpoint-phone: 600px; /* ≤ 600 px  → phone layout  */
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Improve tap responsiveness on touch devices */
+button,
+a {
+  touch-action: manipulation;
 }
 
 html,
