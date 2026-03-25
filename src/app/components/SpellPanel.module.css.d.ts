@@ -7,6 +7,11 @@
  */
 
 declare const panel: string;
+declare const panelCollapsed: string;
+declare const panelSliver: string;
+declare const collapseBtn: string;
+declare const sliverArrow: string;
+declare const sliverLabel: string;
 declare const panelHeader: string;
 declare const characterChip: string;
 declare const classIcon: string;
@@ -89,6 +94,11 @@ declare const panelOpen: string;
 
 export {
 	panel,
+	panelCollapsed,
+	panelSliver,
+	collapseBtn,
+	sliverArrow,
+	sliverLabel,
 	panelHeader,
 	characterChip,
 	classIcon,
@@ -172,6 +182,11 @@ export {
 
 declare const __default_export__: {
 	panel: typeof panel;
+	panelCollapsed: typeof panelCollapsed;
+	panelSliver: typeof panelSliver;
+	collapseBtn: typeof collapseBtn;
+	sliverArrow: typeof sliverArrow;
+	sliverLabel: typeof sliverLabel;
 	panelHeader: typeof panelHeader;
 	characterChip: typeof characterChip;
 	classIcon: typeof classIcon;

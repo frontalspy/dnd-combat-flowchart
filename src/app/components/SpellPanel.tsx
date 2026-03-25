@@ -1,4 +1,4 @@
-import { Plus, Search, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Search, X } from "lucide-react";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { STANDARD_ACTIONS } from "../data/actions";
 import type { ClassAction } from "../data/classes";
@@ -122,6 +122,10 @@ interface SpellPanelProps {
   isOpen?: boolean;
   /** Called when the user dismisses the panel (mobile close button / drag handle tap). */
   onClose?: () => void;
+  /** Whether the panel is collapsed to a narrow sliver (desktop only, ≥ 900 px). */
+  collapsed?: boolean;
+  /** Called when the collapse/expand toggle is clicked (desktop only). */
+  onToggleCollapse?: () => void;
 }
 
 export function SpellPanel({
@@ -132,6 +136,8 @@ export function SpellPanel({
   onDragStart,
   isOpen = true,
   onClose,
+  collapsed = false,
+  onToggleCollapse,
 }: SpellPanelProps) {
   const panelRef = useRef<HTMLElement>(null);
   const touchStartY = useRef(0);
@@ -396,8 +402,24 @@ export function SpellPanel({
     <aside
       ref={panelRef}
       data-spell-panel=""
-      className={`${styles.panel}${isOpen ? ` ${styles.panelOpen}` : ""}`}
+      className={`${styles.panel}${isOpen ? ` ${styles.panelOpen}` : ""}${collapsed ? ` ${styles.panelCollapsed}` : ""}`}
     >
+      {/* Sliver tab — visible only when desktop panel is collapsed */}
+      {onToggleCollapse && (
+        <div className={styles.panelSliver} aria-hidden={!collapsed}>
+          <button
+            type="button"
+            className={styles.sliverArrow}
+            onClick={onToggleCollapse}
+            title="Expand library panel"
+            aria-label="Expand library panel"
+            tabIndex={collapsed ? 0 : -1}
+          >
+            <ChevronRight size={12} />
+          </button>
+          <span className={styles.sliverLabel}>Library</span>
+        </div>
+      )}
       {/* Mobile drag handle — tap to close on phone/tablet */}
       <div
         className={styles.dragHandle}
@@ -417,7 +439,7 @@ export function SpellPanel({
 
       {/* Header */}
       <div className={styles.panelHeader}>
-        <div className={styles.characterChip}>
+        <div className={styles.characterChip} style={{ flex: 1, minWidth: 0 }}>
           <span className={styles.classIcon}>
             <Icon src={classDef?.icon ?? combatIcon} size={26} />
           </span>
@@ -448,6 +470,18 @@ export function SpellPanel({
             )}
           </div>
         </div>
+        {/* Desktop collapse button — only rendered when collapse is available */}
+        {onToggleCollapse && (
+          <button
+            type="button"
+            className={styles.collapseBtn}
+            onClick={onToggleCollapse}
+            title="Collapse library panel  [ [ ]"
+            aria-label="Collapse library panel"
+          >
+            <ChevronLeft size={12} />
+          </button>
+        )}
       </div>
 
       {/* Drag Templates */}

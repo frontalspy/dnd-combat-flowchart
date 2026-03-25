@@ -98,6 +98,7 @@ export function FlowchartBuilder() {
   const [edgeStyle] = useState<EdgeStyleType>("step");
   const [animatedEdges, setAnimatedEdges] = useState(false);
   const [bundleEdges, setBundleEdges] = useState(false);
+  const [spellPanelCollapsed, setSpellPanelCollapsed] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [showLoadoutPicker, setShowLoadoutPicker] = useState(false);
   const [showStatsPicker, setShowStatsPicker] = useState(false);
@@ -169,6 +170,7 @@ export function FlowchartBuilder() {
     setEditingName(false);
     setSelectedNodes([]);
     setIsSaved(false);
+    setSpellPanelCollapsed(false);
   }, [activeTabId]);
 
   const exportFnsRef = useRef<FlowCanvasExports | null>(null);
@@ -329,6 +331,9 @@ export function FlowchartBuilder() {
         exportFnsRef.current?.selectAll();
       } else if (e.key === "Escape") {
         setSelectedNodes([]);
+      } else if (e.key === "[" && !mod) {
+        // Toggle spell panel collapse (desktop only — the collapsed prop is guarded in JSX)
+        setSpellPanelCollapsed((v) => !v);
       }
     };
     window.addEventListener("keydown", handler);
@@ -1259,6 +1264,12 @@ export function FlowchartBuilder() {
               onDragStart={handleDragStart}
               isOpen={isPhone || isTablet ? spellPanelOpen : true}
               onClose={() => setSpellPanelOpen(false)}
+              collapsed={!isPhone && !isTablet ? spellPanelCollapsed : false}
+              onToggleCollapse={
+                !isPhone && !isTablet
+                  ? () => setSpellPanelCollapsed((v) => !v)
+                  : undefined
+              }
             />
 
             <FlowCanvas
@@ -1378,6 +1389,8 @@ export function FlowchartBuilder() {
         <span>
           Ctrl+C/V copy·paste · Ctrl+Z/Y undo·redo · Ctrl+A select all
         </span>
+        <span>·</span>
+        <span>[ toggles the library panel</span>
         <span>·</span>
         <span>Hover spell cards for full descriptions</span>
       </div>
