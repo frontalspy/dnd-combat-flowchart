@@ -435,6 +435,8 @@ export function FlowchartBuilder() {
   const viewportWidth = useViewportWidth();
   const isPhone = viewportWidth <= 600;
   const isTablet = viewportWidth >= 601 && viewportWidth <= 899;
+  const isCompact = viewportWidth <= 1200;
+  const isNarrow = viewportWidth <= 1700;
 
   if (!character) {
     goToSetup();
@@ -951,7 +953,7 @@ export function FlowchartBuilder() {
             {showExportMenu && (
               <div className={styles.exportMenu}>
                 {/* ── Mobile tabs section ── */}
-                {isPhone && openTabIds.length > 0 && (
+                {isCompact && openTabIds.length > 0 && (
                   <>
                     <div className={styles.exportMenuTabHeader}>Open Tabs</div>
                     {openTabIds.map((id) => {
@@ -998,6 +1000,127 @@ export function FlowchartBuilder() {
                         </div>
                       );
                     })}
+                    <div className={styles.exportMenuDivider} />
+                  </>
+                )}
+                {/* ── Collapsed toolbar items (≤1700px) ── */}
+                {isNarrow && (
+                  <>
+                    <div className={styles.exportMenuTabHeader}>Toolbar</div>
+                    {!economyHudHidden && (
+                      <button
+                        type="button"
+                        className={`${styles.exportMenuItem} ${
+                          actionEconomyInfo.overBudgetNodeIds.length > 0
+                            ? styles.exportMenuItemAlert
+                            : showEconomyPopover
+                              ? styles.exportMenuItemActive
+                              : ""
+                        }`}
+                        onClick={() => {
+                          setShowEconomyPopover((v) => !v);
+                          setShowExportMenu(false);
+                        }}
+                      >
+                        <Activity size={14} />
+                        Economy
+                        {actionEconomyInfo.overBudgetNodeIds.length > 0 && (
+                          <span className={styles.exportMenuItemCheck}>⚠</span>
+                        )}
+                      </button>
+                    )}
+                    {hasSlotsToTrack && (
+                      <button
+                        type="button"
+                        className={`${styles.exportMenuItem} ${
+                          totalSlotsSpent > 0 ? styles.exportMenuItemActive : ""
+                        }`}
+                        onClick={() => {
+                          setShowSlotsPopover((v) => !v);
+                          setShowExportMenu(false);
+                        }}
+                      >
+                        <Layers size={14} />
+                        {isWarlock ? "Pact Magic" : "Spell Slots"}
+                        {totalSlotsSpent > 0 && (
+                          <span className={styles.exportMenuItemCheck}>
+                            {totalSlotsSpent} used
+                          </span>
+                        )}
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className={`${styles.exportMenuItem} ${
+                        selectionGroups.length > 0
+                          ? styles.exportMenuItemActive
+                          : ""
+                      }`}
+                      onClick={() => {
+                        setShowGroupsPopover((v) => !v);
+                        setShowExportMenu(false);
+                      }}
+                    >
+                      <Layers size={14} />
+                      Groups
+                      {selectionGroups.length > 0 && (
+                        <span className={styles.exportMenuItemCheck}>
+                          {selectionGroups.length}
+                        </span>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      className={`${styles.exportMenuItem} ${
+                        concentrationInfo.conflictIds.length > 0
+                          ? styles.exportMenuItemAlert
+                          : concentrationInfo.spells.length > 0
+                            ? styles.exportMenuItemActive
+                            : ""
+                      }`}
+                      onClick={() => {
+                        setShowConcentrationPopover((v) => !v);
+                        setShowExportMenu(false);
+                      }}
+                    >
+                      <Focus size={14} />
+                      Concentration
+                      {concentrationInfo.spells.length > 0 && (
+                        <span className={styles.exportMenuItemCheck}>
+                          {concentrationInfo.spells.length}
+                        </span>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      className={`${styles.exportMenuItem} ${
+                        character?.abilityScores
+                          ? styles.exportMenuItemActive
+                          : ""
+                      }`}
+                      onClick={() => {
+                        setShowStatsPicker(true);
+                        setShowExportMenu(false);
+                      }}
+                    >
+                      <BarChart2 size={14} />
+                      Stats
+                    </button>
+                    <button
+                      type="button"
+                      className={`${styles.exportMenuItem} ${
+                        character?.loadout?.mainHand
+                          ? styles.exportMenuItemActive
+                          : ""
+                      }`}
+                      onClick={() => {
+                        setShowLoadoutPicker(true);
+                        setShowExportMenu(false);
+                      }}
+                    >
+                      <Sword size={14} />
+                      Loadout
+                    </button>
                     <div className={styles.exportMenuDivider} />
                   </>
                 )}

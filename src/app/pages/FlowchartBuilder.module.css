@@ -1000,6 +1000,10 @@
   color: var(--gold);
 }
 
+.exportMenuItemAlert {
+  color: #e57373;
+}
+
 .exportMenuItemSuccess {
   color: var(--green-light);
 }
@@ -1167,7 +1171,17 @@
   display: none;
 }
 
-/* ── Responsive: tablet (601–899 px) ─────────────────────────── */
+/* ── Responsive: hide right-bar items (≤ 1700 px) ────────────── */
+@media (max-width: 1700px) {
+  /* Hide right-bar chips when the window is too narrow to show them comfortably */
+  .loadoutChip,
+  .topDivider,
+  .edgeStyleGroup {
+    display: none;
+  }
+}
+
+/* ── Responsive: tablet touch targets (≤ 899 px) ─────────────── */
 @media (max-width: 899px) {
   /* Increase tap target size on all top-bar action buttons */
   .actionBtn,
@@ -1249,15 +1263,46 @@
     right: 12px;
   }
 
-  /* Hide secondary top-bar chips on phone to save space */
-  .loadoutChip,
-  .topDivider,
-  .edgeStyleGroup {
-    display: none;
-  }
-
   /* Keep only the most essential chips visible */
   .actionBtn {
     min-height: 44px;
+  }
+}
+
+/* ── Responsive: phone (≤ 600 px) ────────────────────────────── */
+@media (max-width: 600px) {
+  /* Library FAB */
+  .libraryFab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: absolute;
+    bottom: 20px;
+    right: 12px;
+    z-index: 30;
+    padding: 10px 16px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-mid);
+    border-radius: 24px;
+    color: var(--text);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    transition:
+      background 0.15s,
+      box-shadow 0.15s;
+  }
+
+  .libraryFab:hover {
+    background: var(--bg-surface);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Move select-mode toggle above the FAB */
+  .selectModeToggle {
+    bottom: 76px;
+    right: 12px;
   }
 }

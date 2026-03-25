@@ -96,6 +96,7 @@ declare const exportMenuWrapper: string;
 declare const exportMenu: string;
 declare const exportMenuItem: string;
 declare const exportMenuItemActive: string;
+declare const exportMenuItemAlert: string;
 declare const exportMenuItemSuccess: string;
 declare const exportMenuItemKbd: string;
 declare const exportMenuItemCheck: string;
@@ -206,6 +207,7 @@ export {
 	exportMenu,
 	exportMenuItem,
 	exportMenuItemActive,
+	exportMenuItemAlert,
 	exportMenuItemSuccess,
 	exportMenuItemKbd,
 	exportMenuItemCheck,
@@ -317,6 +319,7 @@ declare const __default_export__: {
 	exportMenu: typeof exportMenu;
 	exportMenuItem: typeof exportMenuItem;
 	exportMenuItemActive: typeof exportMenuItemActive;
+	exportMenuItemAlert: typeof exportMenuItemAlert;
 	exportMenuItemSuccess: typeof exportMenuItemSuccess;
 	exportMenuItemKbd: typeof exportMenuItemKbd;
 	exportMenuItemCheck: typeof exportMenuItemCheck;

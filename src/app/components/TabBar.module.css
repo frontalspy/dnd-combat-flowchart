@@ -276,13 +276,20 @@
   padding: 4px 2px 0;
 }
 
-/* ── Responsive: tablet (601–899 px) ─────────────────────────── */
-@media (max-width: 899px) {
+/* ── Responsive: hide tab meta at 1700 px ───────────────────── */
+@media (max-width: 1700px) {
   .tabMeta {
     display: none;
   }
   .tab {
     max-width: 140px;
+  }
+}
+
+/* ── Responsive: tablet (601–1200 px) ────────────────────────── */
+@media (max-width: 1200px) {
+  .tabBar {
+    display: none;
   }
 }
 
