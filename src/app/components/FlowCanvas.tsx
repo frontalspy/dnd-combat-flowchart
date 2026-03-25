@@ -203,6 +203,8 @@ export interface FlowCanvasExports {
   selectAll: () => void;
   selectNodes: (ids: string[]) => void;
   focusNodes: (ids: string[]) => void;
+  /** Touch drag-to-canvas: add a node at the given screen coordinates. */
+  dropAtPosition: (clientX: number, clientY: number, data: unknown) => void;
 }
 
 export type EdgeStyleType = "smoothstep" | "step" | "straight";
@@ -256,6 +258,9 @@ function FlowCanvasInner({
   selectMode = false,
 }: FlowCanvasInnerProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
+  const isTouchDevice =
+    typeof window !== "undefined" &&
+    ("ontouchstart" in window || navigator.maxTouchPoints > 0);
   const { fitView, getNodes, getEdges, screenToFlowPosition, addNodes } =
     useReactFlow();
 
@@ -459,6 +464,13 @@ function FlowCanvasInner({
     return `${conflictNames.join(", ")} are concentration spells on the same branch.`;
   }, [conflictNodeIds, nodes]);
 
+  // Drop handler — must be declared before the onExportReady useEffect below
+  const { onDrop, onDragOver, dropAtPosition } = useFlowDrop({
+    screenToFlowPosition,
+    setNodes,
+    scheduleSnapshot,
+  });
+
   // Expose export functions to parent
   useEffect(() => {
     const captureElement = () =>
@@ -572,6 +584,7 @@ function FlowCanvasInner({
       selectAll: handleSelectAll,
       selectNodes,
       focusNodes,
+      dropAtPosition,
     });
   }, [
     fitView,
@@ -585,6 +598,7 @@ function FlowCanvasInner({
     handleUndo,
     handleRedo,
     handleSelectAll,
+    dropAtPosition,
   ]);
 
   const onConnect = useCallback(
@@ -615,13 +629,6 @@ function FlowCanvasInner({
     },
     [setEdges, scheduleSnapshot, animatedEdges]
   );
-
-  // Drop handler
-  const { onDrop, onDragOver } = useFlowDrop({
-    screenToFlowPosition,
-    setNodes,
-    scheduleSnapshot,
-  });
 
   const handleSelectionChange = useCallback(
     ({ nodes: selectedNodes }: { nodes: Node[] }) => {
@@ -708,7 +715,11 @@ function FlowCanvasInner({
     <ActionEconomyContext.Provider value={overBudgetNodeIds}>
       <ConcentrationContext.Provider value={conflictNodeIds}>
         <SelectionGroupContext.Provider value={nodeGroupColorMap}>
-          <div ref={reactFlowWrapper} className={styles.canvasWrapper}>
+          <div
+            ref={reactFlowWrapper}
+            className={styles.canvasWrapper}
+            data-canvas-drop=""
+          >
             {conflictWarningText && (
               <div className={styles.concentrationWarning} role="alert">
                 <span className={styles.concentrationWarningIcon}>⚠</span>
@@ -731,8 +742,8 @@ function FlowCanvasInner({
               fitView
               deleteKeyCode={["Delete", "Backspace"]}
               multiSelectionKeyCode={["Control", "Shift"]}
-              selectionOnDrag={true}
-              panOnDrag={selectMode ? false : [1, 2]}
+              selectionOnDrag={selectMode || !isTouchDevice}
+              panOnDrag={selectMode ? false : isTouchDevice ? true : [1, 2]}
               selectionMode={SelectionMode.Partial}
               defaultEdgeOptions={{
                 type: edgeStyle,

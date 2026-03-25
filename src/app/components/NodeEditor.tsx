@@ -1,7 +1,7 @@
 import type { Node } from "@xyflow/react";
 import { useReactFlow } from "@xyflow/react";
 import { Layers, Trash2, X } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { getClassDefinition } from "../data/classes";
 import {
   ACTION_TYPE_LABELS,
@@ -109,6 +109,43 @@ export function NodeEditor({
   onRenameGroup,
   isSheet = false,
 }: NodeEditorProps) {
+  const panelRef = useRef<HTMLElement>(null);
+  const touchStartY = useRef(0);
+  const touchCurrentY = useRef(0);
+
+  const handleDragTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+    touchCurrentY.current = e.touches[0].clientY;
+    if (panelRef.current) panelRef.current.style.transition = "none";
+  }, []);
+
+  const handleDragTouchMove = useCallback((e: React.TouchEvent) => {
+    touchCurrentY.current = e.touches[0].clientY;
+    const dy = touchCurrentY.current - touchStartY.current;
+    if (dy > 0 && panelRef.current)
+      panelRef.current.style.transform = `translateY(${dy}px)`;
+  }, []);
+
+  const handleDragTouchEnd = useCallback(() => {
+    const dy = touchCurrentY.current - touchStartY.current;
+    const el = panelRef.current;
+    if (!el) return;
+    if (dy > 80) {
+      el.style.transition = "transform 0.22s ease";
+      el.style.transform = "translateY(100%)";
+      setTimeout(() => {
+        el.style.transition = "";
+        el.style.transform = "";
+        onClose();
+      }, 220);
+    } else {
+      el.style.transition = "transform 0.22s ease";
+      el.style.transform = "";
+      setTimeout(() => {
+        el.style.transition = "";
+      }, 220);
+    }
+  }, [onClose]);
   const { updateNodeData, deleteElements } = useReactFlow();
 
   const [notes, setNotes] = useState("");
@@ -220,6 +257,7 @@ export function NodeEditor({
 
   return (
     <aside
+      ref={panelRef}
       className={`${styles.panel}${isSheet ? ` ${styles.panelSheet}` : ""}`}
     >
       {/* Mobile drag handle — shown in bottom-sheet layout */}
@@ -227,6 +265,9 @@ export function NodeEditor({
         <div
           className={styles.sheetHandle}
           onClick={onClose}
+          onTouchStart={handleDragTouchStart}
+          onTouchMove={handleDragTouchMove}
+          onTouchEnd={handleDragTouchEnd}
           role="button"
           aria-label="Close panel"
           tabIndex={0}

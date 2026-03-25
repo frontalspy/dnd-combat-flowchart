@@ -1,5 +1,5 @@
 import { Plus, Search, X } from "lucide-react";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { STANDARD_ACTIONS } from "../data/actions";
 import type { ClassAction } from "../data/classes";
 import { CLASSES, getClassDefinition, getMaxSpellLevel } from "../data/classes";
@@ -133,6 +133,43 @@ export function SpellPanel({
   isOpen = true,
   onClose,
 }: SpellPanelProps) {
+  const panelRef = useRef<HTMLElement>(null);
+  const touchStartY = useRef(0);
+  const touchCurrentY = useRef(0);
+
+  const handleDragTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+    touchCurrentY.current = e.touches[0].clientY;
+    if (panelRef.current) panelRef.current.style.transition = "none";
+  }, []);
+
+  const handleDragTouchMove = useCallback((e: React.TouchEvent) => {
+    touchCurrentY.current = e.touches[0].clientY;
+    const dy = touchCurrentY.current - touchStartY.current;
+    if (dy > 0 && panelRef.current)
+      panelRef.current.style.transform = `translateY(${dy}px)`;
+  }, []);
+
+  const handleDragTouchEnd = useCallback(() => {
+    const dy = touchCurrentY.current - touchStartY.current;
+    const el = panelRef.current;
+    if (!el) return;
+    if (dy > 80) {
+      el.style.transition = "transform 0.22s ease";
+      el.style.transform = "translateY(100%)";
+      setTimeout(() => {
+        el.style.transition = "";
+        el.style.transform = "";
+        onClose?.();
+      }, 220);
+    } else {
+      el.style.transition = "transform 0.22s ease";
+      el.style.transform = "";
+      setTimeout(() => {
+        el.style.transition = "";
+      }, 220);
+    }
+  }, [onClose]);
   const [activeTab, setActiveTab] = useState<PanelTab>("actions");
   const [search, setSearch] = useState("");
   const [spellLevelFilter, setSpellLevelFilter] =
@@ -356,11 +393,18 @@ export function SpellPanel({
   ];
 
   return (
-    <aside className={`${styles.panel}${isOpen ? ` ${styles.panelOpen}` : ""}`}>
+    <aside
+      ref={panelRef}
+      data-spell-panel=""
+      className={`${styles.panel}${isOpen ? ` ${styles.panelOpen}` : ""}`}
+    >
       {/* Mobile drag handle — tap to close on phone/tablet */}
       <div
         className={styles.dragHandle}
         onClick={onClose}
+        onTouchStart={handleDragTouchStart}
+        onTouchMove={handleDragTouchMove}
+        onTouchEnd={handleDragTouchEnd}
         role="button"
         aria-label="Close library"
         tabIndex={0}

@@ -21,6 +21,7 @@ import {
   Printer,
   Save,
   Sword,
+  X,
   Zap,
 } from "lucide-react";
 import React, {
@@ -45,6 +46,7 @@ import { SpellPanel } from "../components/SpellPanel";
 import { StatsEditor } from "../components/StatsEditor";
 import { TabBar } from "../components/TabBar";
 import { useApp } from "../context/AppContext";
+import { TouchDropContext } from "../context/TouchDropContext";
 import {
   CLASSES,
   getMulticlassSpellSlots,
@@ -72,8 +74,16 @@ export function FlowchartBuilder() {
     restoreSpellSlots,
     addCustomWeapon,
     addCustomAction,
+    setActiveTab,
+    closeTab,
   } = useApp();
-  const { character: globalCharacter, activeTabId, customWeapons } = state;
+  const {
+    character: globalCharacter,
+    activeTabId,
+    customWeapons,
+    openTabIds,
+    savedFlowcharts,
+  } = state;
 
   const activeChart = getActiveFlowchart();
   const character = activeChart?.character ?? globalCharacter;
@@ -189,6 +199,18 @@ export function FlowchartBuilder() {
 
   const handleExportReady = useCallback((fns: FlowCanvasExports) => {
     exportFnsRef.current = fns;
+  }, []);
+
+  /** Stable callback for touch drag-to-canvas — reads exportFnsRef at call time. */
+  const touchDropAtPosition = useCallback(
+    (clientX: number, clientY: number, data: unknown) => {
+      exportFnsRef.current?.dropAtPosition(clientX, clientY, data);
+    },
+    []
+  );
+
+  const touchCloseLibrary = useCallback(() => {
+    setSpellPanelOpen(false);
   }, []);
 
   const handleFlowChange = useCallback((nodes: Node[], edges: unknown[]) => {
@@ -928,6 +950,57 @@ export function FlowchartBuilder() {
             </button>
             {showExportMenu && (
               <div className={styles.exportMenu}>
+                {/* ── Mobile tabs section ── */}
+                {isPhone && openTabIds.length > 0 && (
+                  <>
+                    <div className={styles.exportMenuTabHeader}>Open Tabs</div>
+                    {openTabIds.map((id) => {
+                      const chart = savedFlowcharts.find((f) => f.id === id);
+                      const cls = chart
+                        ? CLASSES.find((c) => c.id === chart.character.class)
+                        : null;
+                      const classLabel = chart
+                        ? `${cls?.name ?? chart.character.class} ${chart.character.level}`
+                        : null;
+                      const isActiveTab = id === activeTabId;
+                      return (
+                        <div
+                          key={id}
+                          className={`${styles.exportMenuTabRow}${
+                            isActiveTab ? ` ${styles.exportMenuTabActive}` : ""
+                          }`}
+                        >
+                          <button
+                            type="button"
+                            className={styles.exportMenuTabSwitch}
+                            onClick={() => {
+                              setActiveTab(id);
+                              setShowExportMenu(false);
+                            }}
+                          >
+                            <span className={styles.exportMenuTabName}>
+                              {chart?.name ?? "Unsaved Chart"}
+                            </span>
+                            {classLabel && (
+                              <span className={styles.exportMenuTabMeta}>
+                                {classLabel}
+                              </span>
+                            )}
+                          </button>
+                          <button
+                            type="button"
+                            className={styles.exportMenuTabClose}
+                            onClick={() => closeTab(id)}
+                            aria-label="Close tab"
+                          >
+                            <X size={11} />
+                          </button>
+                        </div>
+                      );
+                    })}
+                    <div className={styles.exportMenuDivider} />
+                  </>
+                )}
                 <button
                   type="button"
                   className={`${styles.exportMenuItem} ${isSaved ? styles.exportMenuItemSuccess : ""}`}
@@ -1039,100 +1112,107 @@ export function FlowchartBuilder() {
 
       {/* Main layout */}
       <ReactFlowProvider>
-        <div className={styles.workspace}>
-          {/* Dimmer overlay — tapping outside the drawer closes it on mobile/tablet */}
-          {(isPhone || isTablet) && spellPanelOpen && (
-            <div
-              className={styles.drawerOverlay}
-              onClick={() => setSpellPanelOpen(false)}
-              aria-hidden="true"
-            />
-          )}
+        <TouchDropContext.Provider
+          value={{
+            dropAtPosition: touchDropAtPosition,
+            closeLibrary: touchCloseLibrary,
+          }}
+        >
+          <div className={styles.workspace}>
+            {/* Dimmer overlay — tapping outside the drawer closes it on mobile/tablet */}
+            {(isPhone || isTablet) && spellPanelOpen && (
+              <div
+                className={styles.drawerOverlay}
+                onClick={() => setSpellPanelOpen(false)}
+                aria-hidden="true"
+              />
+            )}
 
-          <SpellPanel
-            character={character}
-            customWeapons={customWeapons}
-            customActions={state.customActions}
-            onAddCustomAction={addCustomAction}
-            onDragStart={handleDragStart}
-            isOpen={isPhone || isTablet ? spellPanelOpen : true}
-            onClose={() => setSpellPanelOpen(false)}
-          />
-
-          <FlowCanvas
-            key={activeTabId ?? "draft"}
-            initialNodes={activeChart?.nodes as Node[] | undefined}
-            initialEdges={
-              activeChart?.edges as import("@xyflow/react").Edge[] | undefined
-            }
-            onSelectionChange={setSelectedNodes}
-            onExportReady={handleExportReady}
-            onFlowChange={handleFlowChange}
-            onConcentrationChange={handleConcentrationChange}
-            onActionEconomyChange={handleActionEconomyChange}
-            edgeStyle={edgeStyle}
-            animatedEdges={animatedEdges}
-            selectionGroups={selectionGroups}
-            bundleEdges={bundleEdges}
-            selectMode={selectMode}
-          />
-
-          {/* Library FAB — phone only */}
-          {isPhone && (
-            <button
-              type="button"
-              className={styles.libraryFab}
-              onClick={() => setSpellPanelOpen(true)}
-              title="Open spell library"
-              aria-label="Open spell library"
-            >
-              <BookOpen size={20} />
-              <span>Library</span>
-            </button>
-          )}
-
-          {/* Select mode toggle — phone and tablet */}
-          {(isPhone || isTablet) && (
-            <button
-              type="button"
-              className={`${styles.selectModeToggle} ${
-                selectMode ? styles.selectModeToggleActive : ""
-              }`}
-              onClick={() => setSelectMode((v) => !v)}
-              title={
-                selectMode ? "Switch to pan mode" : "Switch to select mode"
-              }
-              aria-label={
-                selectMode ? "Switch to pan mode" : "Switch to select mode"
-              }
-            >
-              <MousePointer2 size={16} />
-            </button>
-          )}
-
-          {selectedNodes.length === 1 && (
-            <NodeEditor
-              selectedNode={selectedNodes[0]}
-              onClose={() => setSelectedNodes([])}
+            <SpellPanel
               character={character}
               customWeapons={customWeapons}
-              selectionGroups={selectionGroups}
-              onRemoveFromGroup={handleRemoveFromGroup}
-              onDisbandGroup={handleDisbandGroup}
-              onRenameGroup={handleRenameGroup}
-              isSheet={isPhone}
+              customActions={state.customActions}
+              onAddCustomAction={addCustomAction}
+              onDragStart={handleDragStart}
+              isOpen={isPhone || isTablet ? spellPanelOpen : true}
+              onClose={() => setSpellPanelOpen(false)}
             />
-          )}
-          {selectedNodes.length > 1 && (
-            <MultiSelectBar
-              selectedNodes={selectedNodes}
-              onDeselect={() => setSelectedNodes([])}
+
+            <FlowCanvas
+              key={activeTabId ?? "draft"}
+              initialNodes={activeChart?.nodes as Node[] | undefined}
+              initialEdges={
+                activeChart?.edges as import("@xyflow/react").Edge[] | undefined
+              }
+              onSelectionChange={setSelectedNodes}
+              onExportReady={handleExportReady}
+              onFlowChange={handleFlowChange}
+              onConcentrationChange={handleConcentrationChange}
+              onActionEconomyChange={handleActionEconomyChange}
+              edgeStyle={edgeStyle}
+              animatedEdges={animatedEdges}
               selectionGroups={selectionGroups}
-              onCreateGroup={handleCreateGroup}
-              onDisbandGroup={handleDisbandGroup}
+              bundleEdges={bundleEdges}
+              selectMode={selectMode}
             />
-          )}
-        </div>
+
+            {/* Library FAB — phone only */}
+            {isPhone && (
+              <button
+                type="button"
+                className={styles.libraryFab}
+                onClick={() => setSpellPanelOpen(true)}
+                title="Open spell library"
+                aria-label="Open spell library"
+              >
+                <BookOpen size={20} />
+                <span>Library</span>
+              </button>
+            )}
+
+            {/* Select mode toggle — phone and tablet */}
+            {(isPhone || isTablet) && (
+              <button
+                type="button"
+                className={`${styles.selectModeToggle} ${
+                  selectMode ? styles.selectModeToggleActive : ""
+                }`}
+                onClick={() => setSelectMode((v) => !v)}
+                title={
+                  selectMode ? "Switch to pan mode" : "Switch to select mode"
+                }
+                aria-label={
+                  selectMode ? "Switch to pan mode" : "Switch to select mode"
+                }
+              >
+                <MousePointer2 size={16} />
+              </button>
+            )}
+
+            {selectedNodes.length === 1 && (
+              <NodeEditor
+                selectedNode={selectedNodes[0]}
+                onClose={() => setSelectedNodes([])}
+                character={character}
+                customWeapons={customWeapons}
+                selectionGroups={selectionGroups}
+                onRemoveFromGroup={handleRemoveFromGroup}
+                onDisbandGroup={handleDisbandGroup}
+                onRenameGroup={handleRenameGroup}
+                isSheet={isPhone}
+              />
+            )}
+            {selectedNodes.length > 1 && (
+              <MultiSelectBar
+                selectedNodes={selectedNodes}
+                onDeselect={() => setSelectedNodes([])}
+                selectionGroups={selectionGroups}
+                onCreateGroup={handleCreateGroup}
+                onDisbandGroup={handleDisbandGroup}
+              />
+            )}
+          </div>
+        </TouchDropContext.Provider>
       </ReactFlowProvider>
 
       {/* Print layout (off-screen, captured for reference card export) */}

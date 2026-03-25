@@ -17,34 +17,39 @@
   padding: 0 10px;
   gap: 10px;
   z-index: 10;
+  position: relative;
 }
 
 .topLeft {
   display: flex;
   align-items: stretch;
   align-self: stretch;
-  flex: 1;
+  flex: 0 0 40%;
   min-width: 0;
-  max-width: 40%;
   overflow: hidden;
   padding-left: 4px;
   gap: 6px;
 }
 
 .topCenter {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 1;
-  min-width: 0;
+  max-width: 40%;
+  pointer-events: auto;
+  z-index: 1;
 }
 
 .topRight {
   display: flex;
   align-items: center;
   gap: 6px;
-  flex: 1;
+  flex: 0 0 auto;
   justify-content: flex-end;
+  margin-left: auto;
   position: relative;
 }
 
@@ -1018,6 +1023,95 @@
   margin: 3px 0;
 }
 
+/* Mobile-only tab section inside the export menu */
+.exportMenuTabHeader {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding: 6px 10px 3px;
+}
+
+.exportMenuTabRow {
+  display: flex;
+  align-items: center;
+  border-radius: 2px;
+  transition: background 0.12s;
+}
+
+.exportMenuTabRow:hover {
+  background: var(--bg-lift);
+}
+
+.exportMenuTabActive {
+  background: rgba(184, 144, 26, 0.08);
+}
+
+.exportMenuTabActive:hover {
+  background: rgba(184, 144, 26, 0.14);
+}
+
+.exportMenuTabSwitch {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding: 6px 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.exportMenuTabName {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.exportMenuTabActive .exportMenuTabName {
+  color: var(--gold-light);
+}
+
+.exportMenuTabMeta {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.exportMenuTabClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  border-radius: 2px;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.exportMenuTabClose:hover {
+  background: var(--bg-lift);
+  color: var(--text);
+}
+
 /* ── Tablet panel-toggle button in top bar ─────────────────────── */
 .panelToggleBtn {
   display: flex;
@@ -1075,11 +1169,6 @@
 
 /* ── Responsive: tablet (601–899 px) ─────────────────────────── */
 @media (max-width: 899px) {
-  /* Let topLeft shrink to content so topCenter (chart name) keeps space */
-  .topLeft {
-    flex: 0 0 auto;
-  }
-
   /* Increase tap target size on all top-bar action buttons */
   .actionBtn,
   .backBtn,

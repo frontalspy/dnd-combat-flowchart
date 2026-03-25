@@ -100,6 +100,13 @@ declare const exportMenuItemSuccess: string;
 declare const exportMenuItemKbd: string;
 declare const exportMenuItemCheck: string;
 declare const exportMenuDivider: string;
+declare const exportMenuTabHeader: string;
+declare const exportMenuTabRow: string;
+declare const exportMenuTabActive: string;
+declare const exportMenuTabSwitch: string;
+declare const exportMenuTabName: string;
+declare const exportMenuTabMeta: string;
+declare const exportMenuTabClose: string;
 declare const panelToggleBtn: string;
 declare const panelToggleBtnActive: string;
 declare const drawerOverlay: string;
@@ -203,6 +210,13 @@ export {
 	exportMenuItemKbd,
 	exportMenuItemCheck,
 	exportMenuDivider,
+	exportMenuTabHeader,
+	exportMenuTabRow,
+	exportMenuTabActive,
+	exportMenuTabSwitch,
+	exportMenuTabName,
+	exportMenuTabMeta,
+	exportMenuTabClose,
 	panelToggleBtn,
 	panelToggleBtnActive,
 	drawerOverlay,
@@ -307,6 +321,13 @@ declare const __default_export__: {
 	exportMenuItemKbd: typeof exportMenuItemKbd;
 	exportMenuItemCheck: typeof exportMenuItemCheck;
 	exportMenuDivider: typeof exportMenuDivider;
+	exportMenuTabHeader: typeof exportMenuTabHeader;
+	exportMenuTabRow: typeof exportMenuTabRow;
+	exportMenuTabActive: typeof exportMenuTabActive;
+	exportMenuTabSwitch: typeof exportMenuTabSwitch;
+	exportMenuTabName: typeof exportMenuTabName;
+	exportMenuTabMeta: typeof exportMenuTabMeta;
+	exportMenuTabClose: typeof exportMenuTabClose;
 	panelToggleBtn: typeof panelToggleBtn;
 	panelToggleBtnActive: typeof panelToggleBtnActive;
 	drawerOverlay: typeof drawerOverlay;
