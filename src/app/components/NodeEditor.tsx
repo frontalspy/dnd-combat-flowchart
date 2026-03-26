@@ -112,6 +112,7 @@ export function NodeEditor({
   const panelRef = useRef<HTMLElement>(null);
   const touchStartY = useRef(0);
   const touchCurrentY = useRef(0);
+  const [sheetExpanded, setSheetExpanded] = useState(false);
 
   const handleDragTouchStart = useCallback((e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY;
@@ -119,33 +120,63 @@ export function NodeEditor({
     if (panelRef.current) panelRef.current.style.transition = "none";
   }, []);
 
-  const handleDragTouchMove = useCallback((e: React.TouchEvent) => {
-    touchCurrentY.current = e.touches[0].clientY;
-    const dy = touchCurrentY.current - touchStartY.current;
-    if (dy > 0 && panelRef.current)
-      panelRef.current.style.transform = `translateY(${dy}px)`;
-  }, []);
+  const handleDragTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      touchCurrentY.current = e.touches[0].clientY;
+      const dy = touchCurrentY.current - touchStartY.current;
+      const el = panelRef.current;
+      if (!el) return;
+      if (dy > 0) {
+        // Dragging down — translate the panel for the dismiss gesture
+        el.style.transform = `translateY(${dy}px)`;
+        el.style.height = "";
+      } else if (!sheetExpanded) {
+        // Dragging up while collapsed — grow height, never move position
+        const baseVh = window.innerHeight * 0.25;
+        const maxVh = window.innerHeight * 0.5;
+        const newH = Math.min(baseVh + Math.abs(dy), maxVh);
+        el.style.transform = "";
+        el.style.height = `${newH}px`;
+      }
+    },
+    [sheetExpanded]
+  );
 
   const handleDragTouchEnd = useCallback(() => {
     const dy = touchCurrentY.current - touchStartY.current;
     const el = panelRef.current;
     if (!el) return;
+    // Always clear any inline overrides first
+    el.style.transform = "";
+    el.style.height = "";
     if (dy > 80) {
-      el.style.transition = "transform 0.22s ease";
-      el.style.transform = "translateY(100%)";
-      setTimeout(() => {
+      if (sheetExpanded) {
+        // Collapse back to 25vh — don't close
         el.style.transition = "";
-        el.style.transform = "";
-        onClose();
-      }, 220);
+        setSheetExpanded(false);
+      } else {
+        // Close
+        el.style.transition = "transform 0.22s ease";
+        el.style.transform = "translateY(100%)";
+        setTimeout(() => {
+          el.style.transition = "";
+          el.style.transform = "";
+          onClose();
+        }, 220);
+      }
+    } else if (dy < -40 && !sheetExpanded) {
+      // Expand to 50vh
+      el.style.transition = "";
+      setSheetExpanded(true);
     } else {
+      // Snap back to current snap point
       el.style.transition = "transform 0.22s ease";
       el.style.transform = "";
       setTimeout(() => {
         el.style.transition = "";
       }, 220);
     }
-  }, [onClose]);
+  }, [sheetExpanded, onClose]);
   const { updateNodeData, deleteElements } = useReactFlow();
 
   const [notes, setNotes] = useState("");
@@ -153,6 +184,12 @@ export function NodeEditor({
   const [rcType, setRcType] = useState<ResourceType | "">("");
   const [rcAmount, setRcAmount] = useState("");
   const [rcLabel, setRcLabel] = useState("");
+
+  // Reset expanded state when a new node is selected
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally keyed on node id only
+  useEffect(() => {
+    setSheetExpanded(false);
+  }, [selectedNode?.id]);
 
   useEffect(() => {
     if (!selectedNode) return;
@@ -258,18 +295,23 @@ export function NodeEditor({
   return (
     <aside
       ref={panelRef}
-      className={`${styles.panel}${isSheet ? ` ${styles.panelSheet}` : ""}`}
+      className={`${styles.panel}${isSheet ? ` ${styles.panelSheet}` : ""}${
+        isSheet && sheetExpanded ? ` ${styles.panelSheetExpanded}` : ""
+      }`}
     >
-      {/* Mobile drag handle — shown in bottom-sheet layout */}
+      {/* Mobile drag handle — drag up to expand, drag down to collapse/close */}
       {isSheet && (
         <div
           className={styles.sheetHandle}
-          onClick={onClose}
           onTouchStart={handleDragTouchStart}
           onTouchMove={handleDragTouchMove}
           onTouchEnd={handleDragTouchEnd}
           role="button"
-          aria-label="Close panel"
+          aria-label={
+            sheetExpanded
+              ? "Drag down to collapse"
+              : "Drag up to expand or tap to close"
+          }
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") onClose();

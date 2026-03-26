@@ -7,6 +7,7 @@ import { SPELL_SCHOOLS } from "../data/damageTypes";
 import spellsData from "../data/spells.json";
 import type { Weapon } from "../data/weapons";
 import { WEAPONS } from "../data/weapons";
+import { useTouchDragDrop } from "../hooks/useTouchDragDrop";
 import combatActionIcon from "../icons/combat/action.svg";
 import roundIcon from "../icons/combat/round.svg";
 import scrollIcon from "../icons/entity/scroll.svg";
@@ -88,6 +89,8 @@ interface DragTemplateProps {
   icon: string;
   label: string;
   description: string;
+  dragData: unknown;
+  accentColor?: string;
   onDragStart: (e: React.DragEvent) => void;
 }
 
@@ -95,19 +98,79 @@ function DragTemplate({
   icon,
   label,
   description,
+  dragData,
+  accentColor = "#8b949e",
   onDragStart,
 }: DragTemplateProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const { handleTouchStart, handleTouchEnd } = useTouchDragDrop(
+    dragData,
+    label,
+    accentColor,
+    cardRef
+  );
   return (
     <div
+      ref={cardRef}
       className={styles.template}
       draggable
       onDragStart={onDragStart}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       title={description}
     >
       <span className={styles.templateIcon}>
         <Icon src={icon} size={16} />
       </span>
       <span className={styles.templateLabel}>{label}</span>
+    </div>
+  );
+}
+
+interface ConditionChipFullProps {
+  cond: DndCondition;
+  affects: "self" | "target" | "area";
+  onTemplateDrag: (e: React.DragEvent, nodeType: string, data: unknown) => void;
+}
+
+function ConditionChipFull({
+  cond,
+  affects,
+  onTemplateDrag,
+}: ConditionChipFullProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const dragData = {
+    nodeType: "conditionStatusNode",
+    condition: cond,
+    affects,
+  };
+  const { handleTouchStart, handleTouchEnd } = useTouchDragDrop(
+    dragData,
+    CONDITION_DISPLAY_NAMES[cond],
+    "#a05050",
+    cardRef
+  );
+  return (
+    <div
+      ref={cardRef}
+      className={styles.conditionChipFull}
+      draggable
+      title={`Drag to add a "${CONDITION_DISPLAY_NAMES[cond]}" condition node`}
+      onDragStart={(e) =>
+        onTemplateDrag(e, "conditionStatusNode", {
+          condition: cond,
+          affects,
+        })
+      }
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      <span className={styles.conditionChipFullIcon}>
+        <Icon src={CONDITION_ICONS[cond]} size={22} />
+      </span>
+      <span className={styles.conditionChipFullLabel}>
+        {CONDITION_DISPLAY_NAMES[cond]}
+      </span>
     </div>
   );
 }
@@ -492,6 +555,11 @@ export function SpellPanel({
             icon={puzzleIcon}
             label="Condition"
             description="Add a decision/condition node"
+            dragData={{
+              nodeType: "conditionNode",
+              type: "conditionNode",
+              label: "Condition?",
+            }}
             onDragStart={(e) =>
               handleTemplateDrag(e, "conditionNode", {
                 type: "conditionNode",
@@ -503,6 +571,7 @@ export function SpellPanel({
             icon={scrollIcon}
             label="Note"
             description="Add a sticky note"
+            dragData={{ nodeType: "noteNode", type: "noteNode", content: "" }}
             onDragStart={(e) =>
               handleTemplateDrag(e, "noteNode", {
                 type: "noteNode",
@@ -514,6 +583,11 @@ export function SpellPanel({
             icon={combatIcon}
             label="Start"
             description="Add a combat start node"
+            dragData={{
+              nodeType: "startNode",
+              type: "startNode",
+              label: "Combat Start",
+            }}
             onDragStart={(e) =>
               handleTemplateDrag(e, "startNode", {
                 type: "startNode",
@@ -525,6 +599,11 @@ export function SpellPanel({
             icon={roundIcon}
             label="End"
             description="Add a round end node"
+            dragData={{
+              nodeType: "endNode",
+              type: "endNode",
+              label: "End of Round",
+            }}
             onDragStart={(e) =>
               handleTemplateDrag(e, "endNode", {
                 type: "endNode",
@@ -705,25 +784,12 @@ export function SpellPanel({
             </div>
             <div className={styles.conditionChipsFull}>
               {ALL_CONDITIONS.map((cond) => (
-                <div
+                <ConditionChipFull
                   key={cond}
-                  className={styles.conditionChipFull}
-                  draggable
-                  title={`Drag to add a "${CONDITION_DISPLAY_NAMES[cond]}" condition node`}
-                  onDragStart={(e) =>
-                    handleTemplateDrag(e, "conditionStatusNode", {
-                      condition: cond,
-                      affects: conditionAffects,
-                    })
-                  }
-                >
-                  <span className={styles.conditionChipFullIcon}>
-                    <Icon src={CONDITION_ICONS[cond]} size={22} />
-                  </span>
-                  <span className={styles.conditionChipFullLabel}>
-                    {CONDITION_DISPLAY_NAMES[cond]}
-                  </span>
-                </div>
+                  cond={cond}
+                  affects={conditionAffects}
+                  onTemplateDrag={handleTemplateDrag}
+                />
               ))}
             </div>
           </div>

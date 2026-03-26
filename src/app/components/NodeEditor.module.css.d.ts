@@ -44,6 +44,7 @@ declare const disbandGroupBtn: string;
 declare const sheetHandle: string;
 declare const sheetHandleBar: string;
 declare const panelSheet: string;
+declare const panelSheetExpanded: string;
 
 export {
 	panel,
@@ -83,7 +84,8 @@ export {
 	disbandGroupBtn,
 	sheetHandle,
 	sheetHandleBar,
-	panelSheet
+	panelSheet,
+	panelSheetExpanded
 };
 
 declare const __default_export__: {
@@ -125,5 +127,6 @@ declare const __default_export__: {
 	sheetHandle: typeof sheetHandle;
 	sheetHandleBar: typeof sheetHandleBar;
 	panelSheet: typeof panelSheet;
+	panelSheetExpanded: typeof panelSheetExpanded;
 };
 export default __default_export__;

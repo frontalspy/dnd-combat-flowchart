@@ -391,11 +391,16 @@
     top: auto;
     width: 100%;
     min-width: 0;
-    height: 55vh;
+    height: 25vh;
     border-left: none;
     border-top: 1px solid var(--border-mid);
     border-radius: 14px 14px 0 0;
     box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.3);
     z-index: 60;
+    transition: height 0.22s ease;
+  }
+
+  .panelSheetExpanded {
+    height: 50vh;
   }
 }
