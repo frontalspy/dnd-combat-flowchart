@@ -56,13 +56,16 @@ export function TabBar() {
             : null;
           const isActive = id === activeTabId;
           return (
-            <button
+            <div
               key={id}
               role="tab"
-              type="button"
+              tabIndex={0}
               aria-selected={isActive}
               className={`${styles.tab} ${isActive ? styles.tabActive : ""}`}
               onClick={() => handleTabClick(id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") handleTabClick(id);
+              }}
               title={chart?.name ?? id}
             >
               <span className={styles.tabIcon}>
@@ -85,7 +88,7 @@ export function TabBar() {
               >
                 <Icon src={crossIcon} size={10} />
               </button>
-            </button>
+            </div>
           );
         })}
 

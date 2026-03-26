@@ -619,30 +619,32 @@ export function SpellPanel({
         </div>
       </div>
 
-      {/* Search — hidden on conditions tab */}
-      {activeTab !== "conditions" && (
-        <div className={styles.searchWrapper}>
-          <Search size={14} className={styles.searchIcon} />
-          <input
-            type="text"
-            className={styles.searchInput}
-            placeholder={
-              activeTab === "spells" ? "Search spells..." : "Search actions..."
-            }
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          {search && (
-            <button
-              type="button"
-              className={styles.clearSearch}
-              onClick={() => setSearch("")}
-            >
-              <X size={12} />
-            </button>
-          )}
-        </div>
-      )}
+      {/* Search */}
+      <div className={styles.searchWrapper}>
+        <Search size={14} className={styles.searchIcon} />
+        <input
+          type="text"
+          className={styles.searchInput}
+          placeholder={
+            activeTab === "spells"
+              ? "Search spells..."
+              : activeTab === "conditions"
+                ? "Search conditions..."
+                : "Search actions..."
+          }
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        {search && (
+          <button
+            type="button"
+            className={styles.clearSearch}
+            onClick={() => setSearch("")}
+          >
+            <X size={12} />
+          </button>
+        )}
+      </div>
 
       {/* Tabs */}
       <div className={styles.tabs}>
@@ -788,7 +790,13 @@ export function SpellPanel({
               </div>
             </div>
             <div className={styles.conditionChipsFull}>
-              {ALL_CONDITIONS.map((cond) => (
+              {ALL_CONDITIONS.filter((cond) =>
+                search
+                  ? CONDITION_DISPLAY_NAMES[cond]
+                      .toLowerCase()
+                      .includes(search.toLowerCase())
+                  : true
+              ).map((cond) => (
                 <ConditionChipFull
                   key={cond}
                   cond={cond}
