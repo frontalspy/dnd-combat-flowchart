@@ -10,7 +10,6 @@ import {
 } from "../data/stats";
 import combatIcon from "../icons/game/combat.svg";
 import dndIcon from "../icons/logo/dnd.svg";
-import crossIcon from "../icons/util/cross.svg";
 import type {
   AbilityScores,
   Character,
@@ -18,6 +17,8 @@ import type {
   DndClass,
 } from "../types";
 import styles from "./CharacterSetup.module.css";
+import { MulticlassSection } from "./setup/MulticlassSection";
+import { SavedFlowchartsList } from "./setup/SavedFlowchartsList";
 
 export function CharacterSetup() {
   const {
@@ -51,9 +52,6 @@ export function CharacterSetup() {
 
   const classDef = selectedClass
     ? CLASSES.find((c) => c.id === selectedClass)
-    : null;
-  const classDef2 = selectedClass2
-    ? CLASSES.find((c) => c.id === selectedClass2)
     : null;
 
   const handleClassSelect = (classId: DndClass) => {
@@ -269,124 +267,18 @@ export function CharacterSetup() {
 
             {/* Second class section */}
             {classDef && showSecondClass && (
-              <div className={styles.secondClassSection}>
-                <div className={styles.secondClassHeader}>
-                  <span className={styles.secondClassTitle}>Second Class</span>
-                  <button
-                    type="button"
-                    className={styles.removeClassBtn}
-                    onClick={handleRemoveSecondClass}
-                    title="Remove second class"
-                  >
-                    ✕ Remove
-                  </button>
-                </div>
-
-                {/* Second class grid */}
-                <div className={styles.fieldGroup}>
-                  <label className={styles.fieldLabel}>Class</label>
-                  <div className={styles.classGrid}>
-                    {CLASSES.filter((c) => c.id !== selectedClass).map(
-                      (cls) => (
-                        <button
-                          key={cls.id}
-                          type="button"
-                          className={`${styles.classBtn} ${selectedClass2 === cls.id ? styles.classBtnActive : ""}`}
-                          style={
-                            selectedClass2 === cls.id
-                              ? {
-                                  borderColor: cls.color,
-                                  boxShadow: `0 0 0 2px ${cls.color}33`,
-                                }
-                              : {}
-                          }
-                          onClick={() => handleClassSelect2(cls.id)}
-                        >
-                          <span className={styles.classBtnIcon}>
-                            <Icon src={cls.icon} size={22} />
-                          </span>
-                          <span className={styles.classBtnName}>
-                            {cls.name}
-                          </span>
-                        </button>
-                      )
-                    )}
-                  </div>
-                </div>
-
-                {/* Second class subclass */}
-                {classDef2 && (
-                  <div className={styles.fieldGroup}>
-                    <label className={styles.fieldLabel}>Subclass</label>
-                    <select
-                      className={styles.select}
-                      value={selectedSubclass2}
-                      onChange={(e) => setSelectedSubclass2(e.target.value)}
-                    >
-                      <option value="">— Choose subclass —</option>
-                      {classDef2.subclasses.map((sc) => (
-                        <option key={sc.id} value={sc.id}>
-                          {sc.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {/* Second class level */}
-                {classDef2 && (
-                  <div className={styles.fieldGroup}>
-                    <label className={styles.fieldLabel}>Class Level</label>
-                    <div className={styles.levelStepper}>
-                      <button
-                        type="button"
-                        className={styles.stepBtn}
-                        onClick={() => setLevel2((v) => Math.max(1, v - 1))}
-                        disabled={level2 <= 1}
-                        aria-label="Decrease second class level"
-                      >
-                        −
-                      </button>
-                      <input
-                        type="number"
-                        className={styles.levelInput}
-                        min={1}
-                        max={19}
-                        value={level2}
-                        onChange={(e) =>
-                          setLevel2(
-                            Math.min(19, Math.max(1, Number(e.target.value)))
-                          )
-                        }
-                      />
-                      <button
-                        type="button"
-                        className={styles.stepBtn}
-                        onClick={() => setLevel2((v) => Math.min(19, v + 1))}
-                        disabled={level2 >= 19}
-                        aria-label="Increase second class level"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Total level indicator */}
-                <div className={styles.totalLevelRow}>
-                  <span className={styles.totalLevelLabel}>Total Level:</span>
-                  <span
-                    className={`${styles.totalLevelBadge} ${levelOverflow ? styles.totalLevelBadgeError : ""}`}
-                  >
-                    {totalLevel} / 20
-                  </span>
-                  {levelOverflow && (
-                    <span className={styles.totalLevelWarning}>
-                      Total level cannot exceed 20
-                    </span>
-                  )}
-                </div>
-              </div>
+              <MulticlassSection
+                primaryClassId={selectedClass as DndClass}
+                selectedClass2={selectedClass2}
+                selectedSubclass2={selectedSubclass2}
+                level2={level2}
+                totalLevel={totalLevel}
+                levelOverflow={levelOverflow}
+                onSelectClass2={handleClassSelect2}
+                onSubclass2Change={setSelectedSubclass2}
+                onLevel2Change={setLevel2}
+                onRemove={handleRemoveSecondClass}
+              />
             )}
 
             <button
@@ -400,59 +292,11 @@ export function CharacterSetup() {
           </section>
 
           {/* Saved flowcharts */}
-          {state.savedFlowcharts.length > 0 && (
-            <section className={styles.savedSection}>
-              <h2 className={styles.sectionTitle}>Saved Flowcharts</h2>
-              <div className={styles.savedList}>
-                {state.savedFlowcharts.map((chart) => {
-                  const cls = CLASSES.find(
-                    (c) => c.id === chart.character.class
-                  );
-                  return (
-                    <button
-                      key={chart.id}
-                      type="button"
-                      className={styles.savedCard}
-                      onClick={() => handleLoadChart(chart.id)}
-                    >
-                      <div className={styles.savedCardLeft}>
-                        <span className={styles.savedCardIcon}>
-                          <Icon src={cls?.icon ?? combatIcon} size={26} />
-                        </span>
-                        <div className={styles.savedCardInfo}>
-                          <span className={styles.savedCardName}>
-                            {chart.name}
-                          </span>
-                          <span className={styles.savedCardMeta}>
-                            {cls?.name ?? chart.character.class} Lv{" "}
-                            {chart.character.level}
-                            {(chart.character.secondaryClasses ?? [])
-                              .map((sc) => {
-                                const sc2 = CLASSES.find(
-                                  (c) => c.id === sc.class
-                                );
-                                return ` / ${sc2?.name ?? sc.class} Lv ${sc.level}`;
-                              })
-                              .join("")}
-                            {" · "}
-                            {new Date(chart.updatedAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        className={styles.deleteSavedBtn}
-                        onClick={(e) => handleDeleteChart(e, chart.id)}
-                        title="Delete flowchart"
-                      >
-                        <Icon src={crossIcon} size={12} />
-                      </button>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-          )}
+          <SavedFlowchartsList
+            charts={state.savedFlowcharts}
+            onLoad={handleLoadChart}
+            onDelete={handleDeleteChart}
+          />
         </div>
       </div>
     </div>
