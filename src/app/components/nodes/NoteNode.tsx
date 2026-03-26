@@ -3,7 +3,7 @@ import { useReactFlow } from "@xyflow/react";
 import React, { useCallback, useContext, useState } from "react";
 import scrollIcon from "../../icons/entity/scroll.svg";
 import type { NoteNodeData } from "../../types";
-import { SelectionGroupContext } from "../FlowCanvas";
+import { SelectionGroupContext } from "../FlowCanvasContexts";
 import { Icon } from "../Icon";
 import styles from "./NoteNode.module.css";
 

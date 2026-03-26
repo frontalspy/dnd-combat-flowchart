@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import type { PathBudget } from "../components/FlowCanvas";
+import type { PathBudget } from "../types";
 
 /**
  * Owns all HUD popover visibility flags plus the live data fed into each HUD:

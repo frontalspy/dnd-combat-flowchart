@@ -1,6 +1,6 @@
 import { Layers } from "lucide-react";
 import React from "react";
-import { GROUP_COLORS } from "../../components/FlowCanvas";
+import { GROUP_COLORS } from "../../data/groupColors";
 import type { SelectionGroup } from "../../types";
 import styles from "../FlowchartBuilder.module.css";
 

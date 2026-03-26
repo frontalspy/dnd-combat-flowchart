@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { EdgeStyleType } from "../components/FlowCanvas";
+import type { EdgeStyleType } from "../types";
 
 /**
  * Owns the canvas edge rendering options: style, animation, and bundling.

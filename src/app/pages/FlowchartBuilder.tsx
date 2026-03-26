@@ -11,8 +11,7 @@ import {
   Sword,
 } from "lucide-react";
 import React, { useCallback, useState } from "react";
-import type { FlowCanvasExports } from "../components/FlowCanvas";
-import { type EdgeStyleType, FlowCanvas } from "../components/FlowCanvas";
+import { FlowCanvas } from "../components/FlowCanvas";
 import { LoadoutPicker } from "../components/LoadoutPicker";
 import { MultiSelectBar } from "../components/MultiSelectBar";
 import { NodeEditor } from "../components/NodeEditor";
@@ -35,7 +34,7 @@ import { useSelectionGroups } from "../hooks/useSelectionGroups";
 import { useSpellPanel } from "../hooks/useSpellPanel";
 import { useSpellSlots } from "../hooks/useSpellSlots";
 import { useViewportWidth } from "../hooks/useViewportWidth";
-import type { WeaponLoadout } from "../types";
+import type { EdgeStyleType, FlowCanvasExports, WeaponLoadout } from "../types";
 import { ConcentrationHud } from "./builder/ConcentrationHud";
 import { EconomyHud } from "./builder/EconomyHud";
 import { ExportMenu } from "./builder/ExportMenu";

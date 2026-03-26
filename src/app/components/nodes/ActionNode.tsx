@@ -40,7 +40,7 @@ import {
   ActionEconomyContext,
   ConcentrationContext,
   SelectionGroupContext,
-} from "../FlowCanvas";
+} from "../FlowCanvasContexts";
 import { Icon } from "../Icon";
 import styles from "./ActionNode.module.css";
 

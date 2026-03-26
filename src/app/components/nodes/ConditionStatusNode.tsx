@@ -18,7 +18,7 @@ import restrainedIcon from "../../icons/condition/restrained.svg";
 import stunnedIcon from "../../icons/condition/stunned.svg";
 import unconsciousIcon from "../../icons/condition/unconscious.svg";
 import type { ConditionStatusNodeData, DndCondition } from "../../types";
-import { SelectionGroupContext } from "../FlowCanvas";
+import { SelectionGroupContext } from "../FlowCanvasContexts";
 import { Icon } from "../Icon";
 import styles from "./ConditionStatusNode.module.css";
 

@@ -1,7 +1,6 @@
 import type { Node } from "@xyflow/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import type { FlowCanvasExports } from "../components/FlowCanvas";
-import type { SavedFlowchart } from "../types";
+import type { FlowCanvasExports, SavedFlowchart } from "../types";
 
 /**
  * Owns the stable refs for the FlowCanvas export API and live flow data,

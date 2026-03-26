@@ -3,7 +3,7 @@ import { Handle, Position, useReactFlow } from "@xyflow/react";
 import React, { useCallback, useContext, useState } from "react";
 import puzzleIcon from "../../icons/game/puzzle.svg";
 import type { ConditionNodeData } from "../../types";
-import { SelectionGroupContext } from "../FlowCanvas";
+import { SelectionGroupContext } from "../FlowCanvasContexts";
 import { Icon } from "../Icon";
 import styles from "./ConditionNode.module.css";
 

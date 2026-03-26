@@ -12,7 +12,6 @@ import {
   type OnEdgesChange,
   type OnNodesChange,
   ReactFlow,
-  ReactFlowProvider,
   SelectionMode,
   useEdgesState,
   useNodesState,
@@ -26,188 +25,42 @@ import React, {
   useState,
 } from "react";
 import "@xyflow/react/dist/style.css";
-import { toJpeg, toPng } from "html-to-image";
-import jsPDF from "jspdf";
+import { GROUP_COLORS } from "../data/groupColors";
 import { useClipboard } from "../hooks/useClipboard";
 import { useFlowDrop } from "../hooks/useFlowDrop";
 import { useFlowHistory } from "../hooks/useFlowHistory";
-import type { ActionNodeData, StartNodeData } from "../types";
-
-/** Context providing the set of ActionNode IDs that are in a concentration conflict. */
-export const ConcentrationContext = React.createContext<Set<string>>(new Set());
-
-/** Context providing a map of nodeId → group badge colour for selection groups. */
-export const SelectionGroupContext = React.createContext<Map<string, string>>(
-  new Map()
-);
-
-/** A single end-to-end path through the flowchart with its action economy spend. */
-export interface PathBudget {
-  pathId: string;
-  /** All node IDs on the path, in traversal order. */
-  nodeIds: string[];
-  /** Labels of ActionNodes that consume action/bonus/reaction on this path. */
-  nodeLabels: string[];
-  actions: number;
-  bonusActions: number;
-  reactions: number;
-}
-
-/** Context providing the set of ActionNode IDs that contribute to an over-budget path. */
-export const ActionEconomyContext = React.createContext<Set<string>>(new Set());
-
-function findConcentrationConflicts(nodes: Node[], edges: Edge[]): Set<string> {
-  const adjacency = new Map<string, string[]>();
-  for (const node of nodes) {
-    adjacency.set(node.id, []);
-  }
-  for (const edge of edges) {
-    const existing = adjacency.get(edge.source);
-    if (existing) existing.push(edge.target);
-  }
-
-  const hasIncoming = new Set(edges.map((e) => e.target));
-  const roots = nodes.filter((n) => !hasIncoming.has(n.id));
-
-  const conflictIds = new Set<string>();
-
-  function dfs(nodeId: string, concPath: string[], visited: Set<string>): void {
-    if (visited.has(nodeId)) return;
-    const newVisited = new Set(visited);
-    newVisited.add(nodeId);
-
-    const node = nodes.find((n) => n.id === nodeId);
-    if (!node) return;
-
-    let newPath = concPath;
-    if (node.type === "actionNode") {
-      const data = node.data as ActionNodeData;
-      if (data.concentration) {
-        if (newPath.length > 0) {
-          for (const id of newPath) conflictIds.add(id);
-          conflictIds.add(nodeId);
-        }
-        newPath = [...newPath, nodeId];
-      }
-    }
-
-    for (const childId of adjacency.get(nodeId) ?? []) {
-      dfs(childId, newPath, newVisited);
-    }
-  }
-
-  for (const root of roots) {
-    dfs(root.id, [], new Set());
-  }
-  return conflictIds;
-}
-
-function computePathBudgets(nodes: Node[], edges: Edge[]): PathBudget[] {
-  const adjacency = new Map<string, string[]>();
-  for (const node of nodes) {
-    adjacency.set(node.id, []);
-  }
-  for (const edge of edges) {
-    const neighbors = adjacency.get(edge.source);
-    if (neighbors) neighbors.push(edge.target);
-  }
-
-  const hasIncoming = new Set(edges.map((e) => e.target));
-  const roots = nodes.filter((n) => !hasIncoming.has(n.id));
-
-  const paths: PathBudget[] = [];
-  let counter = 0;
-
-  function dfs(
-    nodeId: string,
-    path: string[],
-    labels: string[],
-    budget: { a: number; b: number; r: number },
-    visited: Set<string>
-  ): void {
-    if (visited.has(nodeId)) return;
-    const vis = new Set(visited);
-    vis.add(nodeId);
-
-    const node = nodes.find((n) => n.id === nodeId);
-    let { a, b, r } = budget;
-    const newLabels = [...labels];
-
-    if (node?.type === "actionNode") {
-      const data = node.data as ActionNodeData;
-      const lbl = data.label as string;
-      if (data.actionType === "action") {
-        a++;
-        newLabels.push(lbl);
-      } else if (data.actionType === "bonus") {
-        b++;
-        newLabels.push(lbl);
-      } else if (data.actionType === "reaction") {
-        r++;
-        newLabels.push(lbl);
-      }
-    }
-
-    const newPath = [...path, nodeId];
-    const children = adjacency.get(nodeId) ?? [];
-    if (children.length === 0) {
-      paths.push({
-        pathId: `path-${counter++}`,
-        nodeIds: newPath,
-        nodeLabels: newLabels,
-        actions: a,
-        bonusActions: b,
-        reactions: r,
-      });
-    } else {
-      for (const child of children) {
-        dfs(child, newPath, newLabels, { a, b, r }, vis);
-      }
-    }
-  }
-
-  for (const root of roots) {
-    dfs(root.id, [], [], { a: 0, b: 0, r: 0 }, new Set());
-  }
-  return paths;
-}
-
-import type { SelectionGroup } from "../types";
+import type {
+  ActionNodeData,
+  EdgeStyleType,
+  FlowCanvasExports,
+  PathBudget,
+  SelectionGroup,
+  StartNodeData,
+} from "../types";
+import { findConcentrationConflicts } from "../utils/concentrationConflicts";
 import { computeBundles } from "../utils/edgeBundling";
+import {
+  applyExportFonts,
+  captureFlowJpeg,
+  captureFlowPng,
+  downloadJpeg,
+  removeExportFonts,
+  savePdf,
+} from "../utils/exportFlow";
+import { computePathBudgets } from "../utils/pathBudgets";
+import { ExportOverlay } from "./ExportOverlay";
 import { BundleEdge } from "./edges/BundleEdge";
 import { SnappedConnectionLine } from "./edges/SnappedConnectionLine";
 import { SnappedEdge } from "./edges/SnappedEdge";
 import styles from "./FlowCanvas.module.css";
+import {
+  ActionEconomyContext,
+  ConcentrationContext,
+  SelectionGroupContext,
+} from "./FlowCanvasContexts";
 import { nodeTypes } from "./nodes/nodeTypes";
 
-export const GROUP_COLORS = [
-  "#7c3aed",
-  "#2563eb",
-  "#059669",
-  "#d97706",
-  "#dc2626",
-  "#db2777",
-];
-
 const edgeTypes = { snappedEdge: SnappedEdge, bundleEdge: BundleEdge };
-
-export interface FlowCanvasExports {
-  exportJpg: (name: string) => Promise<void>;
-  exportPdf: (name: string) => Promise<void>;
-  getFlowObject: () => { nodes: Node[]; edges: Edge[] };
-  loadFlowObject: (nodes: Node[], edges: Edge[]) => void;
-  copy: (nodes: Node[]) => void;
-  paste: () => void;
-  undo: () => void;
-  redo: () => void;
-  selectAll: () => void;
-  selectNodes: (ids: string[]) => void;
-  focusNodes: (ids: string[]) => void;
-  /** Touch drag-to-canvas: add a node at the given screen coordinates. */
-  dropAtPosition: (clientX: number, clientY: number, data: unknown) => void;
-}
-
-export type EdgeStyleType = "smoothstep" | "step" | "straight";
 
 interface FlowCanvasInnerProps {
   initialNodes?: Node[];
@@ -386,6 +239,7 @@ function FlowCanvasInner({
   }, [nodes, edges, onFlowChange]);
 
   const [minimapCollapsed, setMinimapCollapsed] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   // Compute concentration conflicts on every graph change
   const [conflictNodeIds, setConflictNodeIds] = useState<Set<string>>(
@@ -488,23 +342,20 @@ function FlowCanvasInner({
       if (!el || !reactFlowWrapper.current) return;
       const width = reactFlowWrapper.current.offsetWidth;
       const height = reactFlowWrapper.current.offsetHeight;
-      const { x, y, zoom } = getExportViewport(width, height);
-      const dataUrl = await toJpeg(el, {
-        quality: 0.95,
-        backgroundColor: "#0d1117",
-        skipFonts: true,
-        width,
-        height,
-        style: {
-          width: `${width}px`,
-          height: `${height}px`,
-          transform: `translate(${x}px, ${y}px) scale(${zoom})`,
-        },
-      });
-      const link = document.createElement("a");
-      link.download = `${name}.jpg`;
-      link.href = dataUrl;
-      link.click();
+      const transform = getExportViewport(width, height);
+      setIsExporting(true);
+      applyExportFonts();
+      let dataUrl: string;
+      try {
+        dataUrl = await captureFlowJpeg(el, width, height, transform);
+      } catch (err) {
+        removeExportFonts();
+        setIsExporting(false);
+        throw err;
+      }
+      removeExportFonts();
+      setIsExporting(false);
+      downloadJpeg(dataUrl, name);
     };
 
     const exportPdf = async (name: string) => {
@@ -512,41 +363,20 @@ function FlowCanvasInner({
       if (!el || !reactFlowWrapper.current) return;
       const width = reactFlowWrapper.current.offsetWidth;
       const height = reactFlowWrapper.current.offsetHeight;
-      const { x, y, zoom } = getExportViewport(width, height);
-      const dataUrl = await toPng(el, {
-        backgroundColor: "#0d1117",
-        skipFonts: true,
-        width,
-        height,
-        style: {
-          width: `${width}px`,
-          height: `${height}px`,
-          transform: `translate(${x}px, ${y}px) scale(${zoom})`,
-        },
-      });
-      const img = new Image();
-      img.src = dataUrl;
-      await new Promise((r) => {
-        img.onload = r;
-      });
-      const pdf = new jsPDF({
-        orientation: img.width > img.height ? "landscape" : "portrait",
-        unit: "px",
-      });
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const ratio = Math.min(pageWidth / img.width, pageHeight / img.height);
-      const imgW = img.width * ratio;
-      const imgH = img.height * ratio;
-      pdf.addImage(
-        dataUrl,
-        "PNG",
-        (pageWidth - imgW) / 2,
-        (pageHeight - imgH) / 2,
-        imgW,
-        imgH
-      );
-      pdf.save(`${name}.pdf`);
+      const transform = getExportViewport(width, height);
+      setIsExporting(true);
+      applyExportFonts();
+      let dataUrl: string;
+      try {
+        dataUrl = await captureFlowPng(el, width, height, transform);
+      } catch (err) {
+        removeExportFonts();
+        setIsExporting(false);
+        throw err;
+      }
+      removeExportFonts();
+      setIsExporting(false);
+      await savePdf(dataUrl, name);
     };
 
     const getFlowObject = () => ({ nodes: getNodes(), edges: getEdges() });
@@ -720,6 +550,7 @@ function FlowCanvasInner({
             className={styles.canvasWrapper}
             data-canvas-drop=""
           >
+            <ExportOverlay visible={isExporting} />
             {conflictWarningText && (
               <div className={styles.concentrationWarning} role="alert">
                 <span className={styles.concentrationWarningIcon}>⚠</span>

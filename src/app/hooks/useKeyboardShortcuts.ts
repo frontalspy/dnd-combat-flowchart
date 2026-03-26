@@ -1,7 +1,7 @@
 import type { Node } from "@xyflow/react";
 import type { MutableRefObject } from "react";
 import { useEffect } from "react";
-import type { FlowCanvasExports } from "../components/FlowCanvas";
+import type { FlowCanvasExports } from "../types";
 
 interface UseKeyboardShortcutsOptions {
   exportFnsRef: MutableRefObject<FlowCanvasExports | null>;

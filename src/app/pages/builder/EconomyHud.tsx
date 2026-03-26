@@ -1,7 +1,7 @@
 import { Activity } from "lucide-react";
 import React from "react";
-import type { PathBudget } from "../../components/FlowCanvas";
 import { ACTION_TYPE_LABELS } from "../../data/damageTypes";
+import type { PathBudget } from "../../types";
 import styles from "../FlowchartBuilder.module.css";
 
 interface EconomyHudProps {

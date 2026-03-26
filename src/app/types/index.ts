@@ -1,3 +1,5 @@
+import type { Edge, Node } from "@xyflow/react";
+
 export type DndClass =
   | "barbarian"
   | "bard"
@@ -217,3 +219,34 @@ export interface SavedFlowchart {
   createdAt: number;
   updatedAt: number;
 }
+
+/** A single end-to-end path through the flowchart with its action economy spend. */
+export interface PathBudget {
+  pathId: string;
+  /** All node IDs on the path, in traversal order. */
+  nodeIds: string[];
+  /** Labels of ActionNodes that consume action/bonus/reaction on this path. */
+  nodeLabels: string[];
+  actions: number;
+  bonusActions: number;
+  reactions: number;
+}
+
+/** Functions exposed by FlowCanvas to its parent via onExportReady. */
+export interface FlowCanvasExports {
+  exportJpg: (name: string) => Promise<void>;
+  exportPdf: (name: string) => Promise<void>;
+  getFlowObject: () => { nodes: Node[]; edges: Edge[] };
+  loadFlowObject: (nodes: Node[], edges: Edge[]) => void;
+  copy: (nodes: Node[]) => void;
+  paste: () => void;
+  undo: () => void;
+  redo: () => void;
+  selectAll: () => void;
+  selectNodes: (ids: string[]) => void;
+  focusNodes: (ids: string[]) => void;
+  /** Touch drag-to-canvas: add a node at the given screen coordinates. */
+  dropAtPosition: (clientX: number, clientY: number, data: unknown) => void;
+}
+
+export type EdgeStyleType = "smoothstep" | "step" | "straight";

@@ -3,7 +3,7 @@ import { Handle, Position, useReactFlow } from "@xyflow/react";
 import React, { useCallback, useContext, useState } from "react";
 import combatIcon from "../../icons/game/combat.svg";
 import type { StartNodeData } from "../../types";
-import { SelectionGroupContext } from "../FlowCanvas";
+import { SelectionGroupContext } from "../FlowCanvasContexts";
 import { Icon } from "../Icon";
 import styles from "./StartNode.module.css";
 
