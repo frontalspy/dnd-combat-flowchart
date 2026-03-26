@@ -1,13 +1,16 @@
+import React from "react";
+import { createPortal } from "react-dom";
+
 interface ExportOverlayProps {
   visible: boolean;
 }
 
 export function ExportOverlay({ visible }: ExportOverlayProps) {
   if (!visible) return null;
-  return (
+  return createPortal(
     <div
       style={{
-        position: "absolute",
+        position: "fixed",
         inset: 0,
         background: "rgba(0,0,0,0.7)",
         zIndex: 9999,
@@ -22,6 +25,7 @@ export function ExportOverlay({ visible }: ExportOverlayProps) {
       }}
     >
       Exporting…
-    </div>
+    </div>,
+    document.body
   );
 }

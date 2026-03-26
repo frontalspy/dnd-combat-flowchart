@@ -337,6 +337,12 @@ function FlowCanvasInner({
       return getViewportForBounds(nodesBounds, width, height, 0.5, 2, 0.15);
     };
 
+    const finishExport = () => {
+      setTimeout(() => {
+        setIsExporting(false);
+      }, 300);
+    };
+
     const exportJpg = async (name: string) => {
       const el = captureElement();
       if (!el || !reactFlowWrapper.current) return;
@@ -350,11 +356,11 @@ function FlowCanvasInner({
         dataUrl = await captureFlowJpeg(el, width, height, transform);
       } catch (err) {
         removeExportFonts();
-        setIsExporting(false);
+        finishExport();
         throw err;
       }
       removeExportFonts();
-      setIsExporting(false);
+      finishExport();
       downloadJpeg(dataUrl, name);
     };
 

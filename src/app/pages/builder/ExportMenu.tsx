@@ -334,7 +334,7 @@ export function ExportMenu({
             }}
           >
             <Download size={14} />
-            Export JPG
+            Export Image
           </button>
           <button
             type="button"
