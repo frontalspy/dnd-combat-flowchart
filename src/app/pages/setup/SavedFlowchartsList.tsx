@@ -26,11 +26,15 @@ export function SavedFlowchartsList({
         {charts.map((chart) => {
           const cls = CLASSES.find((c) => c.id === chart.character.class);
           return (
-            <button
+            <div
               key={chart.id}
-              type="button"
+              role="button"
+              tabIndex={0}
               className={styles.savedCard}
               onClick={() => onLoad(chart.id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") onLoad(chart.id);
+              }}
             >
               <div className={styles.savedCardLeft}>
                 <span className={styles.savedCardIcon}>
@@ -60,7 +64,7 @@ export function SavedFlowchartsList({
               >
                 <Icon src={crossIcon} size={12} />
               </button>
-            </button>
+            </div>
           );
         })}
       </div>

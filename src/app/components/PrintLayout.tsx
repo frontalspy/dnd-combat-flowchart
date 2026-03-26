@@ -22,6 +22,7 @@ import type {
   NoteNodeData,
   StartNodeData,
 } from "../types";
+import { ConditionIcon } from "./nodes/ConditionIcon";
 import {
   CONDITION_DISPLAY_NAMES,
   CONDITION_ICONS,
@@ -481,13 +482,7 @@ function RenderConditionStatusNode({
       }}
     >
       {icon && (
-        <img
-          src={icon}
-          alt={displayName}
-          width={fontSize + 4}
-          height={fontSize + 4}
-          style={{ filter: "brightness(0)", flexShrink: 0 }}
-        />
+        <ConditionIcon svg={icon} size={fontSize + 4} alt={displayName} />
       )}
       <span
         style={{

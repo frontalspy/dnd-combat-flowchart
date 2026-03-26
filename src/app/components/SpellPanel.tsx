@@ -25,6 +25,7 @@ import type {
 } from "../types";
 import { CustomActionModal } from "./CustomActionModal";
 import { Icon } from "./Icon";
+import { ConditionIcon } from "./nodes/ConditionIcon";
 import {
   CONDITION_DISPLAY_NAMES,
   CONDITION_ICONS,
@@ -166,7 +167,11 @@ function ConditionChipFull({
       onTouchEnd={handleTouchEnd}
     >
       <span className={styles.conditionChipFullIcon}>
-        <Icon src={CONDITION_ICONS[cond]} size={22} />
+        <ConditionIcon
+          svg={CONDITION_ICONS[cond]}
+          size={22}
+          alt={CONDITION_DISPLAY_NAMES[cond]}
+        />
       </span>
       <span className={styles.conditionChipFullLabel}>
         {CONDITION_DISPLAY_NAMES[cond]}

@@ -27,6 +27,7 @@ import type {
 } from "../types";
 import { Icon } from "./Icon";
 import styles from "./NodeEditor.module.css";
+import { ConditionIcon } from "./nodes/ConditionIcon";
 import {
   CONDITION_DESCRIPTIONS,
   CONDITION_DISPLAY_NAMES,
@@ -412,7 +413,7 @@ export function NodeEditor({
                 <div className={styles.field}>
                   <label className={styles.fieldLabel}>Condition</label>
                   <div className={styles.conditionInfoRow}>
-                    <Icon src={iconSrc} size={20} alt={displayName} />
+                    <ConditionIcon svg={iconSrc} size={20} alt={displayName} />
                     <span className={styles.conditionDisplayName}>
                       {displayName}
                     </span>

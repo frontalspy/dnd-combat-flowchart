@@ -2,24 +2,24 @@ import type { Node, NodeProps } from "@xyflow/react";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
 import React, { useCallback, useContext, useState } from "react";
 // Lazy icon imports — indexed by condition key
-import blindedIcon from "../../icons/condition/blinded.svg";
-import charmedIcon from "../../icons/condition/charmed.svg";
-import deafenedIcon from "../../icons/condition/deafened.svg";
-import exhaustionIcon from "../../icons/condition/exhaustion.svg";
-import frightenedIcon from "../../icons/condition/frightened.svg";
-import grappledIcon from "../../icons/condition/grappled.svg";
-import incapacitatedIcon from "../../icons/condition/incapacitated.svg";
-import invisibleIcon from "../../icons/condition/invisible.svg";
-import paralyzedIcon from "../../icons/condition/paralyzed.svg";
-import petrifiedIcon from "../../icons/condition/petrified.svg";
-import poisonedIcon from "../../icons/condition/poisoned.svg";
-import proneIcon from "../../icons/condition/prone.svg";
-import restrainedIcon from "../../icons/condition/restrained.svg";
-import stunnedIcon from "../../icons/condition/stunned.svg";
-import unconsciousIcon from "../../icons/condition/unconscious.svg";
+import blindedIcon from "../../icons/condition/blinded.svg?raw";
+import charmedIcon from "../../icons/condition/charmed.svg?raw";
+import deafenedIcon from "../../icons/condition/deafened.svg?raw";
+import exhaustionIcon from "../../icons/condition/exhaustion.svg?raw";
+import frightenedIcon from "../../icons/condition/frightened.svg?raw";
+import grappledIcon from "../../icons/condition/grappled.svg?raw";
+import incapacitatedIcon from "../../icons/condition/incapacitated.svg?raw";
+import invisibleIcon from "../../icons/condition/invisible.svg?raw";
+import paralyzedIcon from "../../icons/condition/paralyzed.svg?raw";
+import petrifiedIcon from "../../icons/condition/petrified.svg?raw";
+import poisonedIcon from "../../icons/condition/poisoned.svg?raw";
+import proneIcon from "../../icons/condition/prone.svg?raw";
+import restrainedIcon from "../../icons/condition/restrained.svg?raw";
+import stunnedIcon from "../../icons/condition/stunned.svg?raw";
+import unconsciousIcon from "../../icons/condition/unconscious.svg?raw";
 import type { ConditionStatusNodeData, DndCondition } from "../../types";
 import { SelectionGroupContext } from "../FlowCanvasContexts";
-import { Icon } from "../Icon";
+import { ConditionIcon } from "./ConditionIcon";
 import styles from "./ConditionStatusNode.module.css";
 
 export const CONDITION_ICONS: Record<DndCondition, string> = {
@@ -144,7 +144,7 @@ export function ConditionStatusNode({
 
       <div className={styles.inner}>
         <span className={styles.icon}>
-          <Icon src={icon} size={18} alt={displayName} />
+          <ConditionIcon svg={icon} size={18} alt={displayName} />
         </span>
         <div className={styles.content}>
           <span className={styles.affectsLabel}>{affectsLabel}</span>
