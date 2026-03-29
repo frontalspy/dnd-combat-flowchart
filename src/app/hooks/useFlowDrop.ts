@@ -92,6 +92,7 @@ function buildNodeFromItem(
     concentration: (item.concentration as boolean | undefined) ?? false,
     notes: "",
     resourceCost,
+    spellComponents: item.spellComponents as string | undefined,
   };
   return { id: newId(), type: "actionNode", position, data };
 }

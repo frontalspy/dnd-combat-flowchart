@@ -30,6 +30,9 @@ import d20Icon from "../../icons/dice/d20.svg";
 import timeIcon from "../../icons/entity/time.svg";
 import spellIcon from "../../icons/game/spell.svg";
 import concentrationIcon from "../../icons/spell/concentration.svg";
+import materialIcon from "../../icons/spell/material.svg";
+import somaticIcon from "../../icons/spell/somatic.svg";
+import vocalIcon from "../../icons/spell/vocal.svg";
 import starIcon from "../../icons/util/star.svg";
 import type { ActionNodeData, ResourceType } from "../../types";
 import {
@@ -95,6 +98,11 @@ function NodeTooltip({ data, visible, top, left }: NodeTooltipProps) {
             <span>
               <strong>Level:</strong>{" "}
               {data.spellLevel === "cantrip" ? "Cantrip" : `${data.spellLevel}`}
+            </span>
+          )}
+          {data.spellComponents && (
+            <span>
+              <strong>Components:</strong> {data.spellComponents}
             </span>
           )}
         </div>
@@ -344,6 +352,46 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
               <Icon src={timeIcon} size={12} /> {data.duration}
             </span>
           )}
+          {data.spellComponents &&
+            (() => {
+              const raw = data.spellComponents;
+              const prefix = raw.split("(")[0];
+              const hasV = /\bV\b/.test(prefix);
+              const hasS = /\bS\b/.test(prefix);
+              const hasM = /\bM\b/.test(prefix);
+              const matDesc = raw.match(/\(([^)]+)\)/)?.[1];
+              if (!hasV && !hasS && !hasM) return null;
+              return (
+                <>
+                  {hasV && (
+                    <span
+                      className={styles.componentPill}
+                      title="Verbal component"
+                    >
+                      <Icon src={vocalIcon} size={11} alt="Verbal" />
+                    </span>
+                  )}
+                  {hasS && (
+                    <span
+                      className={styles.componentPill}
+                      title="Somatic component"
+                    >
+                      <Icon src={somaticIcon} size={11} alt="Somatic" />
+                    </span>
+                  )}
+                  {hasM && (
+                    <span
+                      className={styles.componentPill}
+                      title={
+                        matDesc ? `Material: ${matDesc}` : "Material component"
+                      }
+                    >
+                      <Icon src={materialIcon} size={11} alt="Material" />
+                    </span>
+                  )}
+                </>
+              );
+            })()}
         </div>
 
         {/* Roll type + standalone dice indicators */}

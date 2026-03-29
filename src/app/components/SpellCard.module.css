@@ -85,6 +85,27 @@
   border-radius: 8px;
 }
 
+/* Spell component badges (V / S / M) */
+.componentPills {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 3px;
+}
+
+.componentPill {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+  background: rgba(107, 76, 42, 0.07);
+  border: 1px solid var(--border-dim);
+}
+
 /* Multiclass source badges */
 .classBadges {
   display: flex;

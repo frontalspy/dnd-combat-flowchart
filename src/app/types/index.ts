@@ -162,6 +162,8 @@ export interface ActionNodeData extends Record<string, unknown> {
   castAtLevel?: number;
   baseDamageDice?: string;
   baseDuration?: string;
+  /** Raw V/S/M component string from the spell (e.g. "V, S, M (a tiny bell)"). */
+  spellComponents?: string;
 }
 
 export interface ConditionNodeData extends Record<string, unknown> {

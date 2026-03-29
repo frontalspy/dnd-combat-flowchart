@@ -15,6 +15,8 @@ declare const sourceBadge: string;
 declare const actionBadge: string;
 declare const cardName: string;
 declare const damageBadge: string;
+declare const componentPills: string;
+declare const componentPill: string;
 declare const classBadges: string;
 declare const classBadge: string;
 declare const tooltip: string;
@@ -37,6 +39,8 @@ export {
 	actionBadge,
 	cardName,
 	damageBadge,
+	componentPills,
+	componentPill,
 	classBadges,
 	classBadge,
 	tooltip,
@@ -60,6 +64,8 @@ declare const __default_export__: {
 	actionBadge: typeof actionBadge;
 	cardName: typeof cardName;
 	damageBadge: typeof damageBadge;
+	componentPills: typeof componentPills;
+	componentPill: typeof componentPill;
 	classBadges: typeof classBadges;
 	classBadge: typeof classBadge;
 	tooltip: typeof tooltip;

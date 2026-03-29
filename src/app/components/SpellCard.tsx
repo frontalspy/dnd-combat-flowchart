@@ -12,6 +12,9 @@ import {
   SPELL_SCHOOLS,
 } from "../data/damageTypes";
 import { useTouchDragDrop } from "../hooks/useTouchDragDrop";
+import materialIcon from "../icons/spell/material.svg";
+import somaticIcon from "../icons/spell/somatic.svg";
+import vocalIcon from "../icons/spell/vocal.svg";
 import buildIcon from "../icons/util/build.svg";
 import starIcon from "../icons/util/star.svg";
 import type { ActionItem, Spell } from "../types";
@@ -146,6 +149,7 @@ export function SpellCard({
     saveAbility: extractSaveAbility(spell.description) ?? undefined,
     rollType: extractRollType(spell.description),
     higherLevels: spell.higher_levels ?? undefined,
+    spellComponents: spell.components?.raw ?? undefined,
     concentration:
       spell.concentration === true ||
       spell.duration?.toLowerCase().includes("concentration") === true,
@@ -194,6 +198,35 @@ export function SpellCard({
       </div>
 
       <div className={styles.cardName}>{spell.name}</div>
+
+      {(spell.components.verbal ||
+        spell.components.somatic ||
+        spell.components.material) && (
+        <div className={styles.componentPills}>
+          {spell.components.verbal && (
+            <span className={styles.componentPill} title="Verbal component">
+              <Icon src={vocalIcon} size={11} alt="Verbal" />
+            </span>
+          )}
+          {spell.components.somatic && (
+            <span className={styles.componentPill} title="Somatic component">
+              <Icon src={somaticIcon} size={11} alt="Somatic" />
+            </span>
+          )}
+          {spell.components.material && (
+            <span
+              className={styles.componentPill}
+              title={
+                spell.components.materials_needed?.length
+                  ? `Material: ${spell.components.materials_needed.join(", ")}`
+                  : "Material component"
+              }
+            >
+              <Icon src={materialIcon} size={11} alt="Material" />
+            </span>
+          )}
+        </div>
+      )}
 
       {damageInfo && (
         <span
