@@ -36,6 +36,7 @@ import { WeaponCard } from "./WeaponCard";
 
 /** 2–3-letter abbreviation for each class, used in multiclass spell source badges. */
 const CLASS_ABBR: Record<DndClass, string> = {
+  artificer: "Art",
   barbarian: "Bar",
   bard: "Brd",
   cleric: "Cle",

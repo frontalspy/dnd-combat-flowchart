@@ -1,3 +1,4 @@
+import artificerIcon from "../icons/class/artificer.svg";
 import barbarianIcon from "../icons/class/barbarian.svg";
 import bardIcon from "../icons/class/bard.svg";
 import clericIcon from "../icons/class/cleric.svg";
@@ -14,7 +15,13 @@ import type { ActionType, Character, DamageType, DndClass } from "../types";
 import type { SpellcastingAbility } from "./stats";
 import type { WeaponCategory } from "./weapons";
 
-export type SpellcastingType = "full" | "half" | "third" | "warlock" | "none";
+export type SpellcastingType =
+  | "full"
+  | "half"
+  | "artificer"
+  | "third"
+  | "warlock"
+  | "none";
 
 export interface ClassAction {
   id: string;
@@ -46,6 +53,108 @@ export interface ClassDefinition {
 }
 
 export const CLASSES: ClassDefinition[] = [
+  {
+    id: "artificer",
+    name: "Artificer",
+    color: "#37474f",
+    icon: artificerIcon,
+    spellcastingAbility: "int",
+    spellcastingType: "artificer",
+    weaponProficiencies: ["simple-melee", "simple-ranged"],
+    subclasses: [
+      { id: "alchemist", name: "Alchemist" },
+      { id: "armorer", name: "Armorer" },
+      { id: "artillerist", name: "Artillerist" },
+      { id: "battle-smith", name: "Battle Smith" },
+    ],
+    classActions: [
+      {
+        id: "artificer-magical-tinkering",
+        name: "Magical Tinkering",
+        description:
+          "Touch a Tiny nonmagical object to imbue it with one of four magical properties: shed light, emit a recorded message, emit an odor or sound, or display a static visual effect. Up to Int modifier objects can be imbued at once.",
+        actionType: "action",
+        minLevel: 1,
+      },
+      {
+        id: "artificer-infuse-item",
+        name: "Infuse Item",
+        description:
+          "During a long rest, infuse up to half your Artificer level (rounded down, min 2) of items with magical properties from your known infusions list. Infusions last until you use them again or you die.",
+        actionType: "special",
+        minLevel: 2,
+      },
+      {
+        id: "artificer-right-tool",
+        name: "The Right Tool for the Job",
+        description:
+          "Spend 1 hour with thieves' tools or artisan's tools to magically produce a set of artisan's tools in an unoccupied space within 5 feet. Tools vanish when you use this feature again.",
+        actionType: "special",
+        minLevel: 3,
+      },
+      {
+        id: "artificer-flash-of-genius",
+        name: "Flash of Genius",
+        description:
+          "Reaction: when you or another creature within 30 feet makes an ability check or saving throw, add your Intelligence modifier to the roll. Uses = Int modifier per long rest.",
+        actionType: "reaction",
+        minLevel: 7,
+      },
+      {
+        id: "artificer-spell-storing-item",
+        name: "Spell-Storing Item",
+        description:
+          "After a long rest, store a 1st- or 2nd-level spell in an item you touch. Any creature holding the item can use an action to cast the spell (your spellcasting ability). Can be used Int modifier + 1 times.",
+        actionType: "special",
+        minLevel: 11,
+      },
+      {
+        id: "artificer-soul-of-artifice",
+        name: "Soul of Artifice",
+        description:
+          "Reaction when you are reduced to 0 HP: drop to 1 HP instead. Once per long rest. You also gain +1 to all saving throws for each attuned magic item.",
+        actionType: "reaction",
+        minLevel: 20,
+      },
+      {
+        id: "artificer-eldritch-cannon",
+        name: "Eldritch Cannon (Artillerist)",
+        description:
+          "Action: create a Small or Tiny magical cannon in an unoccupied space within 5 feet. Lasts 1 hour. Choose type: Flamethrower (15-ft cone, 2d8 fire, Dex save), Force Ballista (ranged spell, 2d8 force, pushes 5 feet), or Protector (friendly creatures within 10 feet gain 1d8 + Int temp HP).",
+        actionType: "action",
+        damageType: "fire",
+        minLevel: 3,
+      },
+      {
+        id: "artificer-explosive-cannon",
+        name: "Explosive Cannon (Artillerist)",
+        description:
+          "Action: Detonate your Eldritch Cannon, destroying it. Each creature within 20 feet must make a DC 8+prof+Int Dexterity save or take 3d8 force damage (half on success).",
+        actionType: "action",
+        damageType: "force",
+        damageDice: "3d8",
+        minLevel: 9,
+      },
+      {
+        id: "artificer-arcane-jolt",
+        name: "Arcane Jolt (Battle Smith)",
+        description:
+          "When your Steel Defender or a magic weapon you hold hits, deal an extra 2d6 force damage to the target, or restore 2d6 HP to a creature within 30 feet of the target. Uses = Int modifier per long rest. Scales to 4d6 at level 15.",
+        actionType: "special",
+        damageType: "force",
+        damageDice: "2d6",
+        minLevel: 9,
+      },
+      {
+        id: "artificer-steel-defender",
+        name: "Steel Defender (Battle Smith)",
+        description:
+          "During a long rest, create a magical Iron Defender with HP equal to 5 × Artificer level + Int modifier. It acts on your initiative on its own turn, can use its Deflect Attack reaction (imposes disadvantage), and obeys your verbal commands.",
+        actionType: "bonus",
+        minLevel: 3,
+      },
+    ],
+  },
   {
     id: "barbarian",
     name: "Barbarian",
@@ -750,6 +859,10 @@ export const CLASSES: ClassDefinition[] = [
 const FULL_CASTER_TABLE = [
   0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 9, 9,
 ];
+// Artificer is a half-caster that gains spell slots starting at level 1
+const ARTIFICER_CASTER_TABLE = [
+  0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5,
+];
 const HALF_CASTER_TABLE = [
   0, 0, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5,
 ];
@@ -781,6 +894,8 @@ export function getMaxSpellLevel(
   switch (type) {
     case "full":
       return FULL_CASTER_TABLE[level] ?? 0;
+    case "artificer":
+      return ARTIFICER_CASTER_TABLE[level] ?? 0;
     case "half":
       return HALF_CASTER_TABLE[level] ?? 0;
     case "third":

@@ -29,7 +29,8 @@
     "casting_time": "1 action",
     "classes": [
       "ranger",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -50,7 +51,8 @@
     "tags": [
       "ranger",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level abjuration (ritual)"
   },
@@ -448,7 +450,8 @@
       "cleric",
       "druid",
       "paladin",
-      "ranger"
+      "ranger",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -470,7 +473,8 @@
       "druid",
       "paladin",
       "ranger",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level evocation"
   },
@@ -542,7 +546,8 @@
       "paladin",
       "ranger",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -565,7 +570,8 @@
       "ranger",
       "sorcerer",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level divination (Ritual)",
     "concentration": true
@@ -610,7 +616,8 @@
       "bard",
       "cleric",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -630,7 +637,8 @@
       "cleric (trickery)",
       "sorcerer",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level illusion"
   },
@@ -787,7 +795,8 @@
     "casting_time": "1 action",
     "classes": [
       "bard",
-      "druid"
+      "druid",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -805,7 +814,8 @@
     "tags": [
       "bard",
       "druid",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level evocation",
     "concentration": true
@@ -815,7 +825,8 @@
     "classes": [
       "sorcerer",
       "warlock",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -834,7 +845,8 @@
       "sorcerer",
       "warlock",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level transmutation",
     "concentration": true
@@ -843,7 +855,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -865,7 +878,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level necromancy"
   },
@@ -874,7 +888,8 @@
     "classes": [
       "bard",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -896,7 +911,8 @@
       "bard",
       "sorcerer",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level transmutation"
   },
@@ -931,7 +947,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -949,7 +966,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Evocation cantrip"
   },
@@ -1051,7 +1069,8 @@
   {
     "casting_time": "1 action",
     "classes": [
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -1071,7 +1090,8 @@
     "school": "conjuration",
     "tags": [
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level conjuration"
   },
@@ -1079,7 +1099,8 @@
     "casting_time": "1 action",
     "classes": [
       "cleric",
-      "druid"
+      "druid",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -1097,7 +1118,8 @@
     "tags": [
       "cleric",
       "druid",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Divination cantrip",
     "concentration": true
@@ -1294,7 +1316,8 @@
     "casting_time": "1 minute",
     "classes": [
       "bard",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -1315,7 +1338,8 @@
     "tags": [
       "bard",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level divination (Ritual)"
   },
@@ -1381,7 +1405,8 @@
       "druid",
       "ranger",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -1404,7 +1429,8 @@
       "ranger",
       "sorcerer",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level transmutation"
   },
@@ -1414,7 +1440,8 @@
       "bard",
       "cleric",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -1437,7 +1464,8 @@
       "cleric",
       "sorcerer",
       "wizard",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Evocation cantrip"
   },
@@ -1447,7 +1475,8 @@
       "bard",
       "druid",
       "ranger",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -1471,7 +1500,8 @@
       "druid",
       "ranger",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level transmutation"
   },
@@ -1510,7 +1540,8 @@
       "bard",
       "sorcerer",
       "warlock",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -1530,7 +1561,8 @@
       "sorcerer",
       "warlock",
       "wizard",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Conjuration cantrip"
   },
@@ -1568,7 +1600,8 @@
       "cleric",
       "druid",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -1592,7 +1625,8 @@
       "druid",
       "sorcerer",
       "wizard",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Transmutation cantrip"
   },
@@ -1601,7 +1635,8 @@
     "classes": [
       "bard",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -1623,7 +1658,8 @@
       "bard",
       "sorcerer",
       "wizard",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Transmutation cantrip"
   },
@@ -1696,7 +1732,8 @@
       "bard",
       "sorcerer",
       "warlock",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -1716,7 +1753,8 @@
       "sorcerer",
       "warlock",
       "wizard",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Transmutation cantrip"
   },
@@ -1783,7 +1821,8 @@
     "classes": [
       "cleric",
       "druid",
-      "paladin"
+      "paladin",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -1802,7 +1841,8 @@
       "cleric",
       "druid",
       "paladin",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level transmutation"
   },
@@ -1810,7 +1850,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -1828,7 +1869,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Evocation cantrip"
   },
@@ -1893,7 +1935,8 @@
     "casting_time": "1 action",
     "classes": [
       "cleric",
-      "druid"
+      "druid",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -1914,7 +1957,8 @@
     "tags": [
       "cleric",
       "druid",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Abjuration cantrip",
     "concentration": true
@@ -1946,7 +1990,8 @@
   {
     "casting_time": "1 bonus action",
     "classes": [
-      "cleric"
+      "cleric",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -1966,7 +2011,8 @@
     "school": "abjuration",
     "tags": [
       "cleric",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level abjuration"
   },
@@ -2083,7 +2129,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -2101,7 +2148,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Evocation cantrip"
   },
@@ -2172,7 +2220,8 @@
   {
     "casting_time": "1 action",
     "classes": [
-      "cleric"
+      "cleric",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -2189,7 +2238,8 @@
     "school": "necromancy",
     "tags": [
       "cleric",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Necromancy cantrip"
   },
@@ -2248,7 +2298,8 @@
   {
     "casting_time": "1 action",
     "classes": [
-      "druid"
+      "druid",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -2268,7 +2319,8 @@
     "school": "transmutation",
     "tags": [
       "druid",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Transmutation cantrip"
   },
@@ -2476,7 +2528,8 @@
     "casting_time": "1 action",
     "classes": [
       "cleric",
-      "paladin"
+      "paladin",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -2498,7 +2551,8 @@
     "tags": [
       "cleric",
       "paladin",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level abjuration"
   },
@@ -2829,7 +2883,8 @@
   {
     "casting_time": "1 action",
     "classes": [
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -2849,7 +2904,8 @@
     "school": "divination",
     "tags": [
       "wizard",
-      "level4"
+      "level4",
+      "artificer"
     ],
     "type": "4th-level divination",
     "concentration": true
@@ -3081,7 +3137,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -3099,7 +3156,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "level3"
+      "level3",
+      "artificer"
     ],
     "type": "3rd-level transmutation"
   },
@@ -3311,7 +3369,8 @@
     "casting_time": "1 action",
     "classes": [
       "cleric",
-      "paladin"
+      "paladin",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -3329,7 +3388,8 @@
     "tags": [
       "cleric",
       "paladin",
-      "level3"
+      "level3",
+      "artificer"
     ],
     "type": "3rd-level conjuration"
   },
@@ -3399,7 +3459,8 @@
       "paladin",
       "sorcerer",
       "warlock",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -3423,14 +3484,16 @@
       "sorcerer",
       "warlock",
       "wizard",
-      "level3"
+      "level3",
+      "artificer"
     ],
     "type": "3rd-level abjuration"
   },
   {
     "casting_time": "1 action",
     "classes": [
-      "paladin"
+      "paladin",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -3448,7 +3511,8 @@
     "school": "transmutation",
     "tags": [
       "paladin",
-      "level3"
+      "level3",
+      "artificer"
     ],
     "type": "3rd-level transmutation",
     "concentration": true
@@ -3555,7 +3619,8 @@
     "classes": [
       "sorcerer",
       "warlock",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -3578,7 +3643,8 @@
       "sorcerer",
       "warlock",
       "wizard",
-      "level3"
+      "level3",
+      "artificer"
     ],
     "type": "3rd-level transmutation",
     "concentration": true
@@ -3619,7 +3685,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -3640,7 +3707,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "level3"
+      "level3",
+      "artificer"
     ],
     "type": "3rd-level transmutation",
     "concentration": true
@@ -3711,7 +3779,8 @@
       "cleric",
       "paladin",
       "warlock",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -3735,7 +3804,8 @@
       "paladin",
       "warlock",
       "wizard",
-      "level3"
+      "level3",
+      "artificer"
     ],
     "type": "3rd-level abjuration"
   },
@@ -3803,7 +3873,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -3821,7 +3892,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-Level Transmutation",
     "concentration": true
@@ -3829,7 +3901,8 @@
   {
     "casting_time": "1 action",
     "classes": [
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -3849,7 +3922,8 @@
     "school": "abjuration",
     "tags": [
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-Level abjuration"
   },
@@ -3999,7 +4073,8 @@
       "druid",
       "ranger",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -4020,7 +4095,8 @@
       "ranger",
       "sorcerer",
       "wizard",
-      "level3"
+      "level3",
+      "artificer"
     ],
     "type": "3rd-level abjuration",
     "concentration": true
@@ -4029,7 +4105,8 @@
     "casting_time": "1 action",
     "classes": [
       "cleric",
-      "paladin"
+      "paladin",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -4050,7 +4127,8 @@
     "tags": [
       "cleric",
       "paladin",
-      "level3"
+      "level3",
+      "artificer"
     ],
     "type": "3rd-level conjuration"
   },
@@ -4483,7 +4561,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -4501,7 +4580,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-Level illusion",
     "concentration": true
@@ -4629,7 +4709,8 @@
       "druid",
       "ranger",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -4652,7 +4733,8 @@
       "ranger",
       "sorcerer",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level transmutation"
   },
@@ -6240,7 +6322,8 @@
       "bard",
       "sorcerer",
       "warlock",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -6264,7 +6347,8 @@
       "sorcerer",
       "warlock",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level illusion",
     "concentration": true
@@ -6274,7 +6358,8 @@
     "classes": [
       "bard",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -6294,7 +6379,8 @@
       "bard",
       "sorcerer",
       "wizard",
-      "level5"
+      "level5",
+      "artificer"
     ],
     "type": "ANIMATED OBJECTS STATISTICS",
     "concentration": true
@@ -6831,7 +6917,8 @@
     "casting_time": "1 action",
     "classes": [
       "cleric",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -6852,7 +6939,8 @@
     "tags": [
       "cleric",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level evocation"
   },
@@ -6860,7 +6948,8 @@
     "casting_time": "1 minute",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -6882,7 +6971,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "level5"
+      "level5",
+      "artificer"
     ],
     "type": "5th-level illusion"
   },
@@ -7092,7 +7182,8 @@
       "bard",
       "cleric",
       "druid",
-      "sorcerer"
+      "sorcerer",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -7116,7 +7207,8 @@
       "cleric",
       "druid",
       "sorcerer",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level transmutation",
     "concentration": true
@@ -7125,7 +7217,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -7146,7 +7239,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level transmutation",
     "concentration": true
@@ -7180,7 +7274,8 @@
   {
     "casting_time": "10 minutes",
     "classes": [
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -7197,7 +7292,8 @@
     "school": "transmutation",
     "tags": [
       "wizard",
-      "level4"
+      "level4",
+      "artificer"
     ],
     "type": "4th-level transmutation"
   },
@@ -7494,7 +7590,8 @@
       "bard",
       "cleric",
       "druid",
-      "ranger"
+      "ranger",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -7517,7 +7614,8 @@
       "cleric",
       "druid",
       "ranger",
-      "level4"
+      "level4",
+      "artificer"
     ],
     "type": "4th-level abjuration"
   },
@@ -7644,7 +7742,8 @@
     "classes": [
       "cleric",
       "wizard",
-      "bard"
+      "bard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -7667,7 +7766,8 @@
       "cleric",
       "wizard",
       "bard",
-      "level3"
+      "level3",
+      "artificer"
     ],
     "type": "3rd-level abjuration"
   },
@@ -7732,7 +7832,8 @@
     "classes": [
       "cleric",
       "druid",
-      "bard"
+      "bard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -7754,7 +7855,8 @@
       "cleric",
       "druid",
       "bard",
-      "level5"
+      "level5",
+      "artificer"
     ],
     "type": "5th-level abjuration"
   },
@@ -7931,7 +8033,8 @@
     "casting_time": "1 action",
     "classes": [
       "druid",
-      "bard"
+      "bard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -7953,7 +8056,8 @@
     "tags": [
       "druid",
       "bard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level transmutation",
     "concentration": true
@@ -8177,7 +8281,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -8198,7 +8303,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level transmutation",
     "concentration": true
@@ -8371,7 +8477,8 @@
     "casting_time": "1 bonus action",
     "classes": [
       "paladin",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -8390,7 +8497,8 @@
     "tags": [
       "paladin",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level transmutation",
     "concentration": true
@@ -8399,7 +8507,8 @@
     "casting_time": "1 minute",
     "classes": [
       "bard",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -8420,7 +8529,8 @@
     "tags": [
       "bard",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level illusion (ritual)"
   },
@@ -8932,7 +9042,8 @@
       "cleric",
       "ranger",
       "paladin",
-      "druid"
+      "druid",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -8952,7 +9063,8 @@
       "ranger",
       "paladin",
       "druid",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level abjuration"
   },
@@ -9013,7 +9125,8 @@
   {
     "casting_time": "1 action",
     "classes": [
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -9033,7 +9146,8 @@
     "school": "transmutation",
     "tags": [
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level transmutation"
   },
@@ -9133,7 +9247,8 @@
     "classes": [
       "bard",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -9155,7 +9270,8 @@
       "bard",
       "sorcerer",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level divination"
   },
@@ -9198,7 +9314,8 @@
     "classes": [
       "sorcerer",
       "warlock",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -9220,7 +9337,8 @@
       "sorcerer",
       "warlock",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level transmutation",
     "concentration": true
@@ -9285,7 +9403,8 @@
     "classes": [
       "cleric",
       "druid",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -9307,7 +9426,8 @@
       "cleric",
       "druid",
       "wizard",
-      "level4"
+      "level4",
+      "artificer"
     ],
     "type": "4th-level transmutation"
   },
@@ -9349,7 +9469,8 @@
       "druid",
       "sorcerer",
       "ranger",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -9372,7 +9493,8 @@
       "sorcerer",
       "ranger",
       "wizard",
-      "level4"
+      "level4",
+      "artificer"
     ],
     "type": "4th-level abjuration",
     "concentration": true
@@ -9672,7 +9794,8 @@
     "classes": [
       "druid",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -9694,7 +9817,8 @@
       "druid",
       "sorcerer",
       "wizard",
-      "level5"
+      "level5",
+      "artificer"
     ],
     "type": "5th-level evocation",
     "concentration": true
@@ -9734,7 +9858,8 @@
       "druid",
       "ranger",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -9757,7 +9882,8 @@
       "ranger",
       "sorcerer",
       "wizard",
-      "level3"
+      "level3",
+      "artificer"
     ],
     "type": "3rd-level transmutation (ritual)"
   },
@@ -9767,7 +9893,8 @@
       "cleric",
       "druid",
       "ranger",
-      "sorcerer"
+      "sorcerer",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -9790,7 +9917,8 @@
       "druid",
       "ranger",
       "sorcerer",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "3rd-level transmutation (ritual)"
   },
@@ -9798,7 +9926,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -9819,7 +9948,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level conjuration",
     "concentration": true
@@ -9997,7 +10127,8 @@
     "classes": [
       "bard",
       "druid",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -10016,7 +10147,8 @@
       "bard",
       "druid",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level transmutation (ritual)",
     "concentration": true
@@ -10028,7 +10160,8 @@
       "druid",
       "sorcerer",
       "warlock",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -10049,7 +10182,8 @@
       "sorcerer",
       "warlock",
       "wizard",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Evocation cantrip"
   },
@@ -10286,7 +10420,8 @@
     "classes": [
       "druid",
       "ranger",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -10306,7 +10441,8 @@
       "druid",
       "ranger",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level abjuration"
   },
@@ -10440,7 +10576,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -10459,7 +10596,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level transmutation"
   },
@@ -10554,7 +10692,8 @@
     "classes": [
       "druid",
       "warlock",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -10574,7 +10713,8 @@
       "druid",
       "warlock",
       "wizard",
-      "level4"
+      "level4",
+      "artificer"
     ],
     "type": "4th-level transmutation",
     "concentration": true
@@ -10821,7 +10961,8 @@
     "casting_time": "1 action",
     "classes": [
       "druid",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -10842,7 +10983,8 @@
     "tags": [
       "druid",
       "wizard",
-      "level5"
+      "level5",
+      "artificer"
     ],
     "type": "5th-level transmutation"
   },
@@ -11626,7 +11768,8 @@
       "bard",
       "druid",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -11648,7 +11791,8 @@
       "druid",
       "sorcerer",
       "wizard",
-      "cantrip"
+      "cantrip",
+      "artificer"
     ],
     "type": "Evocation cantrip"
   },
@@ -11993,7 +12137,8 @@
       "druid",
       "ranger",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -12016,7 +12161,8 @@
       "ranger",
       "sorcerer",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level abjuration"
   },
@@ -12024,7 +12170,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -12045,7 +12192,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level transmutation"
   },
@@ -12173,7 +12321,8 @@
     "casting_time": "1 action",
     "classes": [
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -12197,7 +12346,8 @@
     "tags": [
       "sorcerer",
       "wizard",
-      "level1"
+      "level1",
+      "artificer"
     ],
     "type": "1st-level evocation"
   },
@@ -12455,7 +12605,8 @@
     "classes": [
       "sorcerer",
       "warlock",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -12477,7 +12628,8 @@
       "sorcerer",
       "warlock",
       "wizard",
-      "level2"
+      "level2",
+      "artificer"
     ],
     "type": "2nd-level abjuration"
   },
@@ -12744,7 +12896,8 @@
     "classes": [
       "druid",
       "warlock",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -12766,7 +12919,8 @@
       "druid",
       "warlock",
       "wizard",
-      "level4"
+      "level4",
+      "artificer"
     ],
     "type": "4th-level transmutation"
   },
@@ -12866,7 +13020,8 @@
   {
     "casting_time": "1 action",
     "classes": [
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": true,
@@ -12889,7 +13044,8 @@
     "source": "TCoE",
     "tags": [
       "wizard",
-      "level4"
+      "level4",
+      "artificer"
     ],
     "type": "4th-level conjuration"
   },
@@ -12930,7 +13086,8 @@
     "classes": [
       "bard",
       "sorcerer",
-      "wizard"
+      "wizard",
+      "artificer"
     ],
     "components": {
       "material": false,
@@ -12952,7 +13109,8 @@
       "bard",
       "sorcerer",
       "wizard",
-      "level5"
+      "level5",
+      "artificer"
     ],
     "type": "5th-level transmutation"
   },
@@ -13352,5 +13510,264 @@
       "level9"
     ],
     "type": "9th-level conjuration"
+  },
+  {
+    "casting_time": "1 minute",
+    "classes": [
+      "artificer",
+      "druid",
+      "ranger",
+      "wizard"
+    ],
+    "components": {
+      "material": true,
+      "materials_needed": [
+        "25 feet of rope, which the spell consumes"
+      ],
+      "raw": "S, M (25 feet of rope, which the spell consumes)",
+      "somatic": true,
+      "verbal": false
+    },
+    "concentration": false,
+    "description": "As you cast this spell, you use the rope to create a circle with a 5-foot radius on the ground or the floor. When you finish casting, the rope becomes imperceptible and the spell lasts until triggered or dispelled.\n\nAny Small, Medium, or Large creature that enters the snare's space must make a Dexterity saving throw. On a failed save, the creature is magically hoisted 3 feet off the ground and restrained. A restrained creature can use its action to make a Strength or Dexterity check against your spell save DC; on success, it is no longer restrained and drops to the ground. A creature that can reach the snare can also remove it with a successful Strength check against your spell save DC.",
+    "duration": "8 hours",
+    "level": "1",
+    "name": "Snare",
+    "range": "Touch",
+    "ritual": false,
+    "school": "abjuration",
+    "source": "XGtE",
+    "tags": [
+      "artificer",
+      "druid",
+      "ranger",
+      "wizard",
+      "level1"
+    ],
+    "type": "1st-level abjuration"
+  },
+  {
+    "casting_time": "1 action",
+    "classes": [
+      "artificer",
+      "bard",
+      "ranger",
+      "sorcerer",
+      "wizard"
+    ],
+    "components": {
+      "material": true,
+      "materials_needed": [
+        "a pinch of sand"
+      ],
+      "raw": "S, M (a pinch of sand)",
+      "somatic": true,
+      "verbal": false
+    },
+    "concentration": false,
+    "description": "You make a calming gesture, and up to three willing creatures of your choice that you can see within range fall unconscious for the spell's duration. The spell ends on a target early if it takes damage or someone uses an action to shake or slap it awake. If a target remains unconscious for the full duration, that target gains the benefit of a short rest and can't be affected by this spell again until it finishes a long rest.",
+    "duration": "10 minutes",
+    "higher_levels": "When you cast this spell using a spell slot of 4th level or higher, you can target one additional willing creature for each slot level above 3rd.",
+    "level": "3",
+    "name": "Catnap",
+    "range": "30 feet",
+    "ritual": false,
+    "school": "enchantment",
+    "source": "XGtE",
+    "tags": [
+      "artificer",
+      "bard",
+      "ranger",
+      "sorcerer",
+      "wizard",
+      "level3"
+    ],
+    "type": "3rd-level enchantment"
+  },
+  {
+    "casting_time": "1 minute",
+    "classes": [
+      "artificer",
+      "wizard"
+    ],
+    "components": {
+      "material": false,
+      "raw": "V, S",
+      "somatic": true,
+      "verbal": true
+    },
+    "concentration": false,
+    "description": "You touch one Tiny, nonmagical object that isn't attached to another object or a surface and isn't being carried by another creature. The target animates and sprouts little arms and legs, becoming a creature under your control until the spell ends or it drops to 0 hit points.\n\nAs a bonus action, you can mentally command it if it is within 120 feet of you. The servant has AC 10, 10 hit points, Strength 4, and Dexterity 10. It can't attack. If it drops to 0 hit points, it reverts to its original form.",
+    "duration": "8 hours",
+    "higher_levels": "When you cast this spell using a spell slot of 4th level or higher, you can animate two additional objects for each slot level above 3rd.",
+    "level": "3",
+    "name": "Tiny Servant",
+    "range": "Touch",
+    "ritual": false,
+    "school": "transmutation",
+    "source": "XGtE",
+    "tags": [
+      "artificer",
+      "wizard",
+      "level3"
+    ],
+    "type": "3rd-level transmutation"
+  },
+  {
+    "casting_time": "1 action",
+    "classes": [
+      "artificer",
+      "wizard"
+    ],
+    "components": {
+      "material": true,
+      "materials_needed": [
+        "an exquisite chest worth at least 5,000 gp and its Tiny replica worth at least 50 gp, both made of the same rare materials"
+      ],
+      "raw": "V, S, M (an exquisite chest worth at least 5,000 gp and its Tiny replica worth at least 50 gp, both made of the same rare materials)",
+      "somatic": true,
+      "verbal": true
+    },
+    "concentration": false,
+    "description": "You hide a chest, and all its contents, on the Ethereal Plane. You must touch the chest and the miniature replica that serves as a material component for the spell. The chest can contain up to 12 cubic feet of nonliving material.\n\nWhile the chest remains on the Ethereal Plane, you can use an action and touch the replica to recall the chest. It appears in an unoccupied space within 5 feet of you. You can send the chest back by using an action and touching both the chest and the replica.\n\nAfter 60 days, there is a cumulative 5 percent chance per day that the spell's effect ends. The effect ends if you cast this spell again, the replica is destroyed, or you choose to end the spell as an action.",
+    "duration": "Instantaneous",
+    "level": "4",
+    "name": "Leomund's Secret Chest",
+    "range": "Touch",
+    "ritual": false,
+    "school": "conjuration",
+    "source": "PHB",
+    "tags": [
+      "artificer",
+      "wizard",
+      "level4"
+    ],
+    "type": "4th-level conjuration"
+  },
+  {
+    "casting_time": "1 action",
+    "classes": [
+      "artificer",
+      "wizard"
+    ],
+    "components": {
+      "material": true,
+      "materials_needed": [
+        "a tiny silver whistle, a piece of bone, and a thread"
+      ],
+      "raw": "V, S, M (a tiny silver whistle, a piece of bone, and a thread)",
+      "somatic": true,
+      "verbal": true
+    },
+    "concentration": false,
+    "description": "You conjure a phantom watchdog in an unoccupied space you can see within range, where it remains for the duration, until you dismiss it, or until you move more than 100 feet from it.\n\nThe hound is invisible to all creatures except you and can't be harmed. When a Small or larger creature comes within 30 feet without speaking your password, the hound barks loudly. It sees invisible creatures and into the Ethereal Plane.\n\nAt the start of each of your turns, the hound attempts to bite one hostile creature within 5 feet. Its attack bonus equals your spellcasting ability modifier + your proficiency bonus. On a hit, it deals 4d8 piercing damage.",
+    "duration": "8 hours",
+    "level": "4",
+    "name": "Mordenkainen's Faithful Hound",
+    "range": "30 feet",
+    "ritual": false,
+    "school": "conjuration",
+    "source": "PHB",
+    "tags": [
+      "artificer",
+      "wizard",
+      "level4"
+    ],
+    "type": "4th-level conjuration"
+  },
+  {
+    "casting_time": "10 minutes",
+    "classes": [
+      "artificer",
+      "wizard"
+    ],
+    "components": {
+      "material": true,
+      "materials_needed": [
+        "a thin sheet of lead, a piece of opaque glass, a wad of cotton or cloth, and powdered chrysolite"
+      ],
+      "raw": "V, S, M (a thin sheet of lead, a piece of opaque glass, a wad of cotton or cloth, and powdered chrysolite)",
+      "somatic": true,
+      "verbal": true
+    },
+    "concentration": false,
+    "description": "You make an area within range magically secure. The area is a cube from 5 to 100 feet on a side. The spell lasts for the duration or until you dismiss it as an action.\n\nWhen you cast the spell, you choose any or all of the following properties:\n\n- Sound can't pass through the barrier.\n- The barrier appears dark and foggy, preventing vision through it.\n- Divination spell sensors can't appear inside or pass through the perimeter.\n- Creatures inside can't be targeted by divination spells.\n- Nothing can teleport into or out of the area.\n- Planar travel is blocked within the area.\n\nCasting this spell on the same spot every day for a year makes the effect permanent.",
+    "duration": "24 hours",
+    "higher_levels": "When you cast this spell using a spell slot of 5th level or higher, you can increase the size of the cube by 100 feet for each slot level above 4th.",
+    "level": "4",
+    "name": "Mordenkainen's Private Sanctum",
+    "range": "120 feet",
+    "ritual": false,
+    "school": "abjuration",
+    "source": "PHB",
+    "tags": [
+      "artificer",
+      "wizard",
+      "level4"
+    ],
+    "type": "4th-level abjuration"
+  },
+  {
+    "casting_time": "1 action",
+    "classes": [
+      "artificer",
+      "wizard"
+    ],
+    "components": {
+      "material": true,
+      "materials_needed": [
+        "a hemispherical piece of clear crystal and a matching hemispherical piece of gum arabic"
+      ],
+      "raw": "V, S, M (a hemispherical piece of clear crystal and a matching hemispherical piece of gum arabic)",
+      "somatic": true,
+      "verbal": true
+    },
+    "concentration": true,
+    "description": "A sphere of shimmering force encloses a creature or object of Large size or smaller within range. An unwilling creature must make a Dexterity saving throw. On a failed save, the creature is enclosed for the duration.\n\nNothing can pass through the barrier in or out. The sphere is immune to all damage, and a creature inside can't be damaged by attacks or effects from outside, nor affect anything outside it.\n\nThe sphere is weightless. An enclosed creature can use its action to push against the walls and roll the sphere at up to half its speed.",
+    "duration": "Concentration, up to 1 minute",
+    "level": "4",
+    "name": "Otiluke's Resilient Sphere",
+    "range": "30 feet",
+    "ritual": false,
+    "school": "evocation",
+    "source": "PHB",
+    "tags": [
+      "artificer",
+      "wizard",
+      "level4"
+    ],
+    "type": "4th-level evocation"
+  },
+  {
+    "casting_time": "1 action",
+    "classes": [
+      "artificer",
+      "wizard"
+    ],
+    "components": {
+      "material": true,
+      "materials_needed": [
+        "an eggshell and a snakeskin glove"
+      ],
+      "raw": "V, S, M (an eggshell and a snakeskin glove)",
+      "somatic": true,
+      "verbal": true
+    },
+    "concentration": true,
+    "description": "You create a Large hand of shimmering, translucent force in an unoccupied space you can see within range. The hand is AC 20 with HP equal to your hit point maximum, Strength 26 (+8), and Dexterity 10 (+0). As a bonus action on your turns, move it up to 60 feet and use one effect:\n\n**Clenched Fist.** Make a melee spell attack. On a hit, the target takes 4d8 force damage.\n\n**Forceful Hand.** Contest the hand's Strength vs. the target's Athletics (advantage if target is Medium or smaller). On success, push it up to 5 feet + 5 × your spellcasting modifier.\n\n**Grasping Hand.** Try to grapple a Huge or smaller creature. While grappled, use a bonus action to crush for 2d6 + spellcasting modifier bludgeoning damage.\n\n**Interposing Hand.** Interposes between you and a chosen creature, giving you half cover. Creatures with Strength ≤ the hand's Strength can't move through its space.",
+    "duration": "Concentration, up to 1 minute",
+    "higher_levels": "When you cast this spell using a spell slot of 6th level or higher, the Clenched Fist damage increases by 2d8 and the Grasping Hand crush damage increases by 2d6 for each slot level above 5th.",
+    "level": "5",
+    "name": "Bigby's Hand",
+    "range": "120 feet",
+    "ritual": false,
+    "school": "evocation",
+    "source": "PHB",
+    "tags": [
+      "artificer",
+      "wizard",
+      "level5"
+    ],
+    "type": "5th-level evocation"
   }
 ]

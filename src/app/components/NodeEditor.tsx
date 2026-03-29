@@ -49,6 +49,7 @@ const RESOURCE_LABELS: Record<ResourceType, string> = {
 };
 
 const CLASS_RESOURCES: Record<DndClass, ResourceType[]> = {
+  artificer: ["spell-slot", "custom"],
   barbarian: ["rage", "custom"],
   bard: ["spell-slot", "bardic-inspiration", "custom"],
   cleric: ["spell-slot", "channel-divinity", "custom"],

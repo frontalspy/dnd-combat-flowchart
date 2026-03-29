@@ -1,6 +1,7 @@
 import type { Edge, Node } from "@xyflow/react";
 
 export type DndClass =
+  | "artificer"
   | "barbarian"
   | "bard"
   | "cleric"
