@@ -170,6 +170,21 @@ function FlowCanvasInner({
         const connectedEdges = allEdges.filter(
           (e) => e.source === nodeId || e.target === nodeId
         );
+        // Skip snapping when edges span 3+ distinct handle sides (layout too ambiguous)
+        const handleSides = new Set<string>();
+        for (const edge of connectedEdges) {
+          if (edge.source === nodeId) {
+            const h = edge.sourceHandle ?? "";
+            if (h === "source-right" || h === "no") handleSides.add("right");
+            else if (h === "yes") handleSides.add("left");
+            else handleSides.add("bottom");
+          } else {
+            handleSides.add(
+              edge.targetHandle === "target-left" ? "left" : "top"
+            );
+          }
+        }
+        if (handleSides.size >= 3) return change;
         for (const edge of connectedEdges) {
           const otherId = edge.source === nodeId ? edge.target : edge.source;
           const otherNode = allNodes.find((n) => n.id === otherId) as

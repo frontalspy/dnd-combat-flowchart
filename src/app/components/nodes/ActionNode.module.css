@@ -261,6 +261,15 @@
   font-style: italic;
 }
 
+.scalesNote {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  font-style: italic;
+  margin-top: 2px;
+  margin-bottom: 4px;
+  opacity: 0.75;
+}
+
 /* Concentration badge — amber icon in the header badges row */
 .concentrationBadge {
   display: inline-flex;

@@ -36,8 +36,11 @@ function getHandlePos(
 
   if (isSource) {
     const handle = handleId ?? "";
-    if (handle === "yes" || handle === "source-right") {
-      return { x: x + w, y: y + h / 2 };
+    if (handle === "no" || handle === "source-right") {
+      return { x: x + w, y: y + h / 2 }; // right edge
+    }
+    if (handle === "yes") {
+      return { x, y: y + h / 2 }; // left edge
     }
     // Default: bottom-center
     return { x: x + w / 2, y: y + h };

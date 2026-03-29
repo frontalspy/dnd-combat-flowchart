@@ -196,7 +196,8 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
             </span>
           )}
           {(() => {
-            const baseLevel = parseInt(data.spellLevel ?? "0", 10);
+            const baseLevelRaw = parseInt(data.spellLevel ?? "0", 10);
+            const baseLevel = Number.isNaN(baseLevelRaw) ? 0 : baseLevelRaw;
             return data.castAtLevel && data.castAtLevel > baseLevel ? (
               <span
                 className={styles.upcastBadge}
@@ -303,8 +304,21 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
           </div>
         )}
 
+        {!data.higherLevels &&
+          data.castAtLevel !== undefined &&
+          (() => {
+            const bl =
+              data.spellLevel === "cantrip"
+                ? 0
+                : parseInt(data.spellLevel ?? "0", 10) || 0;
+            return data.castAtLevel > bl ? (
+              <div className={styles.scalesNote}>Scales — see description</div>
+            ) : null;
+          })()}
+
         {(() => {
-          const baseLevel = parseInt(data.spellLevel ?? "0", 10);
+          const baseLevelRaw = parseInt(data.spellLevel ?? "0", 10);
+          const baseLevel = Number.isNaN(baseLevelRaw) ? 0 : baseLevelRaw;
           const isLevelledSpell = data.source === "spell" && baseLevel >= 1;
           if (!isLevelledSpell) return null;
           // Prefer the active chart's stored character so the pill range
