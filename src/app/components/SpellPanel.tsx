@@ -306,6 +306,23 @@ export function SpellPanel({
     return "1d4";
   }, [character.class, character.level, character.secondaryClasses]);
 
+  // Eldritch Blast beams scale with warlock level: 1 beam (lv1), 2 (lv5), 3 (lv11), 4 (lv17)
+  const eldritchBlastDice = useMemo(() => {
+    let warlockLevel = 0;
+    if (character.class === "warlock") warlockLevel = character.level;
+    else {
+      const warlockSec = character.secondaryClasses?.find(
+        (sc) => sc.class === "warlock"
+      );
+      if (warlockSec) warlockLevel = warlockSec.level;
+    }
+    if (!warlockLevel) return null;
+    if (warlockLevel >= 17) return "4d10";
+    if (warlockLevel >= 11) return "3d10";
+    if (warlockLevel >= 5) return "2d10";
+    return "1d10";
+  }, [character.class, character.level, character.secondaryClasses]);
+
   const loadoutWeapons = useMemo(() => {
     const result: Array<{ weapon: Weapon; hand: "main" | "off" }> = [];
     const loadout = character.loadout;
@@ -365,6 +382,7 @@ export function SpellPanel({
             description: a.description,
             actionType: a.actionType,
             damageType: a.damageType,
+            damageDice: a.damageDice,
             source: "class" as const,
           });
         }
@@ -851,6 +869,11 @@ export function SpellPanel({
                 spell={spell}
                 onDragStart={onDragStart}
                 classBadges={classBadges}
+                damageDiceOverride={
+                  spell.name === "Eldritch Blast"
+                    ? (eldritchBlastDice ?? undefined)
+                    : undefined
+                }
               />
             );
           })}

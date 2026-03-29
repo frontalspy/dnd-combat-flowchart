@@ -126,7 +126,7 @@ export function ExportMenu({
         onClick={() => setIsOpen((v) => !v)}
         title="Save & Export options"
       >
-        <MoreHorizontal size={14} />
+        {isSaved ? <Check size={14} /> : <MoreHorizontal size={14} />}
         {isSaved ? "Saved!" : "Menu"}
       </button>
 

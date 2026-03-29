@@ -23,6 +23,8 @@ export interface ClassAction {
   actionType: ActionType;
   damageType?: DamageType;
   minLevel: number;
+  /** Explicit damage dice expression (e.g. "2d10") — overrides description-parsed value. */
+  damageDice?: string;
 }
 
 export interface SubclassDefinition {
@@ -674,15 +676,6 @@ export const CLASSES: ClassDefinition[] = [
       { id: "genie", name: "The Genie" },
     ],
     classActions: [
-      {
-        id: "warlock-eldritch-blast",
-        name: "Eldritch Blast",
-        description:
-          "Cantrip (Action): 1d10 force damage per beam. Gain a beam at levels 5/11/17 (up to 4 beams). Range 120ft. Invocations can add push, slow, pull, Cha damage, etc.",
-        actionType: "action",
-        damageType: "force",
-        minLevel: 1,
-      },
       {
         id: "warlock-hex",
         name: "Hex (Pact Feature)",

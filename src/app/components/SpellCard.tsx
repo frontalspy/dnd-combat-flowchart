@@ -93,9 +93,16 @@ interface SpellCardProps {
   spell: Spell;
   onDragStart: (e: React.DragEvent, data: unknown) => void;
   classBadges?: Array<{ label: string; color: string }>;
+  /** Overrides the damage dice parsed from the spell description (e.g. Eldritch Blast scaling). */
+  damageDiceOverride?: string;
 }
 
-export function SpellCard({ spell, onDragStart, classBadges }: SpellCardProps) {
+export function SpellCard({
+  spell,
+  onDragStart,
+  classBadges,
+  damageDiceOverride,
+}: SpellCardProps) {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -130,8 +137,10 @@ export function SpellCard({ spell, onDragStart, classBadges }: SpellCardProps) {
     range: spell.range,
     duration: spell.duration,
     source: "spell" as const,
-    damageDice: extractDamageDice(spell.description) ?? undefined,
-    baseDamageDice: extractDamageDice(spell.description) ?? undefined,
+    damageDice:
+      damageDiceOverride ?? extractDamageDice(spell.description) ?? undefined,
+    baseDamageDice:
+      damageDiceOverride ?? extractDamageDice(spell.description) ?? undefined,
     baseDuration: spell.duration,
     saveDC: extractSaveDC(spell.description) ?? undefined,
     saveAbility: extractSaveAbility(spell.description) ?? undefined,
@@ -266,7 +275,8 @@ export function ActionCard({ action, onDragStart }: ActionCardProps) {
     range: action.range,
     duration: action.duration,
     source: action.source,
-    damageDice: extractDamageDice(action.description) ?? undefined,
+    damageDice:
+      action.damageDice ?? extractDamageDice(action.description) ?? undefined,
     saveDC: extractSaveDC(action.description) ?? undefined,
     saveAbility: extractSaveAbility(action.description) ?? undefined,
     rollType: extractRollType(action.description),

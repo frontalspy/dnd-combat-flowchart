@@ -1,6 +1,7 @@
 import type { Node, NodeProps } from "@xyflow/react";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useRef, useState } from "react";
+import ReactDOM from "react-dom";
 import { useApp } from "../../context/AppContext";
 import { getClassDefinition, getMaxSpellLevel } from "../../data/classes";
 import {
@@ -44,6 +45,78 @@ import {
 import { Icon } from "../Icon";
 import styles from "./ActionNode.module.css";
 
+interface NodeTooltipProps {
+  data: ActionNodeData;
+  visible: boolean;
+  top: number;
+  left: number;
+}
+
+function NodeTooltip({ data, visible, top, left }: NodeTooltipProps) {
+  if (!visible) return null;
+  const damageInfo = data.damageType ? DAMAGE_TYPES[data.damageType] : null;
+  const schoolInfo = data.school
+    ? SPELL_SCHOOLS[data.school.toLowerCase()]
+    : null;
+  const actionInfo =
+    ACTION_TYPE_LABELS[data.actionType] ?? ACTION_TYPE_LABELS.action;
+  return ReactDOM.createPortal(
+    <div className={styles.nodeTooltip} style={{ top, left }}>
+      <div className={styles.nodeTooltipHeader}>
+        <span className={styles.nodeTooltipName}>{data.label}</span>
+        <span className={styles.nodeTooltipType}>{actionInfo.label}</span>
+      </div>
+      {(schoolInfo || damageInfo || data.range || data.duration) && (
+        <div className={styles.nodeTooltipMeta}>
+          {schoolInfo && (
+            <span>
+              <strong>School:</strong> {schoolInfo.label}
+            </span>
+          )}
+          {damageInfo && (
+            <span>
+              <strong>Damage:</strong>{" "}
+              {data.damageDice ? `${data.damageDice} ` : ""}
+              {damageInfo.label}
+            </span>
+          )}
+          {data.range && (
+            <span>
+              <strong>Range:</strong> {data.range}
+            </span>
+          )}
+          {data.duration && (
+            <span>
+              <strong>Duration:</strong> {data.duration}
+              {data.concentration && " (Concentration)"}
+            </span>
+          )}
+          {data.spellLevel && (
+            <span>
+              <strong>Level:</strong>{" "}
+              {data.spellLevel === "cantrip" ? "Cantrip" : `${data.spellLevel}`}
+            </span>
+          )}
+        </div>
+      )}
+      {data.description && (
+        <p className={styles.nodeTooltipDesc}>{data.description}</p>
+      )}
+      {data.higherLevels && (
+        <p className={styles.nodeTooltipHigher}>
+          <strong>At Higher Levels:</strong> {data.higherLevels}
+        </p>
+      )}
+      {data.notes && (
+        <p className={styles.nodeTooltipNotes}>
+          <strong>Notes:</strong> {data.notes}
+        </p>
+      )}
+    </div>,
+    document.body
+  );
+}
+
 const RESOURCE_ICONS: Record<ResourceType, string> = {
   "spell-slot": spellIcon,
   ki: monkIcon,
@@ -85,6 +158,23 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
   const groupColor = groupColorMap.get(id);
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesValue, setNotesValue] = useState(data.notes ?? "");
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
+  const tooltipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const nodeRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseEnter = useCallback(() => {
+    if (nodeRef.current) {
+      const rect = nodeRef.current.getBoundingClientRect();
+      setTooltipPos({ top: rect.top, left: rect.right + 10 });
+    }
+    tooltipTimer.current = setTimeout(() => setTooltipVisible(true), 400);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (tooltipTimer.current) clearTimeout(tooltipTimer.current);
+    setTooltipVisible(false);
+  }, []);
 
   // Compute spell save DC and attack bonus from character context
   const character = state.character;
@@ -142,8 +232,11 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
 
   return (
     <div
+      ref={nodeRef}
       className={`${styles.actionNode} ${selected ? styles.selected : ""} ${isConflict ? styles.concentrationConflict : ""} ${isOverBudget && !isConflict ? styles.overBudget : ""}`}
       style={{ borderColor, position: "relative" }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Handle
         type="target"
@@ -486,6 +579,12 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
           }}
         />
       )}
+      <NodeTooltip
+        data={data}
+        visible={tooltipVisible}
+        top={tooltipPos.top}
+        left={tooltipPos.left}
+      />
     </div>
   );
 }

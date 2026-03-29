@@ -25,6 +25,7 @@ declare const nameInput: string;
 declare const nameConfirmBtn: string;
 declare const actionBtn: string;
 declare const savedBtn: string;
+declare const savedPulse: string;
 declare const shareBtnActive: string;
 declare const animateBtnActive: string;
 declare const edgeStyleGroup: string;
@@ -136,6 +137,7 @@ export {
 	nameConfirmBtn,
 	actionBtn,
 	savedBtn,
+	savedPulse,
 	shareBtnActive,
 	animateBtnActive,
 	edgeStyleGroup,
@@ -248,6 +250,7 @@ declare const __default_export__: {
 	nameConfirmBtn: typeof nameConfirmBtn;
 	actionBtn: typeof actionBtn;
 	savedBtn: typeof savedBtn;
+	savedPulse: typeof savedPulse;
 	shareBtnActive: typeof shareBtnActive;
 	animateBtnActive: typeof animateBtnActive;
 	edgeStyleGroup: typeof edgeStyleGroup;

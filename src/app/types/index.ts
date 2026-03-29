@@ -117,6 +117,8 @@ export interface ActionItem {
   level?: string;
   source: "standard" | "class" | "spell" | "custom";
   minLevel?: number;
+  /** Explicit damage dice expression — takes precedence over description-parsed value. */
+  damageDice?: string;
 }
 
 export type ResourceType =

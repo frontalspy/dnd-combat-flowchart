@@ -44,86 +44,110 @@ declare const castLevelRow: string;
 declare const castLevelPill: string;
 declare const castLevelPillActive: string;
 declare const upcastBadge: string;
+declare const nodeTooltip: string;
+declare const nodeTooltipHeader: string;
+declare const nodeTooltipName: string;
+declare const nodeTooltipType: string;
+declare const nodeTooltipMeta: string;
+declare const nodeTooltipDesc: string;
+declare const nodeTooltipHigher: string;
+declare const nodeTooltipNotes: string;
 
 export {
-  actionNode,
-  selected,
-  handle,
-  header,
-  badges,
-  schoolBadge,
-  levelBadge,
-  handBadgeMH as handBadgeMh,
-  handBadgeOH as handBadgeOh,
-  actionTypeBadge,
-  body,
-  name,
-  pills,
-  damagePill,
-  infoPill,
-  notesSection,
-  notesDisplay,
-  notesText,
-  notesPlaceholder,
-  notesInput,
-  diceRow,
-  dicePill,
-  savePill,
-  saveDCValue as saveDcValue,
-  attackPill,
-  attackBonusValue,
-  higherLevels,
-  scalesNote,
-  concentrationBadge,
-  concentrationConflict,
-  overBudget,
-  resourceCostRow,
-  resourceCostBadge,
-  resourceCostAmount,
-  castLevelRow,
-  castLevelPill,
-  castLevelPillActive,
-  upcastBadge,
+	actionNode,
+	selected,
+	handle,
+	header,
+	badges,
+	schoolBadge,
+	levelBadge,
+	handBadgeMH as handBadgeMh,
+	handBadgeOH as handBadgeOh,
+	actionTypeBadge,
+	body,
+	name,
+	pills,
+	damagePill,
+	infoPill,
+	notesSection,
+	notesDisplay,
+	notesText,
+	notesPlaceholder,
+	notesInput,
+	diceRow,
+	dicePill,
+	savePill,
+	saveDCValue as saveDcValue,
+	attackPill,
+	attackBonusValue,
+	higherLevels,
+	scalesNote,
+	concentrationBadge,
+	concentrationConflict,
+	overBudget,
+	resourceCostRow,
+	resourceCostBadge,
+	resourceCostAmount,
+	castLevelRow,
+	castLevelPill,
+	castLevelPillActive,
+	upcastBadge,
+	nodeTooltip,
+	nodeTooltipHeader,
+	nodeTooltipName,
+	nodeTooltipType,
+	nodeTooltipMeta,
+	nodeTooltipDesc,
+	nodeTooltipHigher,
+	nodeTooltipNotes
 };
 
 declare const __default_export__: {
-  actionNode: typeof actionNode;
-  selected: typeof selected;
-  handle: typeof handle;
-  header: typeof header;
-  badges: typeof badges;
-  schoolBadge: typeof schoolBadge;
-  levelBadge: typeof levelBadge;
-  handBadgeMh: typeof handBadgeMH;
-  handBadgeOh: typeof handBadgeOH;
-  actionTypeBadge: typeof actionTypeBadge;
-  body: typeof body;
-  name: typeof name;
-  pills: typeof pills;
-  damagePill: typeof damagePill;
-  infoPill: typeof infoPill;
-  notesSection: typeof notesSection;
-  notesDisplay: typeof notesDisplay;
-  notesText: typeof notesText;
-  notesPlaceholder: typeof notesPlaceholder;
-  notesInput: typeof notesInput;
-  diceRow: typeof diceRow;
-  dicePill: typeof dicePill;
-  savePill: typeof savePill;
-  saveDcValue: typeof saveDCValue;
-  attackPill: typeof attackPill;
-  attackBonusValue: typeof attackBonusValue;
-  higherLevels: typeof higherLevels;
-  scalesNote: typeof scalesNote;
-  concentrationBadge: typeof concentrationBadge;
-  concentrationConflict: typeof concentrationConflict;
-  overBudget: typeof overBudget;
-  resourceCostRow: typeof resourceCostRow;
-  resourceCostBadge: typeof resourceCostBadge;
-  resourceCostAmount: typeof resourceCostAmount;
-  castLevelRow: typeof castLevelRow;
-  castLevelPill: typeof castLevelPill;
-  castLevelPillActive: typeof castLevelPillActive;
-  upcastBadge: typeof upcastBadge;
+	actionNode: typeof actionNode;
+	selected: typeof selected;
+	handle: typeof handle;
+	header: typeof header;
+	badges: typeof badges;
+	schoolBadge: typeof schoolBadge;
+	levelBadge: typeof levelBadge;
+	handBadgeMh: typeof handBadgeMH;
+	handBadgeOh: typeof handBadgeOH;
+	actionTypeBadge: typeof actionTypeBadge;
+	body: typeof body;
+	name: typeof name;
+	pills: typeof pills;
+	damagePill: typeof damagePill;
+	infoPill: typeof infoPill;
+	notesSection: typeof notesSection;
+	notesDisplay: typeof notesDisplay;
+	notesText: typeof notesText;
+	notesPlaceholder: typeof notesPlaceholder;
+	notesInput: typeof notesInput;
+	diceRow: typeof diceRow;
+	dicePill: typeof dicePill;
+	savePill: typeof savePill;
+	saveDcValue: typeof saveDCValue;
+	attackPill: typeof attackPill;
+	attackBonusValue: typeof attackBonusValue;
+	higherLevels: typeof higherLevels;
+	scalesNote: typeof scalesNote;
+	concentrationBadge: typeof concentrationBadge;
+	concentrationConflict: typeof concentrationConflict;
+	overBudget: typeof overBudget;
+	resourceCostRow: typeof resourceCostRow;
+	resourceCostBadge: typeof resourceCostBadge;
+	resourceCostAmount: typeof resourceCostAmount;
+	castLevelRow: typeof castLevelRow;
+	castLevelPill: typeof castLevelPill;
+	castLevelPillActive: typeof castLevelPillActive;
+	upcastBadge: typeof upcastBadge;
+	nodeTooltip: typeof nodeTooltip;
+	nodeTooltipHeader: typeof nodeTooltipHeader;
+	nodeTooltipName: typeof nodeTooltipName;
+	nodeTooltipType: typeof nodeTooltipType;
+	nodeTooltipMeta: typeof nodeTooltipMeta;
+	nodeTooltipDesc: typeof nodeTooltipDesc;
+	nodeTooltipHigher: typeof nodeTooltipHigher;
+	nodeTooltipNotes: typeof nodeTooltipNotes;
 };
 export default __default_export__;

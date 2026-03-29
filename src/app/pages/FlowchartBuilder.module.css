@@ -209,10 +209,24 @@
   border-color: var(--border-accent);
 }
 
+@keyframes savedPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(74, 160, 74, 0.55);
+  }
+  60% {
+    box-shadow: 0 0 0 6px rgba(74, 160, 74, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(74, 160, 74, 0);
+  }
+}
+
 .savedBtn {
-  background: rgba(74, 112, 64, 0.15);
+  background: rgba(74, 112, 64, 0.22);
   border-color: var(--green);
   color: var(--green-light);
+  box-shadow: 0 0 0 1px rgba(74, 160, 74, 0.35);
+  animation: savedPulse 0.6s ease-out;
 }
 
 .shareBtnActive {
