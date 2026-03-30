@@ -171,8 +171,14 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
   const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
   const tooltipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const nodeRef = useRef<HTMLDivElement>(null);
+  // Disable hover tooltip on touch devices — they use the NodeEditor drawer instead
+  const isTouchDevice = useRef(
+    typeof window !== "undefined" &&
+      window.matchMedia("(pointer: coarse)").matches
+  );
 
   const handleMouseEnter = useCallback(() => {
+    if (isTouchDevice.current) return;
     if (nodeRef.current) {
       const rect = nodeRef.current.getBoundingClientRect();
       setTooltipPos({ top: rect.top, left: rect.right + 10 });
@@ -181,6 +187,7 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
   }, []);
 
   const handleMouseLeave = useCallback(() => {
+    if (isTouchDevice.current) return;
     if (tooltipTimer.current) clearTimeout(tooltipTimer.current);
     setTooltipVisible(false);
   }, []);
