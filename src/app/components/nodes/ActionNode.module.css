@@ -408,6 +408,17 @@
   letter-spacing: 0.2px;
 }
 
+/* Critical hit dice badge — same colours as the damage pill; icon prefix instead of text */
+.critBadge {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
 /* Hover tooltip */
 .nodeTooltip {
   position: fixed;

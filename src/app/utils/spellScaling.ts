@@ -3,6 +3,22 @@
  */
 
 /**
+ * Doubles the number of dice in a dice expression, leaving static modifiers unchanged.
+ * Used to compute critical hit damage (5e PHB: double all damage dice on a crit).
+ *
+ * Examples:
+ *   "2d6+5"       → "4d6+5"
+ *   "1d8 + 3d6"   → "2d8 + 6d6"
+ *   "1d6 + 2"     → "2d6 + 2"
+ */
+export function getCritDice(diceExpr: string): string {
+  return diceExpr.replace(
+    /(\d+)(d\d+)/gi,
+    (_, count, die) => `${parseInt(count, 10) * 2}${die}`
+  );
+}
+
+/**
  * Converts an integer to its English ordinal string.
  * e.g. 1 → "1st", 2 → "2nd", 3 → "3rd", 4 → "4th", 11 → "11th"
  */

@@ -29,6 +29,7 @@ import reachIcon from "../../icons/combat/reach.svg";
 import d20Icon from "../../icons/dice/d20.svg";
 import timeIcon from "../../icons/entity/time.svg";
 import spellIcon from "../../icons/game/spell.svg";
+import criticalRoleIcon from "../../icons/logo/critical-role.svg";
 import concentrationIcon from "../../icons/spell/concentration.svg";
 import materialIcon from "../../icons/spell/material.svg";
 import ritualIcon from "../../icons/spell/ritual.svg";
@@ -37,6 +38,7 @@ import vocalIcon from "../../icons/spell/vocal.svg";
 import starIcon from "../../icons/util/star.svg";
 import type { ActionNodeData, ResourceType } from "../../types";
 import {
+  getCritDice,
   getScaledDamageDice,
   getScaledDuration,
   toOrdinal,
@@ -229,6 +231,10 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
   const actionInfo =
     ACTION_TYPE_LABELS[data.actionType] ?? ACTION_TYPE_LABELS.action;
 
+  const showCrit = data.rollType === "attack" || data.source === "weapon";
+  const critExpr =
+    showCrit && data.damageDice ? getCritDice(data.damageDice) : null;
+
   const handleNotesBlur = useCallback(() => {
     setEditingNotes(false);
     updateNodeData(id, { notes: notesValue });
@@ -358,6 +364,19 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
               {damageInfo.label}
             </span>
           )}
+          {critExpr && damageInfo && (
+            <span
+              className={styles.critBadge}
+              style={{
+                color: damageInfo.color,
+                backgroundColor: damageInfo.bgColor,
+              }}
+              title="Critical hit damage (all dice doubled)"
+            >
+              <Icon src={criticalRoleIcon} size={11} aria-hidden="true" />
+              {critExpr} {damageInfo.label}
+            </span>
+          )}
           {data.range && (
             <span className={styles.infoPill} title="Range">
               <Icon src={reachIcon} size={12} /> {data.range}
@@ -411,53 +430,58 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
         </div>
 
         {/* Roll type + standalone dice indicators */}
-        {(data.rollType === "attack" ||
-          data.label === "Attack" ||
-          data.rollType === "save" ||
-          (data.damageDice && !data.damageType)) && (
-          <div className={styles.diceRow}>
-            {(data.rollType === "attack" || data.label === "Attack") && (
-              <span
-                className={styles.attackPill}
-                title={
-                  computedAttackBonus !== null
-                    ? `Attack roll: ${formatModifier(computedAttackBonus)} to hit`
-                    : "Attack roll required"
-                }
-              >
-                <Icon src={d20Icon} size={12} /> 1d20
-                {computedAttackBonus !== null && (
-                  <span className={styles.attackBonusValue}>
-                    {" "}
-                    {formatModifier(computedAttackBonus)}
-                  </span>
-                )}
-              </span>
-            )}
-            {data.rollType === "save" && (
-              <span
-                className={styles.savePill}
-                title={
-                  computedSaveDC
-                    ? `DC ${computedSaveDC} saving throw`
-                    : data.saveDC
-                      ? `DC ${data.saveDC} saving throw`
-                      : "Saving throw required"
-                }
-              >
-                {(computedSaveDC !== null || data.saveDC) && (
-                  <span className={styles.saveDcValue}>
-                    {computedSaveDC ?? data.saveDC}{" "}
-                  </span>
-                )}
-                {data.saveAbility ? `${data.saveAbility} SAVE` : "SAVE"}
-              </span>
-            )}
-            {data.damageDice && !data.damageType && (
-              <span className={styles.dicePill}>{data.damageDice}</span>
-            )}
-          </div>
-        )}
+        {(() => {
+          const showRow =
+            data.rollType === "attack" ||
+            data.label === "Attack" ||
+            data.rollType === "save" ||
+            (data.damageDice && !data.damageType);
+          if (!showRow) return null;
+          return (
+            <div className={styles.diceRow}>
+              {(data.rollType === "attack" || data.label === "Attack") && (
+                <span
+                  className={styles.attackPill}
+                  title={
+                    computedAttackBonus !== null
+                      ? `Attack roll: ${formatModifier(computedAttackBonus)} to hit`
+                      : "Attack roll required"
+                  }
+                >
+                  <Icon src={d20Icon} size={12} /> 1d20
+                  {computedAttackBonus !== null && (
+                    <span className={styles.attackBonusValue}>
+                      {" "}
+                      {formatModifier(computedAttackBonus)}
+                    </span>
+                  )}
+                </span>
+              )}
+              {data.rollType === "save" && (
+                <span
+                  className={styles.savePill}
+                  title={
+                    computedSaveDC
+                      ? `DC ${computedSaveDC} saving throw`
+                      : data.saveDC
+                        ? `DC ${data.saveDC} saving throw`
+                        : "Saving throw required"
+                  }
+                >
+                  {(computedSaveDC !== null || data.saveDC) && (
+                    <span className={styles.saveDcValue}>
+                      {computedSaveDC ?? data.saveDC}{" "}
+                    </span>
+                  )}
+                  {data.saveAbility ? `${data.saveAbility} SAVE` : "SAVE"}
+                </span>
+              )}
+              {data.damageDice && !data.damageType && (
+                <span className={styles.dicePill}>{data.damageDice}</span>
+              )}
+            </div>
+          );
+        })()}
 
         {data.higherLevels && (
           <div className={styles.higherLevels} title="At higher levels">
