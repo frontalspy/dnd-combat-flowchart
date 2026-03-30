@@ -26,6 +26,14 @@ export function useKeyboardShortcuts({
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       const mod = e.ctrlKey || e.metaKey;
+
+      // Ctrl+S / Cmd+S saves even when focus is inside a text field
+      if (mod && e.key === "s") {
+        e.preventDefault();
+        handleSave();
+        return;
+      }
+
       if (
         e.target instanceof HTMLInputElement ||
         e.target instanceof HTMLTextAreaElement
@@ -42,9 +50,6 @@ export function useKeyboardShortcuts({
       } else if (mod && (e.key === "y" || (e.key === "z" && e.shiftKey))) {
         e.preventDefault();
         exportFnsRef.current?.redo();
-      } else if (mod && e.key === "s") {
-        e.preventDefault();
-        handleSave();
       } else if (mod && e.key === "a") {
         e.preventDefault();
         exportFnsRef.current?.selectAll();

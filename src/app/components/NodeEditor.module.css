@@ -33,6 +33,16 @@
   letter-spacing: 1px;
 }
 
+.nodeNameSubtitle {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
 .actionTypeBadge {
   font-size: var(--fs-xs);
   font-weight: 700;
@@ -194,6 +204,9 @@
   resize: vertical;
   font-family: inherit;
   transition: border-color 0.15s;
+  min-height: 72px;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .notesTextarea:focus {

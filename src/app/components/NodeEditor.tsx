@@ -112,6 +112,7 @@ export function NodeEditor({
   isSheet = false,
 }: NodeEditorProps) {
   const panelRef = useRef<HTMLElement>(null);
+  const labelInputRef = useRef<HTMLInputElement>(null);
   const touchStartY = useRef(0);
   const touchCurrentY = useRef(0);
   const [sheetExpanded, setSheetExpanded] = useState(false);
@@ -191,6 +192,24 @@ export function NodeEditor({
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally keyed on node id only
   useEffect(() => {
     setSheetExpanded(false);
+  }, [selectedNode?.id]);
+
+  // Auto-focus the label input when a node is selected (desktop only)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally keyed on node id only
+  useEffect(() => {
+    if (isSheet) return;
+    const t = setTimeout(() => {
+      // Don't steal focus if the user is already editing something
+      // (e.g. clicked the in-canvas notes textarea to open it)
+      const active = document.activeElement;
+      if (
+        active instanceof HTMLInputElement ||
+        active instanceof HTMLTextAreaElement
+      )
+        return;
+      labelInputRef.current?.focus();
+    }, 50);
+    return () => clearTimeout(t);
   }, [selectedNode?.id]);
 
   useEffect(() => {
@@ -335,6 +354,16 @@ export function NodeEditor({
               {actionInfo.label}
             </span>
           )}
+          {typeof data.label === "string" && data.label && (
+            <span
+              className={styles.nodeNameSubtitle}
+              title={data.label as string}
+            >
+              {(data.label as string).length > 30
+                ? (data.label as string).slice(0, 30) + "…"
+                : (data.label as string)}
+            </span>
+          )}
         </div>
         <button type="button" className={styles.closeBtn} onClick={onClose}>
           <X size={14} />
@@ -380,6 +409,7 @@ export function NodeEditor({
             <label className={styles.fieldLabel}>Name</label>
             <div className={styles.fieldRow}>
               <input
+                ref={labelInputRef}
                 className={styles.fieldInput}
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}
@@ -530,7 +560,7 @@ export function NodeEditor({
               onChange={(e) => setNotes(e.target.value)}
               onBlur={handleSaveNotes}
               placeholder="Add personal notes, reminders, or conditions..."
-              rows={4}
+              rows={3}
             />
           </div>
         )}

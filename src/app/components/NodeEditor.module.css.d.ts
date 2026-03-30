@@ -10,6 +10,7 @@ declare const panel: string;
 declare const header: string;
 declare const headerLeft: string;
 declare const nodeTypeLabel: string;
+declare const nodeNameSubtitle: string;
 declare const actionTypeBadge: string;
 declare const closeBtn: string;
 declare const body: string;
@@ -51,6 +52,7 @@ export {
 	header,
 	headerLeft,
 	nodeTypeLabel,
+	nodeNameSubtitle,
 	actionTypeBadge,
 	closeBtn,
 	body,
@@ -93,6 +95,7 @@ declare const __default_export__: {
 	header: typeof header;
 	headerLeft: typeof headerLeft;
 	nodeTypeLabel: typeof nodeTypeLabel;
+	nodeNameSubtitle: typeof nodeNameSubtitle;
 	actionTypeBadge: typeof actionTypeBadge;
 	closeBtn: typeof closeBtn;
 	body: typeof body;

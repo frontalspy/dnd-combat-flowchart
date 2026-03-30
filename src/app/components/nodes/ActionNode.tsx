@@ -157,7 +157,7 @@ const RESOURCE_SHORT_LABELS: Record<ResourceType, string> = {
 type ActionNodeType = Node<ActionNodeData, "actionNode">;
 
 export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
-  const { updateNodeData } = useReactFlow();
+  const { updateNodeData, setNodes } = useReactFlow();
   const { state, getActiveFlowchart } = useApp();
   const conflictNodeIds = useContext(ConcentrationContext);
   const isConflict = conflictNodeIds.has(id);
@@ -600,7 +600,15 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
             <button
               type="button"
               className={styles.notesDisplay}
-              onClick={() => setEditingNotes(true)}
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={() => {
+                setEditingNotes(true);
+                if (!selected) {
+                  setNodes((nds) =>
+                    nds.map((n) => ({ ...n, selected: n.id === id }))
+                  );
+                }
+              }}
               title="Click to add notes"
             >
               {data.notes ? (
