@@ -7,6 +7,7 @@ import { getClassDefinition, getMaxSpellLevel } from "../../data/classes";
 import {
   ACTION_TYPE_LABELS,
   DAMAGE_TYPES,
+  extractAoE,
   SPELL_SCHOOLS,
 } from "../../data/damageTypes";
 import {
@@ -37,6 +38,15 @@ import materialIcon from "../../icons/spell/material.svg";
 import ritualIcon from "../../icons/spell/ritual.svg";
 import somaticIcon from "../../icons/spell/somatic.svg";
 import vocalIcon from "../../icons/spell/vocal.svg";
+import circleIcon from "../../icons/target/circle.svg";
+import coneIcon from "../../icons/target/cone.svg";
+import cubeIcon from "../../icons/target/cube.svg";
+import cylinderIcon from "../../icons/target/cylinder.svg";
+import emanationIcon from "../../icons/target/emanation.svg";
+import lineIcon from "../../icons/target/line.svg";
+import sphereIcon from "../../icons/target/sphere.svg";
+import squareIcon from "../../icons/target/square.svg";
+import wallIcon from "../../icons/target/wall.svg";
 import starIcon from "../../icons/util/star.svg";
 import type { ActionNodeData, ResourceType } from "../../types";
 import {
@@ -143,6 +153,18 @@ const RESOURCE_ICONS: Record<ResourceType, string> = {
   "sorcery-point": sorcererIcon,
   "warlock-invocation": warlockIcon,
   custom: starIcon,
+};
+
+const AOE_ICONS: Record<string, string> = {
+  circle: circleIcon,
+  cone: coneIcon,
+  cube: cubeIcon,
+  cylinder: cylinderIcon,
+  emanation: emanationIcon,
+  line: lineIcon,
+  sphere: sphereIcon,
+  square: squareIcon,
+  wall: wallIcon,
 };
 
 const RESOURCE_SHORT_LABELS: Record<ResourceType, string> = {
@@ -325,7 +347,11 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
           {data.advantageState === "advantage" && (
             <div
               className={styles.advantageBadge}
-              title={data.advantageNote ? `Advantage — ${data.advantageNote}` : "Advantage"}
+              title={
+                data.advantageNote
+                  ? `Advantage — ${data.advantageNote}`
+                  : "Advantage"
+              }
             >
               <Icon src={advantageIcon} size={14} alt="Advantage" />
             </div>
@@ -333,7 +359,11 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
           {data.advantageState === "disadvantage" && (
             <div
               className={styles.disadvantageBadge}
-              title={data.advantageNote ? `Disadvantage — ${data.advantageNote}` : "Disadvantage"}
+              title={
+                data.advantageNote
+                  ? `Disadvantage — ${data.advantageNote}`
+                  : "Disadvantage"
+              }
             >
               <Icon src={disadvantageIcon} size={14} alt="Disadvantage" />
             </div>
@@ -397,11 +427,31 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
               {critExpr} {damageInfo.label}
             </span>
           )}
-          {data.range && (
-            <span className={styles.infoPill} title="Range">
-              <Icon src={reachIcon} size={12} /> {data.range}
-            </span>
-          )}
+          {data.range &&
+            (() => {
+              const aoe = extractAoE(data.range, data.description ?? "");
+              const baseRange = aoe
+                ? data.range.replace(/\s*\([^)]*\)/, "").trim()
+                : data.range;
+              return (
+                <span
+                  className={styles.infoPill}
+                  title={
+                    aoe
+                      ? `Range: ${baseRange} — ${aoe.size} ${aoe.shape}`
+                      : "Range"
+                  }
+                >
+                  <Icon src={reachIcon} size={12} /> {baseRange}
+                  {aoe && AOE_ICONS[aoe.shape] && (
+                    <>
+                      {" "}
+                      {aoe.size} <Icon src={AOE_ICONS[aoe.shape]} size={12} />
+                    </>
+                  )}
+                </span>
+              );
+            })()}
           {data.duration && data.duration !== "Instantaneous" && (
             <span className={styles.infoPill} title="Duration">
               <Icon src={timeIcon} size={12} /> {data.duration}

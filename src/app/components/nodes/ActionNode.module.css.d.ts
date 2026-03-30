@@ -22,6 +22,7 @@ declare const pills: string;
 declare const damagePill: string;
 declare const infoPill: string;
 declare const componentPill: string;
+declare const aoePill: string;
 declare const notesSection: string;
 declare const notesDisplay: string;
 declare const notesText: string;
@@ -75,6 +76,7 @@ export {
 	damagePill,
 	infoPill,
 	componentPill,
+	aoePill,
 	notesSection,
 	notesDisplay,
 	notesText,
@@ -129,6 +131,7 @@ declare const __default_export__: {
 	damagePill: typeof damagePill;
 	infoPill: typeof infoPill;
 	componentPill: typeof componentPill;
+	aoePill: typeof aoePill;
 	notesSection: typeof notesSection;
 	notesDisplay: typeof notesDisplay;
 	notesText: typeof notesText;

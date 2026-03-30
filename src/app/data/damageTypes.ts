@@ -246,3 +246,41 @@ export function extractSaveAbility(description: string): string | null {
   if (dcMatch) return ABILITY_ABBR[dcMatch[1].toLowerCase()] ?? null;
   return null;
 }
+
+export type AoEShape =
+  | "cone"
+  | "sphere"
+  | "cube"
+  | "cylinder"
+  | "emanation"
+  | "line"
+  | "circle"
+  | "square"
+  | "wall";
+
+export interface AoEInfo {
+  shape: AoEShape;
+  size: string;
+}
+
+const AOE_SHAPE_RE =
+  /(\d+)[- ]foot(?:[- ]radius)?\s+(cone|sphere|cube|cylinder|emanation|line|circle|square|wall|hemisphere)/i;
+
+export function extractAoE(range: string, description = ""): AoEInfo | null {
+  // Try range field first: "Self (15-foot cone)", "60 feet (10-foot-radius sphere)"
+  const parenContent = range.match(/\(([^)]+)\)/)?.[1] ?? "";
+  const rm = parenContent.match(AOE_SHAPE_RE);
+  if (rm) {
+    const raw = rm[2].toLowerCase();
+    const shape: AoEShape = raw === "hemisphere" ? "sphere" : (raw as AoEShape);
+    return { shape, size: `${rm[1]} ft` };
+  }
+  // Fall back to description
+  const dm = description.match(AOE_SHAPE_RE);
+  if (dm) {
+    const raw = dm[2].toLowerCase();
+    const shape: AoEShape = raw === "hemisphere" ? "sphere" : (raw as AoEShape);
+    return { shape, size: `${dm[1]} ft` };
+  }
+  return null;
+}
