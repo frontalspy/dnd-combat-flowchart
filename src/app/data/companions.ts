@@ -55,7 +55,8 @@ export const COMPANIONS: CompanionDefinition[] = [
       {
         id: "black-bear-bite",
         name: "Bite",
-        description: "Melee attack: +3 to hit, reach 5 ft. Hit: 1d6+3 piercing.",
+        description:
+          "Melee attack: +3 to hit, reach 5 ft. Hit: 1d6+3 piercing.",
         actionType: "action",
         damageType: "piercing",
         damageDice: "1d6+3",
@@ -86,7 +87,8 @@ export const COMPANIONS: CompanionDefinition[] = [
       {
         id: "brown-bear-bite",
         name: "Bite",
-        description: "Melee attack: +5 to hit, reach 5 ft. Hit: 2d6+5 piercing.",
+        description:
+          "Melee attack: +5 to hit, reach 5 ft. Hit: 2d6+5 piercing.",
         actionType: "action",
         damageType: "piercing",
         damageDice: "2d6+5",
@@ -140,7 +142,8 @@ export const COMPANIONS: CompanionDefinition[] = [
       {
         id: "giant-eagle-beak",
         name: "Beak",
-        description: "Melee attack: +5 to hit, reach 5 ft. Hit: 1d6+4 piercing.",
+        description:
+          "Melee attack: +5 to hit, reach 5 ft. Hit: 1d6+4 piercing.",
         actionType: "action",
         damageType: "piercing",
         damageDice: "1d6+4",
@@ -171,7 +174,8 @@ export const COMPANIONS: CompanionDefinition[] = [
       {
         id: "polar-bear-bite",
         name: "Bite",
-        description: "Melee attack: +7 to hit, reach 5 ft. Hit: 2d6+5 piercing.",
+        description:
+          "Melee attack: +7 to hit, reach 5 ft. Hit: 2d6+5 piercing.",
         actionType: "action",
         damageType: "piercing",
         damageDice: "2d6+5",
@@ -343,7 +347,50 @@ export const COMPANIONS: CompanionDefinition[] = [
       },
     ],
   },
-  // ─── Artificer (Artillerist) — Homunculus Servant ────────────────────────
+  // ─── Artificer (Artillerist) — Eldritch Cannon ──────────────────────────
+  {
+    id: "artificer-eldritch-cannon",
+    name: "Eldritch Cannon",
+    companionType: "construct",
+    classId: "artificer",
+    subclassId: "artillerist",
+    minLevel: 3,
+    hp: "—",
+    ac: "18",
+    speed: "15 ft. (if Tiny)",
+    description:
+      "Small or Tiny magical cannon summoned in an unoccupied space within 5 ft. Lasts 1 hour. Choose a type at creation: Flamethrower, Force Ballista, or Protector. You can use a bonus action to command it. Destroyed when it drops to 0 HP or via Explosive Cannon.",
+    actions: [
+      {
+        id: "cannon-flamethrower",
+        name: "Flamethrower",
+        description:
+          "The cannon exhales fire in a 15-foot cone. Each creature in the area makes a DC (8+PB+Int) Dexterity save or takes 2d8 fire damage (half on success).",
+        actionType: "action",
+        damageType: "fire",
+        damageDice: "2d8",
+      },
+      {
+        id: "cannon-force-ballista",
+        name: "Force Ballista",
+        description:
+          "Ranged spell attack (range 120 ft.) using your spell attack bonus. Hit: 2d8 force damage, and the target is pushed 5 feet away from the cannon.",
+        actionType: "action",
+        damageType: "force",
+        damageDice: "2d8",
+      },
+      {
+        id: "cannon-protector",
+        name: "Protector",
+        description:
+          "Each creature of your choice within 10 feet of the cannon gains 1d8 + Int modifier temporary hit points.",
+        actionType: "action",
+        damageType: "healing",
+        damageDice: "1d8",
+      },
+    ],
+  },
+  // ─── Artificer (Alchemist) — Homunculus Servant ───────────────────────────
   {
     id: "artificer-homunculus",
     name: "Homunculus Servant",
@@ -519,7 +566,8 @@ export const COMPANIONS: CompanionDefinition[] = [
       {
         id: "pseudodragon-bite",
         name: "Bite",
-        description: "Melee attack: +4 to hit, reach 5 ft. Hit: 1d4+2 piercing.",
+        description:
+          "Melee attack: +4 to hit, reach 5 ft. Hit: 1d4+2 piercing.",
         actionType: "action",
         damageType: "piercing",
         damageDice: "1d4+2",
@@ -648,7 +696,8 @@ export const COMPANIONS: CompanionDefinition[] = [
       {
         id: "steed-hooves",
         name: "Hooves (Warhorse form)",
-        description: "Melee attack: +6 to hit, reach 5 ft. Hit: 2d4+4 bludgeoning.",
+        description:
+          "Melee attack: +6 to hit, reach 5 ft. Hit: 2d4+4 bludgeoning.",
         actionType: "action",
         damageType: "bludgeoning",
         damageDice: "2d4+4",
@@ -694,7 +743,8 @@ export const COMPANIONS: CompanionDefinition[] = [
       {
         id: "skeleton-shortsword",
         name: "Shortsword",
-        description: "Melee attack: +4 to hit, reach 5 ft. Hit: 1d6+2 piercing.",
+        description:
+          "Melee attack: +4 to hit, reach 5 ft. Hit: 1d6+2 piercing.",
         actionType: "action",
         damageType: "piercing",
         damageDice: "1d6+2",
@@ -725,7 +775,8 @@ export const COMPANIONS: CompanionDefinition[] = [
       {
         id: "zombie-slam",
         name: "Slam",
-        description: "Melee attack: +3 to hit, reach 5 ft. Hit: 1d6+1 bludgeoning.",
+        description:
+          "Melee attack: +3 to hit, reach 5 ft. Hit: 1d6+1 bludgeoning.",
         actionType: "action",
         damageType: "bludgeoning",
         damageDice: "1d6+1",

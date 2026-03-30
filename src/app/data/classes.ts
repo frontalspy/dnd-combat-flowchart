@@ -30,6 +30,8 @@ export interface ClassAction {
   actionType: ActionType;
   damageType?: DamageType;
   minLevel: number;
+  /** If set, only show this action when the character's subclass matches. */
+  subclassId?: string;
   /** Explicit damage dice expression (e.g. "2d10") — overrides description-parsed value. */
   damageDice?: string;
 }
@@ -117,41 +119,26 @@ export const CLASSES: ClassDefinition[] = [
         minLevel: 20,
       },
       {
-        id: "artificer-eldritch-cannon",
-        name: "Eldritch Cannon (Artillerist)",
-        description:
-          "Action: create a Small or Tiny magical cannon in an unoccupied space within 5 feet. Lasts 1 hour. Choose type: Flamethrower (15-ft cone, 2d8 fire, Dex save), Force Ballista (ranged spell, 2d8 force, pushes 5 feet), or Protector (friendly creatures within 10 feet gain 1d8 + Int temp HP).",
-        actionType: "action",
-        damageType: "fire",
-        minLevel: 3,
-      },
-      {
         id: "artificer-explosive-cannon",
-        name: "Explosive Cannon (Artillerist)",
+        name: "Explosive Cannon",
         description:
           "Action: Detonate your Eldritch Cannon, destroying it. Each creature within 20 feet must make a DC 8+prof+Int Dexterity save or take 3d8 force damage (half on success).",
         actionType: "action",
         damageType: "force",
         damageDice: "3d8",
+        subclassId: "artillerist",
         minLevel: 9,
       },
       {
         id: "artificer-arcane-jolt",
-        name: "Arcane Jolt (Battle Smith)",
+        name: "Arcane Jolt",
         description:
           "When your Steel Defender or a magic weapon you hold hits, deal an extra 2d6 force damage to the target, or restore 2d6 HP to a creature within 30 feet of the target. Uses = Int modifier per long rest. Scales to 4d6 at level 15.",
         actionType: "special",
         damageType: "force",
         damageDice: "2d6",
+        subclassId: "battle-smith",
         minLevel: 9,
-      },
-      {
-        id: "artificer-steel-defender",
-        name: "Steel Defender (Battle Smith)",
-        description:
-          "During a long rest, create a magical Iron Defender with HP equal to 5 × Artificer level + Int modifier. It acts on your initiative on its own turn, can use its Deflect Attack reaction (imposes disadvantage), and obeys your verbal commands.",
-        actionType: "bonus",
-        minLevel: 3,
       },
     ],
   },

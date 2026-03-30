@@ -4,10 +4,7 @@ import { STANDARD_ACTIONS } from "../data/actions";
 import type { ClassAction } from "../data/classes";
 import { CLASSES, getClassDefinition, getMaxSpellLevel } from "../data/classes";
 import type { CompanionDefinition } from "../data/companions";
-import {
-  COMPANIONS,
-  getCompanionsForClass,
-} from "../data/companions";
+import { COMPANIONS, getCompanionsForClass } from "../data/companions";
 import { SPELL_SCHOOLS } from "../data/damageTypes";
 import spellsData from "../data/spells.json";
 import type { Weapon } from "../data/weapons";
@@ -232,8 +229,7 @@ function CompanionCard({ companion, onDragStart }: CompanionCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const classDef = CLASSES.find((c) => c.id === companion.classId);
   const headerColor = classDef?.color ?? "#5a6a78";
-  const typeIcon =
-    COMPANION_TYPE_ICONS[companion.companionType] ?? summonIcon;
+  const typeIcon = COMPANION_TYPE_ICONS[companion.companionType] ?? summonIcon;
   const typeLabel = COMPANION_TYPE_LABELS[companion.companionType];
 
   const dragData = {
@@ -479,11 +475,13 @@ export function SpellPanel({
 
   const classActions: ActionItem[] = useMemo(() => {
     const resultMap = new Map<string, ActionItem>();
-    for (const { classId, level } of allCharClasses) {
+    for (const { classId, subclassId, level } of allCharClasses) {
       const cd = getClassDefinition(classId);
       if (!cd) continue;
       const eligible = cd.classActions.filter(
-        (a: ClassAction) => a.minLevel <= level
+        (a: ClassAction) =>
+          a.minLevel <= level &&
+          (!a.subclassId || a.subclassId === subclassId)
       );
       // For same-name actions from the same class keep the highest-minLevel one
       const best = new Map<string, ClassAction>();

@@ -3,6 +3,7 @@ import { Handle, Position } from "@xyflow/react";
 import React, { useContext, useState } from "react";
 import { getClassDefinition } from "../../data/classes";
 import { ACTION_TYPE_LABELS, DAMAGE_TYPES } from "../../data/damageTypes";
+import summonIcon from "../../icons/entity/summon.svg";
 import beastIcon from "../../icons/monster/beast.svg";
 import celestialIcon from "../../icons/monster/celestial.svg";
 import constructIcon from "../../icons/monster/construct.svg";
@@ -12,7 +13,6 @@ import faeIcon from "../../icons/monster/fae.svg";
 import fiendIcon from "../../icons/monster/fiend.svg";
 import humanoidIcon from "../../icons/monster/humanoid.svg";
 import undeadIcon from "../../icons/monster/undead.svg";
-import summonIcon from "../../icons/entity/summon.svg";
 import type { CompanionNodeData, CompanionType } from "../../types";
 import { SelectionGroupContext } from "../FlowCanvasContexts";
 import { Icon } from "../Icon";
@@ -57,8 +57,7 @@ export function CompanionNode({
   const classDef = getClassDefinition(data.classId);
   const headerColor = classDef?.color ?? "#5a6a78";
 
-  const typeIcon =
-    COMPANION_TYPE_ICONS[data.companionType] ?? summonIcon;
+  const typeIcon = COMPANION_TYPE_ICONS[data.companionType] ?? summonIcon;
   const typeLabel =
     COMPANION_TYPE_LABELS[data.companionType] ?? data.companionType;
 
@@ -98,10 +97,7 @@ export function CompanionNode({
       />
 
       {/* Header */}
-      <div
-        className={styles.header}
-        style={{ backgroundColor: headerColor }}
-      >
+      <div className={styles.header} style={{ backgroundColor: headerColor }}>
         <div className={styles.headerLeft}>
           <Icon src={typeIcon} size={14} className={styles.typeIcon} />
           <span className={styles.companionName}>{data.label}</span>
