@@ -620,7 +620,8 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
                               data.baseDamageDice,
                               data.higherLevels,
                               baseLevel,
-                              lvl
+                              lvl,
+                              data.description
                             )
                           : data.damageDice,
                         duration: getScaledDuration(

@@ -204,7 +204,46 @@ export function getActionTypeFromCastingTime(
   return "special";
 }
 
+const WORD_NUMS: Record<string, number> = {
+  two: 2,
+  three: 3,
+  four: 4,
+  five: 5,
+  six: 6,
+  seven: 7,
+  eight: 8,
+};
+
 export function extractDamageDice(description: string): string | null {
+  // Multi-projectile pattern: "create three glowing darts ... A dart deals 1d4 + 1"
+  // Generalises to any "create/fire/hurl N (adj?) WORDs ... A WORD deals XdY[+Z]"
+  const countMatch = description.match(
+    /(?:create|fire|hurl|launch)s?\s+(two|three|four|five|six|seven|eight|\d+)\s+(?:\w+\s+)*?(\w+?)s\b/i
+  );
+  if (countMatch) {
+    const countRaw = countMatch[1].toLowerCase();
+    const count = WORD_NUMS[countRaw] ?? parseInt(countRaw, 10);
+    const word = countMatch[2]; // singular, e.g. "dart"
+    const perUnitRe = new RegExp(
+      `\\b[Aa]n?\\s+${word}\\b[^.]*?(\\d+d\\d+(?:\\s*[+\\-]\\s*\\d+)?)`,
+      "i"
+    );
+    const perMatch = description.match(perUnitRe);
+    if (perMatch && !Number.isNaN(count) && count > 1) {
+      const perDice = perMatch[1].trim().replace(/\s+/g, "");
+      const diceMatch = perDice.match(/^(\d+)d(\d+)([+\-]\d+)?$/);
+      if (diceMatch) {
+        const dc = parseInt(diceMatch[1], 10);
+        const dt = diceMatch[2];
+        const mod = diceMatch[3] ? parseInt(diceMatch[3], 10) : 0;
+        const totalMod = mod * count;
+        const totalCount = dc * count;
+        if (totalMod === 0) return `${totalCount}d${dt}`;
+        return `${totalCount}d${dt}${totalMod > 0 ? "+" : ""}${totalMod}`;
+      }
+    }
+  }
+  // Default: first dice expression in the description
   const match = description.match(/\b(\d+d\d+(?:\s*[+\-]\s*\d+)?)\b/i);
   return match ? match[1].trim() : null;
 }

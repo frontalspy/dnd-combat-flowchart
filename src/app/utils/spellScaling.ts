@@ -73,7 +73,8 @@ function ordinalToNumber(word: string): number | null {
  * Returns null when no recognized pattern is found.
  */
 export function parseHigherLevelDiceBonus(
-  text: string
+  text: string,
+  description?: string
 ): { scalingDice: string; aboveLevel: number; stepSize: number } | null {
   // "every two slot levels above" variant (must be checked before the standard
   // pattern because both start with "increases by")
@@ -85,6 +86,27 @@ export function parseHigherLevelDiceBonus(
     const aboveLevel = ordinalToNumber(everyTwoMatch[2]);
     if (aboveLevel !== null) {
       return { scalingDice: everyTwoMatch[1], aboveLevel, stepSize: 2 };
+    }
+  }
+
+  // "one more [projectile] for each slot level above Nth" — e.g. Magic Missile
+  // The per-unit scaling dice is looked up from the spell description when provided.
+  const oneMoreMatch =
+    /(?:the spell )?(?:creates?|fires?|generates?)\s+one more (\w+) for each (?:slot )?level above (\w+)/i.exec(
+      text
+    );
+  if (oneMoreMatch && description) {
+    const word = oneMoreMatch[1];
+    const aboveLevel = ordinalToNumber(oneMoreMatch[2]);
+    if (aboveLevel !== null) {
+      const perUnitRe = new RegExp(
+        `\\b[Aa]n?\\s+${word}\\b[^.]*?(\\d+d\\d+(?:\\s*[+\\-]\\s*\\d+)?)`,
+        "i"
+      );
+      const perMatch = description.match(perUnitRe);
+      if (perMatch) {
+        return { scalingDice: perMatch[1].trim(), aboveLevel, stepSize: 1 };
+      }
     }
   }
 
@@ -158,6 +180,7 @@ export function parseTieredDice(
 /**
  * Adds scaling dice to a base dice expression when the die types match.
  * e.g. combineDice("3d6", "1d6", 2) → "5d6"
+ * Also handles optional static modifiers: combineDice("3d4+3", "1d4+1", 1) → "4d4+4"
  * Falls back to baseDice for mismatched die types or unparseable expressions.
  */
 export function combineDice(
@@ -165,8 +188,9 @@ export function combineDice(
   scalingDice: string,
   levelsAbove: number
 ): string {
-  const baseMatch = /^(\d+)d(\d+)$/.exec(baseDice.trim());
-  const scaleMatch = /^(\d+)d(\d+)$/.exec(scalingDice.trim());
+  const DICE_RE = /^(\d+)d(\d+)(?:\s*([+\-])\s*(\d+))?$/;
+  const baseMatch = DICE_RE.exec(baseDice.trim());
+  const scaleMatch = DICE_RE.exec(scalingDice.trim());
   if (!baseMatch || !scaleMatch) return baseDice;
 
   const baseDieType = parseInt(baseMatch[2], 10);
@@ -175,7 +199,16 @@ export function combineDice(
 
   const baseCount = parseInt(baseMatch[1], 10);
   const scaleCount = parseInt(scaleMatch[1], 10);
-  return `${baseCount + scaleCount * levelsAbove}d${baseDieType}`;
+  const baseMod = baseMatch[4]
+    ? (baseMatch[3] === "-" ? -1 : 1) * parseInt(baseMatch[4], 10)
+    : 0;
+  const scaleMod = scaleMatch[4]
+    ? (scaleMatch[3] === "-" ? -1 : 1) * parseInt(scaleMatch[4], 10)
+    : 0;
+  const totalCount = baseCount + scaleCount * levelsAbove;
+  const totalMod = baseMod + scaleMod * levelsAbove;
+  if (totalMod === 0) return `${totalCount}d${baseDieType}`;
+  return `${totalCount}d${baseDieType}${totalMod > 0 ? "+" : ""}${totalMod}`;
 }
 
 /**
@@ -338,7 +371,8 @@ export function getScaledDamageDice(
   baseDamageDice: string,
   higherLevels: string | undefined,
   spellLevel: number,
-  castAtLevel: number
+  castAtLevel: number,
+  description?: string
 ): string {
   if (castAtLevel <= spellLevel) return baseDamageDice;
   if (!higherLevels) return baseDamageDice;
@@ -347,8 +381,8 @@ export function getScaledDamageDice(
   const tiered = parseTieredDice(higherLevels, castAtLevel);
   if (tiered !== null) return tiered;
 
-  // Standard additive per-level formula
-  const parsed = parseHigherLevelDiceBonus(higherLevels);
+  // Standard additive per-level formula (passes description for projectile-count spells)
+  const parsed = parseHigherLevelDiceBonus(higherLevels, description);
   if (!parsed) return baseDamageDice;
 
   const rawLevelsAbove = castAtLevel - parsed.aboveLevel;
