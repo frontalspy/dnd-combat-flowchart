@@ -196,6 +196,9 @@ export function NodeEditor({
   const [rcType, setRcType] = useState<ResourceType | "">("");
   const [rcAmount, setRcAmount] = useState("");
   const [rcLabel, setRcLabel] = useState("");
+  const [rollType, setRollType] = useState<"attack" | "save" | "auto">("auto");
+  const [saveAbility, setSaveAbility] = useState("");
+  const [saveDCInput, setSaveDCInput] = useState("");
 
   // Reset expanded state when a new node is selected
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally keyed on node id only
@@ -230,6 +233,16 @@ export function NodeEditor({
     setRcType(rc?.type ?? "");
     setRcAmount(rc?.amount !== undefined ? String(rc.amount) : "");
     setRcLabel(rc?.label ?? "");
+    setRollType(
+      (typeof d.rollType === "string" ? d.rollType : "auto") as
+        | "attack"
+        | "save"
+        | "auto"
+    );
+    setSaveAbility(typeof d.saveAbility === "string" ? d.saveAbility : "");
+    // Extract first integer from saveDC value (handles both "DC 15 DEX" and plain "15")
+    const rawDC = typeof d.saveDC === "string" ? d.saveDC : "";
+    setSaveDCInput(rawDC.match(/(\d+)/)?.[1] ?? "");
   }, [selectedNode]);
 
   const handleSaveNotes = useCallback(() => {
@@ -303,6 +316,31 @@ export function NodeEditor({
   const handleRcLabelBlur = useCallback(() => {
     applyResourceCost(rcType, rcAmount, rcLabel);
   }, [applyResourceCost, rcType, rcAmount, rcLabel]);
+
+  const handleRollTypeChange = useCallback(
+    (newType: "attack" | "save" | "auto") => {
+      if (!selectedNode) return;
+      setRollType(newType);
+      updateNodeData(selectedNode.id, { rollType: newType });
+    },
+    [selectedNode, updateNodeData]
+  );
+
+  const handleSaveAbilityChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      if (!selectedNode) return;
+      setSaveAbility(e.target.value);
+      updateNodeData(selectedNode.id, {
+        saveAbility: e.target.value || undefined,
+      });
+    },
+    [selectedNode, updateNodeData]
+  );
+
+  const handleSaveDCBlur = useCallback(() => {
+    if (!selectedNode) return;
+    updateNodeData(selectedNode.id, { saveDC: saveDCInput || undefined });
+  }, [selectedNode, saveDCInput, updateNodeData]);
 
   // ─────────────────────────────────────────────────────────────────
 
@@ -587,6 +625,63 @@ export function NodeEditor({
               </div>
             );
           })()}
+
+        {/* Roll Type override (action nodes only) */}
+        {nodeType === "actionNode" && (
+          <div className={styles.field}>
+            <label className={styles.fieldLabel}>Roll Type</label>
+            <div className={styles.pillRow}>
+              {(["attack", "save", "auto"] as const).map((rt) => (
+                <button
+                  key={rt}
+                  type="button"
+                  className={`${styles.infoPill} ${rollType === rt ? styles.infoPillActive : ""}`}
+                  onClick={() => handleRollTypeChange(rt)}
+                >
+                  {rt === "attack"
+                    ? "Attack Roll"
+                    : rt === "save"
+                      ? "Target Saves"
+                      : "Automatic"}
+                </button>
+              ))}
+            </div>
+            {rollType === "save" && (
+              <>
+                <div className={styles.fieldRow}>
+                  <select
+                    className={styles.resourceSelect}
+                    value={saveAbility}
+                    onChange={handleSaveAbilityChange}
+                  >
+                    <option value="">— Ability —</option>
+                    {["STR", "DEX", "CON", "INT", "WIS", "CHA"].map((ab) => (
+                      <option key={ab} value={ab}>
+                        {ab}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className={styles.fieldRow}>
+                  <label className={styles.amountLabel}>DC</label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={30}
+                    className={styles.amountInput}
+                    value={saveDCInput}
+                    onChange={(e) => setSaveDCInput(e.target.value)}
+                    onBlur={handleSaveDCBlur}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSaveDCBlur();
+                    }}
+                    placeholder="—"
+                  />
+                </div>
+              </>
+            )}
+          </div>
+        )}
 
         {/* Notes */}
         {nodeType !== "noteNode" && nodeType !== "startNode" && (

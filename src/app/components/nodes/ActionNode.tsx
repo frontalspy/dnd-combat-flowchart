@@ -440,11 +440,15 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
                 title={
                   computedSaveDC
                     ? `DC ${computedSaveDC} saving throw`
-                    : "Saving throw required"
+                    : data.saveDC
+                      ? `DC ${data.saveDC} saving throw`
+                      : "Saving throw required"
                 }
               >
-                {computedSaveDC && (
-                  <span className={styles.saveDcValue}>{computedSaveDC} </span>
+                {(computedSaveDC !== null || data.saveDC) && (
+                  <span className={styles.saveDcValue}>
+                    {computedSaveDC ?? data.saveDC}{" "}
+                  </span>
                 )}
                 {data.saveAbility ? `${data.saveAbility} SAVE` : "SAVE"}
               </span>

@@ -274,6 +274,36 @@ function RenderActionNode({
       >
         {data.label as string}
       </div>
+      {/* Roll type badge */}
+      {data.rollType === "attack" && (
+        <div
+          style={{
+            fontSize: badgeFs,
+            fontWeight: 700,
+            color: "#1a5276",
+            padding: "1px 5px 3px",
+            borderTop: "1px solid #ddd",
+            letterSpacing: 0.3,
+          }}
+        >
+          ⚔ Attack Roll
+        </div>
+      )}
+      {data.rollType === "save" && data.saveAbility && (
+        <div
+          style={{
+            fontSize: badgeFs,
+            fontWeight: 700,
+            color: "#7d6608",
+            padding: "1px 5px 3px",
+            borderTop: "1px solid #ddd",
+            letterSpacing: 0.3,
+          }}
+        >
+          {data.saveAbility} Save
+          {data.saveDC ? ` · DC ${data.saveDC}` : ""}
+        </div>
+      )}
     </div>
   );
 }
