@@ -119,7 +119,6 @@ export function NodeEditor({
   isSheet = false,
 }: NodeEditorProps) {
   const panelRef = useRef<HTMLElement>(null);
-  const labelInputRef = useRef<HTMLInputElement>(null);
   const touchStartY = useRef(0);
   const touchCurrentY = useRef(0);
   const [sheetExpanded, setSheetExpanded] = useState(false);
@@ -204,24 +203,6 @@ export function NodeEditor({
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally keyed on node id only
   useEffect(() => {
     setSheetExpanded(false);
-  }, [selectedNode?.id]);
-
-  // Auto-focus the label input when a node is selected (desktop only)
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally keyed on node id only
-  useEffect(() => {
-    if (isSheet) return;
-    const t = setTimeout(() => {
-      // Don't steal focus if the user is already editing something
-      // (e.g. clicked the in-canvas notes textarea to open it)
-      const active = document.activeElement;
-      if (
-        active instanceof HTMLInputElement ||
-        active instanceof HTMLTextAreaElement
-      )
-        return;
-      labelInputRef.current?.focus();
-    }, 50);
-    return () => clearTimeout(t);
   }, [selectedNode?.id]);
 
   useEffect(() => {
@@ -474,7 +455,6 @@ export function NodeEditor({
             <label className={styles.fieldLabel}>Name</label>
             <div className={styles.fieldRow}>
               <input
-                ref={labelInputRef}
                 className={styles.fieldInput}
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}
