@@ -348,12 +348,68 @@
   color: var(--gold);
 }
 
+/* Filters toggle button (in level-chips row) */
+.filtersToggle {
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  padding: 3px 8px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-dim);
+  border-radius: 10px;
+  color: var(--text-faint);
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.filtersToggle:hover {
+  background: var(--bg-surface);
+  color: var(--text-mid);
+  border-color: var(--border-accent);
+}
+
+.filtersToggleActive {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+  background: rgba(200, 144, 28, 0.08);
+}
+
+.filtersDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+/* Advanced filters drawer */
+.filtersDrawer {
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.filtersDrawer .sourceFilters {
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.filtersDrawer .schoolFilters {
+  border-bottom: 1px solid var(--border-dim);
+}
+
 /* Source filters */
 .sourceFilters {
   display: flex;
   gap: 4px;
   padding: 6px 12px 8px;
-  border-bottom: 1px solid var(--border-dim);
 }
 
 .sourceChip {
@@ -857,7 +913,6 @@
   flex-wrap: wrap;
   gap: 4px;
   padding: 6px 12px;
-  border-bottom: 1px solid var(--border-dim);
 }
 
 .schoolChip {
@@ -896,7 +951,6 @@
   display: flex;
   gap: 4px;
   padding: 6px 12px 8px;
-  border-bottom: 1px solid var(--border-dim);
   overflow-x: auto;
   flex-wrap: nowrap;
   scrollbar-width: none;

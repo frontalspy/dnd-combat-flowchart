@@ -1,4 +1,11 @@
-import { ChevronLeft, ChevronRight, Plus, Search, X } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  Plus,
+  Search,
+  X,
+} from "lucide-react";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { STANDARD_ACTIONS } from "../data/actions";
 import type { ClassAction } from "../data/classes";
@@ -409,6 +416,7 @@ export function SpellPanel({
   const [schoolFilter, setSchoolFilter] = useState<string>("all");
   const [damageFilter, setDamageFilter] = useState<string>("all");
   const [spellSort, setSpellSort] = useState<SpellSort>("default");
+  const [showFilters, setShowFilters] = useState(false);
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [conditionAffects, setConditionAffects] = useState<
     "self" | "target" | "area"
@@ -697,6 +705,7 @@ export function SpellPanel({
     setSchoolFilter("all");
     setDamageFilter("all");
     setSpellSort("default");
+    setShowFilters(false);
   }, []);
 
   const handleTemplateDrag = useCallback(
@@ -950,7 +959,7 @@ export function SpellPanel({
         )}
       </div>
 
-      {/* Spell level filter */}
+      {/* Spell level filter + Filters toggle */}
       {activeTab === "spells" && (
         <div className={styles.levelFilters}>
           {spellLevelOptions
@@ -969,96 +978,114 @@ export function SpellPanel({
                 {level === "all" ? "All" : level === "cantrip" ? "✦" : level}
               </button>
             ))}
-        </div>
-      )}
-
-      {/* Source filter */}
-      {activeTab === "spells" && (
-        <div className={styles.sourceFilters}>
-          {(["all", "SRD", "XGtE", "TCoE"] as SpellSourceFilter[]).map(
-            (src) => (
-              <button
-                key={src}
-                type="button"
-                className={`${styles.sourceChip} ${sourceFilter === src ? styles.activeSourceChip : ""}`}
-                onClick={() => setSourceFilter(src)}
-              >
-                {src === "all" ? "All Sources" : src}
-              </button>
-            )
-          )}
-        </div>
-      )}
-
-      {/* School filter */}
-      {activeTab === "spells" && (
-        <div className={styles.schoolFilters}>
           <button
             type="button"
-            className={`${styles.schoolChip} ${schoolFilter === "all" ? styles.activeSchoolChip : ""}`}
-            onClick={() => setSchoolFilter("all")}
+            className={`${styles.filtersToggle} ${
+              sourceFilter !== "all" ||
+              schoolFilter !== "all" ||
+              damageFilter !== "all"
+                ? styles.filtersToggleActive
+                : ""
+            }`}
+            onClick={() => setShowFilters((v) => !v)}
+            aria-expanded={showFilters}
+            title="Toggle source, school and damage type filters"
           >
-            All
+            <Filter size={10} />
+            Filters
+            {(sourceFilter !== "all" ||
+              schoolFilter !== "all" ||
+              damageFilter !== "all") && <span className={styles.filtersDot} />}
           </button>
-          {FILTER_SCHOOLS.map((school) => {
-            const meta = SPELL_SCHOOLS[school];
-            const isActive = schoolFilter === school;
-            return (
-              <button
-                key={school}
-                type="button"
-                className={`${styles.schoolChip} ${isActive ? styles.activeSchoolChip : ""}`}
-                onClick={() => setSchoolFilter(school)}
-                style={
-                  isActive
-                    ? { borderColor: meta.color, color: meta.color }
-                    : undefined
-                }
-                title={meta.label}
-              >
-                <Icon src={SCHOOL_ICONS[school]} size={10} />
-                {meta.abbreviation}
-              </button>
-            );
-          })}
         </div>
       )}
 
-      {/* Damage type filter */}
-      {activeTab === "spells" && (
-        <div className={styles.damageFilters}>
-          <button
-            type="button"
-            className={`${styles.damageChip} ${damageFilter === "all" ? styles.activeDamageChip : ""}`}
-            onClick={() => setDamageFilter("all")}
-          >
-            Any
-          </button>
-          {DAMAGE_TYPE_KEYS.map((dtype) => {
-            const meta = DAMAGE_TYPES[dtype];
-            const isActive = damageFilter === dtype;
-            return (
-              <button
-                key={dtype}
-                type="button"
-                className={`${styles.damageChip} ${isActive ? styles.activeDamageChip : ""}`}
-                onClick={() => setDamageFilter(dtype)}
-                style={
-                  isActive
-                    ? {
-                        borderColor: meta.color,
-                        color: meta.color,
-                        background: meta.bgColor,
-                      }
-                    : undefined
-                }
-                title={meta.label}
-              >
-                <Icon src={meta.icon} size={10} />
-                {meta.label}
-              </button>
-            );
-          })}
+      {/* Advanced filters drawer — source, school, damage */}
+      {activeTab === "spells" && showFilters && (
+        <div className={styles.filtersDrawer}>
+          {/* Source filter */}
+          <div className={styles.sourceFilters}>
+            {(["all", "SRD", "XGtE", "TCoE"] as SpellSourceFilter[]).map(
+              (src) => (
+                <button
+                  key={src}
+                  type="button"
+                  className={`${styles.sourceChip} ${sourceFilter === src ? styles.activeSourceChip : ""}`}
+                  onClick={() => setSourceFilter(src)}
+                >
+                  {src === "all" ? "All Sources" : src}
+                </button>
+              )
+            )}
+          </div>
+
+          {/* School filter */}
+          <div className={styles.schoolFilters}>
+            <button
+              type="button"
+              className={`${styles.schoolChip} ${schoolFilter === "all" ? styles.activeSchoolChip : ""}`}
+              onClick={() => setSchoolFilter("all")}
+            >
+              All
+            </button>
+            {FILTER_SCHOOLS.map((school) => {
+              const meta = SPELL_SCHOOLS[school];
+              const isActive = schoolFilter === school;
+              return (
+                <button
+                  key={school}
+                  type="button"
+                  className={`${styles.schoolChip} ${isActive ? styles.activeSchoolChip : ""}`}
+                  onClick={() => setSchoolFilter(school)}
+                  style={
+                    isActive
+                      ? { borderColor: meta.color, color: meta.color }
+                      : undefined
+                  }
+                  title={meta.label}
+                >
+                  <Icon src={SCHOOL_ICONS[school]} size={10} />
+                  {meta.abbreviation}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Damage type filter */}
+          <div className={styles.damageFilters}>
+            <button
+              type="button"
+              className={`${styles.damageChip} ${damageFilter === "all" ? styles.activeDamageChip : ""}`}
+              onClick={() => setDamageFilter("all")}
+            >
+              Any
+            </button>
+            {DAMAGE_TYPE_KEYS.map((dtype) => {
+              const meta = DAMAGE_TYPES[dtype];
+              const isActive = damageFilter === dtype;
+              return (
+                <button
+                  key={dtype}
+                  type="button"
+                  className={`${styles.damageChip} ${isActive ? styles.activeDamageChip : ""}`}
+                  onClick={() => setDamageFilter(dtype)}
+                  style={
+                    isActive
+                      ? {
+                          borderColor: meta.color,
+                          color: meta.color,
+                          background: meta.bgColor,
+                        }
+                      : undefined
+                  }
+                  title={meta.label}
+                >
+                  <Icon src={meta.icon} size={10} />
+                  {meta.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       )}
 
