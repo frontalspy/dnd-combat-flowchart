@@ -1,4 +1,5 @@
 import { ActionNode } from "./ActionNode";
+import { CompanionNode } from "./CompanionNode";
 import { ConditionNode } from "./ConditionNode";
 import { ConditionStatusNode } from "./ConditionStatusNode";
 import { EndNode } from "./EndNode";
@@ -7,6 +8,7 @@ import { StartNode } from "./StartNode";
 
 export const nodeTypes = {
   actionNode: ActionNode,
+  companionNode: CompanionNode,
   conditionNode: ConditionNode,
   conditionStatusNode: ConditionStatusNode,
   startNode: StartNode,
@@ -16,6 +18,7 @@ export const nodeTypes = {
 
 export {
   ActionNode,
+  CompanionNode,
   ConditionNode,
   ConditionStatusNode,
   StartNode,

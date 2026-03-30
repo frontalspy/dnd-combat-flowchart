@@ -287,7 +287,9 @@ export function NodeEditor({
           ? "Start Node"
           : nodeType === "conditionStatusNode"
             ? "Condition Status"
-            : "Note";
+            : nodeType === "companionNode"
+              ? "Companion / Summon"
+              : "Note";
 
   const descriptionText =
     typeof data.description === "string" ? data.description : null;
@@ -372,7 +374,8 @@ export function NodeEditor({
         {/* Name / label editing */}
         {(nodeType === "actionNode" ||
           nodeType === "conditionNode" ||
-          nodeType === "startNode") && (
+          nodeType === "startNode" ||
+          nodeType === "companionNode") && (
           <div className={styles.field}>
             <label className={styles.fieldLabel}>Name</label>
             <div className={styles.fieldRow}>

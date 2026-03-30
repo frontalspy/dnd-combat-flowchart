@@ -1,0 +1,234 @@
+/* ─── Companion Node ──────────────────────────────────────────────────────── */
+
+.companionNode {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-mid);
+  border-radius: 3px;
+  width: 250px;
+  font-family: inherit;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+
+.companionNode:hover {
+  border-color: var(--gold-dim);
+  box-shadow:
+    0 0 0 2px var(--gold-dim),
+    0 8px 24px rgba(154, 112, 16, 0.4);
+  transform: translateY(-1px);
+}
+
+.selected {
+  border-color: var(--gold-dim);
+  box-shadow:
+    0 0 0 2px var(--gold-dim),
+    0 8px 24px rgba(154, 112, 16, 0.4);
+  transform: translateY(-1px);
+}
+
+/* React Flow handles */
+.handle {
+  width: 10px;
+  height: 10px;
+  background: var(--gold);
+  border: 2px solid var(--bg-deep);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.companionNode:hover .handle,
+.selected .handle {
+  opacity: 1;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 2px 2px 0 0;
+  gap: 6px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  flex: 1;
+}
+
+.typeIcon {
+  flex-shrink: 0;
+  opacity: 0.9;
+  filter: brightness(0) invert(1);
+}
+
+.companionName {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.typeBadge {
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+/* ─── Stats Row ──────────────────────────────────────────────────────────── */
+
+.statsRow {
+  display: flex;
+  align-items: stretch;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--border-dim);
+  background: rgba(107, 76, 42, 0.04);
+  gap: 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.statLabel {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--text-faint);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 1px;
+}
+
+.statValue {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: center;
+}
+
+.statDivider {
+  width: 1px;
+  background: var(--border-dim);
+  margin: 2px 6px;
+  flex-shrink: 0;
+}
+
+/* ─── Actions Container ──────────────────────────────────────────────────── */
+
+.actionsContainer {
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.actionsToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 4px 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.actionsToggle:hover {
+  background: rgba(107, 76, 42, 0.06);
+}
+
+.actionsToggleLabel {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text-mid);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.actionsToggleChevron {
+  font-size: 10px;
+  color: var(--text-faint);
+}
+
+.actionsList {
+  padding: 2px 0;
+}
+
+.actionRow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-bottom: 1px solid rgba(107, 76, 42, 0.06);
+}
+
+.actionRow:last-child {
+  border-bottom: none;
+}
+
+.actionTypePip {
+  flex-shrink: 0;
+  font-size: 8px;
+  font-weight: 800;
+  color: #fff;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.actionName {
+  font-size: var(--fs-xs);
+  color: var(--text);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.actionDamage {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ─── Notes ──────────────────────────────────────────────────────────────── */
+
+.notes {
+  padding: 5px 8px;
+  border-top: 1px solid var(--border-dim);
+}
+
+.notesText {
+  font-size: var(--fs-xs);
+  color: var(--text-mid);
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

@@ -169,6 +169,39 @@ export interface ActionNodeData extends Record<string, unknown> {
   ritual?: boolean;
 }
 
+export type CompanionType =
+  | "beast"
+  | "construct"
+  | "undead"
+  | "elemental"
+  | "fey"
+  | "fiend"
+  | "dragon"
+  | "celestial"
+  | "humanoid";
+
+export interface CompanionAction {
+  id: string;
+  name: string;
+  description: string;
+  actionType: ActionType;
+  damageType?: DamageType;
+  damageDice?: string;
+}
+
+export interface CompanionNodeData extends Record<string, unknown> {
+  label: string;
+  companionId: string;
+  companionType: CompanionType;
+  classId: DndClass;
+  hp: string;
+  ac: string;
+  speed?: string;
+  description?: string;
+  actions: CompanionAction[];
+  notes?: string;
+}
+
 export interface ConditionNodeData extends Record<string, unknown> {
   label: string;
   notes?: string;

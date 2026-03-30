@@ -73,7 +73,29 @@ declare const shieldCard: string;
 declare const shieldIcon: string;
 declare const shieldLabel: string;
 declare const shieldAc: string;
+declare const companionsTab: string;
+declare const companionCard: string;
+declare const companionCardHeader: string;
+declare const companionCardTypeIcon: string;
+declare const companionCardName: string;
+declare const companionCardTypeBadge: string;
+declare const companionCardStats: string;
+declare const companionCardStat: string;
+declare const companionCardStatLabel: string;
+declare const companionCardStatValue: string;
+declare const companionCardMinLevel: string;
 declare const panelFooter: string;
+declare const companionsTab: string;
+declare const companionCard: string;
+declare const companionCardHeader: string;
+declare const companionCardTypeIcon: string;
+declare const companionCardName: string;
+declare const companionCardTypeBadge: string;
+declare const companionCardStats: string;
+declare const companionCardStat: string;
+declare const companionCardStatLabel: string;
+declare const companionCardStatValue: string;
+declare const companionCardMinLevel: string;
 declare const addCustomBtn: string;
 declare const modalOverlay: string;
 declare const modal: string;
@@ -161,6 +183,17 @@ export {
 	shieldLabel,
 	shieldAc,
 	panelFooter,
+	companionsTab,
+	companionCard,
+	companionCardHeader,
+	companionCardTypeIcon,
+	companionCardName,
+	companionCardTypeBadge,
+	companionCardStats,
+	companionCardStat,
+	companionCardStatLabel,
+	companionCardStatValue,
+	companionCardMinLevel,
 	addCustomBtn,
 	modalOverlay,
 	modal,
@@ -249,6 +282,17 @@ declare const __default_export__: {
 	shieldLabel: typeof shieldLabel;
 	shieldAc: typeof shieldAc;
 	panelFooter: typeof panelFooter;
+	companionsTab: typeof companionsTab;
+	companionCard: typeof companionCard;
+	companionCardHeader: typeof companionCardHeader;
+	companionCardTypeIcon: typeof companionCardTypeIcon;
+	companionCardName: typeof companionCardName;
+	companionCardTypeBadge: typeof companionCardTypeBadge;
+	companionCardStats: typeof companionCardStats;
+	companionCardStat: typeof companionCardStat;
+	companionCardStatLabel: typeof companionCardStatLabel;
+	companionCardStatValue: typeof companionCardStatValue;
+	companionCardMinLevel: typeof companionCardMinLevel;
 	addCustomBtn: typeof addCustomBtn;
 	modalOverlay: typeof modalOverlay;
 	modal: typeof modal;

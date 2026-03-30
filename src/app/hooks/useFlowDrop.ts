@@ -3,8 +3,12 @@ import type { Dispatch, SetStateAction } from "react";
 import { useCallback } from "react";
 import type {
   ActionNodeData,
+  CompanionAction,
+  CompanionNodeData,
+  CompanionType,
   ConditionNodeData,
   ConditionStatusNodeData,
+  DndClass,
   DndCondition,
   EndNodeData,
   NoteNodeData,
@@ -55,6 +59,21 @@ function buildNodeFromItem(
       notes: "",
     };
     return { id: newId(), type: "conditionStatusNode", position, data };
+  }
+  if (nodeType === "companionNode") {
+    const data: CompanionNodeData = {
+      label: (item.label as string) ?? "Companion",
+      companionId: (item.companionId as string) ?? "",
+      companionType: (item.companionType as CompanionType) ?? "beast",
+      classId: (item.classId as DndClass) ?? "druid",
+      hp: (item.hp as string) ?? "—",
+      ac: (item.ac as string) ?? "—",
+      speed: item.speed as string | undefined,
+      description: item.description as string | undefined,
+      actions: (item.actions as CompanionAction[]) ?? [],
+      notes: "",
+    };
+    return { id: newId(), type: "companionNode", position, data };
   }
 
   // Default: actionNode — auto-populate resourceCost for spell nodes

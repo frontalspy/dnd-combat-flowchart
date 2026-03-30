@@ -3,6 +3,11 @@ import React, { useCallback, useMemo, useRef, useState } from "react";
 import { STANDARD_ACTIONS } from "../data/actions";
 import type { ClassAction } from "../data/classes";
 import { CLASSES, getClassDefinition, getMaxSpellLevel } from "../data/classes";
+import type { CompanionDefinition } from "../data/companions";
+import {
+  COMPANIONS,
+  getCompanionsForClass,
+} from "../data/companions";
 import { SPELL_SCHOOLS } from "../data/damageTypes";
 import spellsData from "../data/spells.json";
 import type { Weapon } from "../data/weapons";
@@ -11,14 +16,25 @@ import { useTouchDragDrop } from "../hooks/useTouchDragDrop";
 import combatActionIcon from "../icons/combat/action.svg";
 import roundIcon from "../icons/combat/round.svg";
 import scrollIcon from "../icons/entity/scroll.svg";
+import summonIcon from "../icons/entity/summon.svg";
 import combatIcon from "../icons/game/combat.svg";
 import conditionTabIcon from "../icons/game/hazard.svg";
 import puzzleIcon from "../icons/game/puzzle.svg";
 import spellIcon from "../icons/game/spell.svg";
+import beastIcon from "../icons/monster/beast.svg";
+import celestialIcon from "../icons/monster/celestial.svg";
+import constructIcon from "../icons/monster/construct.svg";
+import dragonIcon from "../icons/monster/dragon.svg";
+import elementalIcon from "../icons/monster/elemental.svg";
+import faeIcon from "../icons/monster/fae.svg";
+import fiendIcon from "../icons/monster/fiend.svg";
+import humanoidIcon from "../icons/monster/humanoid.svg";
+import undeadIcon from "../icons/monster/undead.svg";
 import swordIcon from "../icons/weapon/sword.svg";
 import type {
   ActionItem,
   Character,
+  CompanionType,
   DndClass,
   DndCondition,
   Spell,
@@ -51,6 +67,30 @@ const CLASS_ABBR: Record<DndClass, string> = {
   wizard: "Wiz",
 };
 
+const COMPANION_TYPE_ICONS: Record<CompanionType, string> = {
+  beast: beastIcon,
+  construct: constructIcon,
+  undead: undeadIcon,
+  elemental: elementalIcon,
+  fey: faeIcon,
+  fiend: fiendIcon,
+  dragon: dragonIcon,
+  celestial: celestialIcon,
+  humanoid: humanoidIcon,
+};
+
+const COMPANION_TYPE_LABELS: Record<CompanionType, string> = {
+  beast: "Beast",
+  construct: "Construct",
+  undead: "Undead",
+  elemental: "Elemental",
+  fey: "Fey",
+  fiend: "Fiend",
+  dragon: "Dragon",
+  celestial: "Celestial",
+  humanoid: "Humanoid",
+};
+
 const allSpells = spellsData as Spell[];
 
 const ALL_CONDITIONS: DndCondition[] = [
@@ -71,7 +111,7 @@ const ALL_CONDITIONS: DndCondition[] = [
   "unconscious",
 ];
 
-type PanelTab = "actions" | "spells" | "conditions";
+type PanelTab = "actions" | "spells" | "conditions" | "companions";
 type SpellLevelFilter =
   | "all"
   | "cantrip"
@@ -177,6 +217,82 @@ function ConditionChipFull({
       <span className={styles.conditionChipFullLabel}>
         {CONDITION_DISPLAY_NAMES[cond]}
       </span>
+    </div>
+  );
+}
+
+// ─── Companion Card ──────────────────────────────────────────────────────────
+
+interface CompanionCardProps {
+  companion: CompanionDefinition;
+  onDragStart: (e: React.DragEvent, data: unknown) => void;
+}
+
+function CompanionCard({ companion, onDragStart }: CompanionCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const classDef = CLASSES.find((c) => c.id === companion.classId);
+  const headerColor = classDef?.color ?? "#5a6a78";
+  const typeIcon =
+    COMPANION_TYPE_ICONS[companion.companionType] ?? summonIcon;
+  const typeLabel = COMPANION_TYPE_LABELS[companion.companionType];
+
+  const dragData = {
+    nodeType: "companionNode",
+    label: companion.name,
+    companionId: companion.id,
+    companionType: companion.companionType,
+    classId: companion.classId,
+    hp: companion.hp,
+    ac: companion.ac,
+    speed: companion.speed,
+    description: companion.description,
+    actions: companion.actions,
+  };
+
+  const { handleTouchStart, handleTouchEnd } = useTouchDragDrop(
+    dragData,
+    companion.name,
+    headerColor,
+    cardRef
+  );
+
+  return (
+    <div
+      ref={cardRef}
+      className={styles.companionCard}
+      draggable
+      onDragStart={(e) => onDragStart(e, dragData)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      title={`Drag to add ${companion.name} as a companion node`}
+    >
+      <div
+        className={styles.companionCardHeader}
+        style={{ backgroundColor: headerColor }}
+      >
+        <Icon
+          src={typeIcon}
+          size={14}
+          className={styles.companionCardTypeIcon}
+        />
+        <span className={styles.companionCardName}>{companion.name}</span>
+        <span className={styles.companionCardTypeBadge}>{typeLabel}</span>
+      </div>
+      <div className={styles.companionCardStats}>
+        <span className={styles.companionCardStat}>
+          <span className={styles.companionCardStatLabel}>HP</span>
+          <span className={styles.companionCardStatValue}>{companion.hp}</span>
+        </span>
+        <span className={styles.companionCardStat}>
+          <span className={styles.companionCardStatLabel}>AC</span>
+          <span className={styles.companionCardStatValue}>{companion.ac}</span>
+        </span>
+        {companion.minLevel > 1 && (
+          <span className={styles.companionCardMinLevel}>
+            Lv {companion.minLevel}+
+          </span>
+        )}
+      </div>
     </div>
   );
 }
@@ -457,6 +573,32 @@ export function SpellPanel({
     return spells;
   }, [availableSpells, spellLevelFilter, search, sourceFilter]);
 
+  /** All companions available to the character (all classes, within level). */
+  const availableCompanions = useMemo(() => {
+    const result: CompanionDefinition[] = [];
+    const seen = new Set<string>();
+    for (const { classId, subclassId, level } of allCharClasses) {
+      for (const c of getCompanionsForClass(classId, subclassId, level)) {
+        if (!seen.has(c.id)) {
+          seen.add(c.id);
+          result.push(c);
+        }
+      }
+    }
+    return result;
+  }, [allCharClasses]);
+
+  const filteredCompanions = useMemo(() => {
+    if (!search.trim()) return availableCompanions;
+    const q = search.toLowerCase();
+    return availableCompanions.filter(
+      (c) =>
+        c.name.toLowerCase().includes(q) ||
+        c.companionType.toLowerCase().includes(q) ||
+        c.description.toLowerCase().includes(q)
+    );
+  }, [availableCompanions, search]);
+
   const handleAddCustom = useCallback(
     (action: ActionItem) => {
       onAddCustomAction(action);
@@ -649,7 +791,9 @@ export function SpellPanel({
               ? "Search spells..."
               : activeTab === "conditions"
                 ? "Search conditions..."
-                : "Search actions..."
+                : activeTab === "companions"
+                  ? "Search companions..."
+                  : "Search actions..."
           }
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -699,6 +843,18 @@ export function SpellPanel({
           <Icon src={conditionTabIcon} size={14} />
           Conditions
         </button>
+        {availableCompanions.length > 0 && (
+          <button
+            type="button"
+            className={`${styles.tab} ${activeTab === "companions" ? styles.activeTab : ""}`}
+            onClick={() => {
+              setActiveTab("companions");
+            }}
+          >
+            <Icon src={summonIcon} size={14} />
+            Companions
+          </button>
+        )}
       </div>
 
       {/* Spell level filter */}
@@ -844,6 +1000,26 @@ export function SpellPanel({
                 onDragStart={onDragStart}
               />
             ))}
+
+        {activeTab === "companions" && (
+          <div className={styles.companionsTab}>
+            {filteredCompanions.length === 0 ? (
+              <div className={styles.emptyState}>
+                {search.trim()
+                  ? "No companions match your search."
+                  : "No companions available at this level."}
+              </div>
+            ) : (
+              filteredCompanions.map((companion) => (
+                <CompanionCard
+                  key={companion.id}
+                  companion={companion}
+                  onDragStart={onDragStart}
+                />
+              ))
+            )}
+          </div>
+        )}
 
         {activeTab === "spells" && filteredSpells.length === 0 && (
           <div className={styles.emptyState}>
