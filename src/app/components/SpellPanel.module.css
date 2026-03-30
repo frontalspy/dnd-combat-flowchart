@@ -850,6 +850,128 @@
   white-space: nowrap;
 }
 
+/* ── School filter (Spells tab) ───────────────────────────────── */
+
+.schoolFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.schoolChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  padding: 2px 7px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-dim);
+  border-radius: 10px;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+}
+
+.schoolChip:hover {
+  background: var(--bg-surface);
+  color: var(--text-mid);
+}
+
+.activeSchoolChip {
+  /* Per-school colour applied via inline style */
+  background: rgba(200, 144, 28, 0.1);
+}
+
+/* ── Damage type filter (Spells tab) ──────────────────────────── */
+
+.damageFilters {
+  display: flex;
+  gap: 4px;
+  padding: 6px 12px 8px;
+  border-bottom: 1px solid var(--border-dim);
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+}
+
+.damageFilters::-webkit-scrollbar {
+  display: none;
+}
+
+.damageChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  padding: 2px 7px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-dim);
+  border-radius: 10px;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.damageChip:hover {
+  background: var(--bg-surface);
+  color: var(--text-mid);
+}
+
+.activeDamageChip {
+  /* Per-type colour applied via inline style */
+}
+
+/* ── Clear filters / search hint bar ─────────────────────────── */
+
+.clearFiltersRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 3px 12px 2px;
+  gap: 8px;
+}
+
+.searchDescHint {
+  font-size: 10px;
+  color: var(--text-faint);
+  font-style: italic;
+  flex: 1;
+}
+
+.clearFiltersBtn {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-faint);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 2px;
+  font-family: inherit;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+
+.clearFiltersBtn:hover {
+  color: var(--text-mid);
+}
+
 .addCustomBtn {
   width: 100%;
   display: flex;

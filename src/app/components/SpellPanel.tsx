@@ -5,7 +5,11 @@ import type { ClassAction } from "../data/classes";
 import { CLASSES, getClassDefinition, getMaxSpellLevel } from "../data/classes";
 import type { CompanionDefinition } from "../data/companions";
 import { COMPANIONS, getCompanionsForClass } from "../data/companions";
-import { SPELL_SCHOOLS } from "../data/damageTypes";
+import {
+  DAMAGE_TYPES,
+  SPELL_SCHOOLS,
+  detectDamageType,
+} from "../data/damageTypes";
 import spellsData from "../data/spells.json";
 import type { Weapon } from "../data/weapons";
 import { WEAPONS } from "../data/weapons";
@@ -27,11 +31,20 @@ import faeIcon from "../icons/monster/fae.svg";
 import fiendIcon from "../icons/monster/fiend.svg";
 import humanoidIcon from "../icons/monster/humanoid.svg";
 import undeadIcon from "../icons/monster/undead.svg";
+import abjurationIcon from "../icons/spell/abjuration.svg";
+import conjurationIcon from "../icons/spell/conjuration.svg";
+import divinationIcon from "../icons/spell/divination.svg";
+import enchantmentIcon from "../icons/spell/enchantment.svg";
+import evocationIcon from "../icons/spell/evocation.svg";
+import illusionIcon from "../icons/spell/illusion.svg";
+import necromancyIcon from "../icons/spell/necromancy.svg";
+import transmutationIcon from "../icons/spell/transmutation.svg";
 import swordIcon from "../icons/weapon/sword.svg";
 import type {
   ActionItem,
   Character,
   CompanionType,
+  DamageType,
   DndClass,
   DndCondition,
   Spell,
@@ -46,6 +59,30 @@ import {
 import { ActionCard, SpellCard } from "./SpellCard";
 import styles from "./SpellPanel.module.css";
 import { WeaponCard } from "./WeaponCard";
+
+const SCHOOL_ICONS: Record<string, string> = {
+  abjuration: abjurationIcon,
+  conjuration: conjurationIcon,
+  divination: divinationIcon,
+  enchantment: enchantmentIcon,
+  evocation: evocationIcon,
+  illusion: illusionIcon,
+  necromancy: necromancyIcon,
+  transmutation: transmutationIcon,
+};
+
+const FILTER_SCHOOLS = [
+  "abjuration",
+  "conjuration",
+  "divination",
+  "enchantment",
+  "evocation",
+  "illusion",
+  "necromancy",
+  "transmutation",
+] as const;
+
+const DAMAGE_TYPE_KEYS = Object.keys(DAMAGE_TYPES) as DamageType[];
 
 /** 2–3-letter abbreviation for each class, used in multiclass spell source badges. */
 const CLASS_ABBR: Record<DndClass, string> = {
@@ -362,6 +399,8 @@ export function SpellPanel({
   const [spellLevelFilter, setSpellLevelFilter] =
     useState<SpellLevelFilter>("all");
   const [sourceFilter, setSourceFilter] = useState<SpellSourceFilter>("all");
+  const [schoolFilter, setSchoolFilter] = useState<string>("all");
+  const [damageFilter, setDamageFilter] = useState<string>("all");
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [conditionAffects, setConditionAffects] = useState<
     "self" | "target" | "area"
@@ -558,17 +597,33 @@ export function SpellPanel({
         return src === sourceFilter;
       });
     }
+    if (schoolFilter !== "all") {
+      spells = spells.filter((s) => s.school?.toLowerCase() === schoolFilter);
+    }
+    if (damageFilter !== "all") {
+      spells = spells.filter(
+        (s) => detectDamageType(s.description, s.name) === damageFilter
+      );
+    }
     if (search.trim()) {
       const q = search.toLowerCase();
+      const useDescSearch = q.length >= 3;
       spells = spells.filter(
         (s) =>
           s.name.toLowerCase().includes(q) ||
-          s.description.toLowerCase().includes(q) ||
-          s.school.toLowerCase().includes(q)
+          s.school.toLowerCase().includes(q) ||
+          (useDescSearch && s.description?.toLowerCase().includes(q))
       );
     }
     return spells;
-  }, [availableSpells, spellLevelFilter, search, sourceFilter]);
+  }, [
+    availableSpells,
+    spellLevelFilter,
+    search,
+    sourceFilter,
+    schoolFilter,
+    damageFilter,
+  ]);
 
   /** All companions available to the character (all classes, within level). */
   const availableCompanions = useMemo(() => {
@@ -602,6 +657,14 @@ export function SpellPanel({
     },
     [onAddCustomAction]
   );
+
+  const handleClearSpellFilters = useCallback(() => {
+    setSearch("");
+    setSpellLevelFilter("all");
+    setSourceFilter("all");
+    setSchoolFilter("all");
+    setDamageFilter("all");
+  }, []);
 
   const handleTemplateDrag = useCallback(
     (e: React.DragEvent, nodeType: string, data: unknown) => {
@@ -892,6 +955,106 @@ export function SpellPanel({
             )
           )}
         </div>
+      )}
+
+      {/* School filter */}
+      {activeTab === "spells" && (
+        <div className={styles.schoolFilters}>
+          <button
+            type="button"
+            className={`${styles.schoolChip} ${schoolFilter === "all" ? styles.activeSchoolChip : ""}`}
+            onClick={() => setSchoolFilter("all")}
+          >
+            All
+          </button>
+          {FILTER_SCHOOLS.map((school) => {
+            const meta = SPELL_SCHOOLS[school];
+            const isActive = schoolFilter === school;
+            return (
+              <button
+                key={school}
+                type="button"
+                className={`${styles.schoolChip} ${isActive ? styles.activeSchoolChip : ""}`}
+                onClick={() => setSchoolFilter(school)}
+                style={
+                  isActive
+                    ? { borderColor: meta.color, color: meta.color }
+                    : undefined
+                }
+                title={meta.label}
+              >
+                <Icon src={SCHOOL_ICONS[school]} size={10} />
+                {meta.abbreviation}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Damage type filter */}
+      {activeTab === "spells" && (
+        <div className={styles.damageFilters}>
+          <button
+            type="button"
+            className={`${styles.damageChip} ${damageFilter === "all" ? styles.activeDamageChip : ""}`}
+            onClick={() => setDamageFilter("all")}
+          >
+            Any
+          </button>
+          {DAMAGE_TYPE_KEYS.map((dtype) => {
+            const meta = DAMAGE_TYPES[dtype];
+            const isActive = damageFilter === dtype;
+            return (
+              <button
+                key={dtype}
+                type="button"
+                className={`${styles.damageChip} ${isActive ? styles.activeDamageChip : ""}`}
+                onClick={() => setDamageFilter(dtype)}
+                style={
+                  isActive
+                    ? {
+                        borderColor: meta.color,
+                        color: meta.color,
+                        background: meta.bgColor,
+                      }
+                    : undefined
+                }
+                title={meta.label}
+              >
+                <Icon src={meta.icon} size={10} />
+                {meta.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Clear filters / description hint row */}
+      {activeTab === "spells" && (
+        <>
+          {search.trim().length >= 3 && (
+            <div className={styles.clearFiltersRow}>
+              <span className={styles.searchDescHint}>
+                Searching descriptions…
+              </span>
+            </div>
+          )}
+          {(schoolFilter !== "all" ||
+            damageFilter !== "all" ||
+            spellLevelFilter !== "all" ||
+            sourceFilter !== "all" ||
+            search.trim()) && (
+            <div className={styles.clearFiltersRow}>
+              <button
+                type="button"
+                className={styles.clearFiltersBtn}
+                onClick={handleClearSpellFilters}
+              >
+                ✕ Clear filters
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {/* Card list */}

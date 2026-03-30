@@ -85,6 +85,15 @@ declare const companionCardStat: string;
 declare const companionCardStatLabel: string;
 declare const companionCardStatValue: string;
 declare const companionCardMinLevel: string;
+declare const schoolFilters: string;
+declare const schoolChip: string;
+declare const activeSchoolChip: string;
+declare const damageFilters: string;
+declare const damageChip: string;
+declare const activeDamageChip: string;
+declare const clearFiltersRow: string;
+declare const searchDescHint: string;
+declare const clearFiltersBtn: string;
 declare const addCustomBtn: string;
 declare const modalOverlay: string;
 declare const modal: string;
@@ -183,6 +192,15 @@ export {
 	companionCardStatLabel,
 	companionCardStatValue,
 	companionCardMinLevel,
+	schoolFilters,
+	schoolChip,
+	activeSchoolChip,
+	damageFilters,
+	damageChip,
+	activeDamageChip,
+	clearFiltersRow,
+	searchDescHint,
+	clearFiltersBtn,
 	addCustomBtn,
 	modalOverlay,
 	modal,
@@ -282,6 +300,15 @@ declare const __default_export__: {
 	companionCardStatLabel: typeof companionCardStatLabel;
 	companionCardStatValue: typeof companionCardStatValue;
 	companionCardMinLevel: typeof companionCardMinLevel;
+	schoolFilters: typeof schoolFilters;
+	schoolChip: typeof schoolChip;
+	activeSchoolChip: typeof activeSchoolChip;
+	damageFilters: typeof damageFilters;
+	damageChip: typeof damageChip;
+	activeDamageChip: typeof activeDamageChip;
+	clearFiltersRow: typeof clearFiltersRow;
+	searchDescHint: typeof searchDescHint;
+	clearFiltersBtn: typeof clearFiltersBtn;
 	addCustomBtn: typeof addCustomBtn;
 	modalOverlay: typeof modalOverlay;
 	modal: typeof modal;
