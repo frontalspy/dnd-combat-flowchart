@@ -480,8 +480,7 @@ export function SpellPanel({
       if (!cd) continue;
       const eligible = cd.classActions.filter(
         (a: ClassAction) =>
-          a.minLevel <= level &&
-          (!a.subclassId || a.subclassId === subclassId)
+          a.minLevel <= level && (!a.subclassId || a.subclassId === subclassId)
       );
       // For same-name actions from the same class keep the highest-minLevel one
       const best = new Map<string, ClassAction>();
