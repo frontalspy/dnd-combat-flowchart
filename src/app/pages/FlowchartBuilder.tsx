@@ -34,6 +34,7 @@ import { useSelectionGroups } from "../hooks/useSelectionGroups";
 import { useSpellPanel } from "../hooks/useSpellPanel";
 import { useSpellSlots } from "../hooks/useSpellSlots";
 import { useViewportWidth } from "../hooks/useViewportWidth";
+import criticalRoleIcon from "../icons/logo/critical-role.svg";
 import type { EdgeStyleType, FlowCanvasExports, WeaponLoadout } from "../types";
 import { ConcentrationHud } from "./builder/ConcentrationHud";
 import { EconomyHud } from "./builder/EconomyHud";
@@ -132,6 +133,8 @@ export function FlowchartBuilder() {
     setShowSlotsPopover,
     showEconomyPopover,
     setShowEconomyPopover,
+    showCritDice,
+    setShowCritDice,
     economyHudHidden,
     setEconomyHudHidden,
     showGroupsPopover,
@@ -288,6 +291,27 @@ export function FlowchartBuilder() {
         </div>
 
         <div className={styles.topRight}>
+          {/* Critical hit dice toggle */}
+          <button
+            type="button"
+            className={`${styles.loadoutChip} ${
+              showCritDice ? styles.loadoutChipArmed : ""
+            }`}
+            onClick={() => setShowCritDice((v) => !v)}
+            title={
+              showCritDice ? "Hide critical hit dice" : "Show critical hit dice"
+            }
+          >
+            <img
+              src={criticalRoleIcon}
+              width={13}
+              height={13}
+              alt=""
+              aria-hidden="true"
+              style={{ opacity: showCritDice ? 1 : 0.5 }}
+            />
+            Crit Dice
+          </button>
           <EconomyHud
             actionEconomyInfo={actionEconomyInfo}
             worstCase={worstCase}
@@ -468,6 +492,7 @@ export function FlowchartBuilder() {
               selectionGroups={selectionGroups}
               bundleEdges={bundleEdges}
               selectMode={selectMode}
+              showCritDice={showCritDice}
             />
 
             {/* Library FAB — phone only */}

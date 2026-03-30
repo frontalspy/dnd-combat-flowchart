@@ -56,6 +56,7 @@ import styles from "./FlowCanvas.module.css";
 import {
   ActionEconomyContext,
   ConcentrationContext,
+  CritDiceContext,
   SelectionGroupContext,
 } from "./FlowCanvasContexts";
 import { nodeTypes } from "./nodes/nodeTypes";
@@ -82,6 +83,8 @@ interface FlowCanvasInnerProps {
   bundleEdges?: boolean;
   /** When true, pan is disabled and every drag gesture performs box selection. */
   selectMode?: boolean;
+  /** When true, critical hit dice badges are shown on attack nodes. */
+  showCritDice?: boolean;
 }
 
 const DEFAULT_START_NODE: Node<StartNodeData, "startNode"> = {
@@ -109,6 +112,7 @@ function FlowCanvasInner({
   selectionGroups = [],
   bundleEdges = false,
   selectMode = false,
+  showCritDice = false,
 }: FlowCanvasInnerProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const isTouchDevice =
@@ -570,83 +574,85 @@ function FlowCanvasInner({
   }, [edges, bundleData]);
 
   return (
-    <ActionEconomyContext.Provider value={overBudgetNodeIds}>
-      <ConcentrationContext.Provider value={conflictNodeIds}>
-        <SelectionGroupContext.Provider value={nodeGroupColorMap}>
-          <div
-            ref={reactFlowWrapper}
-            className={styles.canvasWrapper}
-            data-canvas-drop=""
-          >
-            <ExportOverlay visible={isExporting} />
-            {conflictWarningText && (
-              <div className={styles.concentrationWarning} role="alert">
-                <span className={styles.concentrationWarningIcon}>⚠</span>
-                {conflictWarningText}
-              </div>
-            )}
-            <ReactFlow
-              nodes={nodes}
-              edges={displayEdges}
-              onNodeClick={handleNodeClick}
-              onNodesChange={wrappedOnNodesChange}
-              onEdgesChange={wrappedOnEdgesChange}
-              onConnect={onConnect}
-              onDrop={onDrop}
-              onDragOver={onDragOver}
-              onSelectionChange={handleSelectionChange}
-              nodeTypes={nodeTypes}
-              edgeTypes={edgeTypes}
-              connectionLineComponent={SnappedConnectionLine}
-              fitView
-              deleteKeyCode={["Delete", "Backspace"]}
-              multiSelectionKeyCode={["Control", "Shift"]}
-              selectionOnDrag={selectMode || !isTouchDevice}
-              panOnDrag={selectMode ? false : isTouchDevice ? true : [1, 2]}
-              selectionMode={SelectionMode.Partial}
-              defaultEdgeOptions={{
-                type: edgeStyle,
-                style: { stroke: "#8b949e", strokeWidth: 2 },
-                markerEnd: { type: "arrow" as const, color: "#8b949e" },
-              }}
-              proOptions={{ hideAttribution: true }}
+    <CritDiceContext.Provider value={showCritDice}>
+      <ActionEconomyContext.Provider value={overBudgetNodeIds}>
+        <ConcentrationContext.Provider value={conflictNodeIds}>
+          <SelectionGroupContext.Provider value={nodeGroupColorMap}>
+            <div
+              ref={reactFlowWrapper}
+              className={styles.canvasWrapper}
+              data-canvas-drop=""
             >
-              <Background
-                variant={BackgroundVariant.Dots}
-                gap={20}
-                size={1}
-                color="#21262d"
-              />
-              <Controls className={styles.controls} />
-              <div
-                className={`${styles.minimapWrapper}${minimapCollapsed ? ` ${styles.minimapCollapsed}` : ""}${" "}${styles.minimapResponsive}`}
+              <ExportOverlay visible={isExporting} />
+              {conflictWarningText && (
+                <div className={styles.concentrationWarning} role="alert">
+                  <span className={styles.concentrationWarningIcon}>⚠</span>
+                  {conflictWarningText}
+                </div>
+              )}
+              <ReactFlow
+                nodes={nodes}
+                edges={displayEdges}
+                onNodeClick={handleNodeClick}
+                onNodesChange={wrappedOnNodesChange}
+                onEdgesChange={wrappedOnEdgesChange}
+                onConnect={onConnect}
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+                onSelectionChange={handleSelectionChange}
+                nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
+                connectionLineComponent={SnappedConnectionLine}
+                fitView
+                deleteKeyCode={["Delete", "Backspace"]}
+                multiSelectionKeyCode={["Control", "Shift"]}
+                selectionOnDrag={selectMode || !isTouchDevice}
+                panOnDrag={selectMode ? false : isTouchDevice ? true : [1, 2]}
+                selectionMode={SelectionMode.Partial}
+                defaultEdgeOptions={{
+                  type: edgeStyle,
+                  style: { stroke: "#8b949e", strokeWidth: 2 },
+                  markerEnd: { type: "arrow" as const, color: "#8b949e" },
+                }}
+                proOptions={{ hideAttribution: true }}
               >
-                <button
-                  type="button"
-                  className={styles.minimapToggle}
-                  onClick={() => setMinimapCollapsed((c) => !c)}
-                  title={minimapCollapsed ? "Show minimap" : "Hide minimap"}
-                  aria-label={
-                    minimapCollapsed ? "Show minimap" : "Hide minimap"
-                  }
+                <Background
+                  variant={BackgroundVariant.Dots}
+                  gap={20}
+                  size={1}
+                  color="#21262d"
+                />
+                <Controls className={styles.controls} />
+                <div
+                  className={`${styles.minimapWrapper}${minimapCollapsed ? ` ${styles.minimapCollapsed}` : ""}${" "}${styles.minimapResponsive}`}
                 >
-                  {minimapCollapsed ? "›" : "‹"}
-                </button>
-                {!minimapCollapsed && (
-                  <MiniMap
-                    className={styles.minimap}
-                    nodeColor={() => "#d4a017"}
-                    maskColor="rgba(13, 17, 23, 0.7)"
-                    pannable
-                    zoomable
-                  />
-                )}
-              </div>
-            </ReactFlow>
-          </div>
-        </SelectionGroupContext.Provider>
-      </ConcentrationContext.Provider>
-    </ActionEconomyContext.Provider>
+                  <button
+                    type="button"
+                    className={styles.minimapToggle}
+                    onClick={() => setMinimapCollapsed((c) => !c)}
+                    title={minimapCollapsed ? "Show minimap" : "Hide minimap"}
+                    aria-label={
+                      minimapCollapsed ? "Show minimap" : "Hide minimap"
+                    }
+                  >
+                    {minimapCollapsed ? "›" : "‹"}
+                  </button>
+                  {!minimapCollapsed && (
+                    <MiniMap
+                      className={styles.minimap}
+                      nodeColor={() => "#d4a017"}
+                      maskColor="rgba(13, 17, 23, 0.7)"
+                      pannable
+                      zoomable
+                    />
+                  )}
+                </div>
+              </ReactFlow>
+            </div>
+          </SelectionGroupContext.Provider>
+        </ConcentrationContext.Provider>
+      </ActionEconomyContext.Provider>
+    </CritDiceContext.Provider>
   );
 }
 
@@ -670,6 +676,8 @@ interface FlowCanvasProps {
   bundleEdges?: boolean;
   /** When true, pan is disabled and every drag gesture performs box selection. */
   selectMode?: boolean;
+  /** When true, critical hit dice badges are shown on attack nodes. */
+  showCritDice?: boolean;
 }
 
 export function FlowCanvas(props: FlowCanvasProps) {

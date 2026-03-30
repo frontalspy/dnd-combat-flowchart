@@ -11,6 +11,7 @@ export function useHudState() {
   const [showSlotsPopover, setShowSlotsPopover] = useState(false);
   const [showEconomyPopover, setShowEconomyPopover] = useState(false);
   const [economyHudHidden, setEconomyHudHidden] = useState(false);
+  const [showCritDice, setShowCritDice] = useState(false);
   const [showGroupsPopover, setShowGroupsPopover] = useState(false);
   const [showConcentrationPopover, setShowConcentrationPopover] =
     useState(false);
@@ -59,6 +60,8 @@ export function useHudState() {
     setEconomyHudHidden,
     showGroupsPopover,
     setShowGroupsPopover,
+    showCritDice,
+    setShowCritDice,
     showConcentrationPopover,
     setShowConcentrationPopover,
     concentrationInfo,

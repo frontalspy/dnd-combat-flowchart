@@ -46,6 +46,7 @@ import {
 import {
   ActionEconomyContext,
   ConcentrationContext,
+  CritDiceContext,
   SelectionGroupContext,
 } from "../FlowCanvasContexts";
 import { Icon } from "../Icon";
@@ -167,6 +168,7 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
   const isOverBudget = overBudgetNodeIds.has(id);
   const groupColorMap = useContext(SelectionGroupContext);
   const groupColor = groupColorMap.get(id);
+  const critDiceEnabled = useContext(CritDiceContext);
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesValue, setNotesValue] = useState(data.notes ?? "");
   const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -364,7 +366,7 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
               {damageInfo.label}
             </span>
           )}
-          {critExpr && damageInfo && (
+          {critDiceEnabled && critExpr && damageInfo && (
             <span
               className={styles.critBadge}
               style={{
