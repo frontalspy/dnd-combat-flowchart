@@ -91,6 +91,9 @@ declare const activeSchoolChip: string;
 declare const damageFilters: string;
 declare const damageChip: string;
 declare const activeDamageChip: string;
+declare const sortRow: string;
+declare const sortLabel: string;
+declare const sortSelect: string;
 declare const clearFiltersRow: string;
 declare const searchDescHint: string;
 declare const clearFiltersBtn: string;
@@ -198,6 +201,9 @@ export {
 	damageFilters,
 	damageChip,
 	activeDamageChip,
+	sortRow,
+	sortLabel,
+	sortSelect,
 	clearFiltersRow,
 	searchDescHint,
 	clearFiltersBtn,
@@ -306,6 +312,9 @@ declare const __default_export__: {
 	damageFilters: typeof damageFilters;
 	damageChip: typeof damageChip;
 	activeDamageChip: typeof activeDamageChip;
+	sortRow: typeof sortRow;
+	sortLabel: typeof sortLabel;
+	sortSelect: typeof sortSelect;
 	clearFiltersRow: typeof clearFiltersRow;
 	searchDescHint: typeof searchDescHint;
 	clearFiltersBtn: typeof clearFiltersBtn;

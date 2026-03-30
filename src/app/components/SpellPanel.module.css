@@ -937,6 +937,53 @@
   /* Per-type colour applied via inline style */
 }
 
+/* ── Sort control ────────────────────────────────────────────── */
+
+.sortRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.sortLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+}
+
+.sortSelect {
+  flex: 1;
+  font-size: var(--fs-xs);
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--text-mid);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  padding: 3px 6px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+  appearance: auto;
+}
+
+.sortSelect:hover {
+  border-color: var(--border-accent);
+  color: var(--text);
+}
+
+.sortSelect:focus {
+  outline: none;
+  border-color: var(--gold);
+  color: var(--text);
+}
+
 /* ── Clear filters / search hint bar ─────────────────────────── */
 
 .clearFiltersRow {

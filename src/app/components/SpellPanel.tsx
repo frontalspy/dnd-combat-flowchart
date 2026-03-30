@@ -7,8 +7,8 @@ import type { CompanionDefinition } from "../data/companions";
 import { COMPANIONS, getCompanionsForClass } from "../data/companions";
 import {
   DAMAGE_TYPES,
-  SPELL_SCHOOLS,
   detectDamageType,
+  SPELL_SCHOOLS,
 } from "../data/damageTypes";
 import spellsData from "../data/spells.json";
 import type { Weapon } from "../data/weapons";
@@ -160,6 +160,13 @@ type SpellLevelFilter =
   | "9";
 
 type SpellSourceFilter = "all" | "SRD" | "XGtE" | "TCoE";
+type SpellSort =
+  | "default"
+  | "name-asc"
+  | "name-desc"
+  | "level-asc"
+  | "level-desc"
+  | "school";
 
 interface DragTemplateProps {
   icon: string;
@@ -401,6 +408,7 @@ export function SpellPanel({
   const [sourceFilter, setSourceFilter] = useState<SpellSourceFilter>("all");
   const [schoolFilter, setSchoolFilter] = useState<string>("all");
   const [damageFilter, setDamageFilter] = useState<string>("all");
+  const [spellSort, setSpellSort] = useState<SpellSort>("default");
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [conditionAffects, setConditionAffects] = useState<
     "self" | "target" | "area"
@@ -615,6 +623,29 @@ export function SpellPanel({
           (useDescSearch && s.description?.toLowerCase().includes(q))
       );
     }
+    if (spellSort !== "default") {
+      const levelOf = (s: Spell) =>
+        s.level === "cantrip" ? 0 : parseInt(s.level as string, 10);
+      spells = [...spells].sort((a, b) => {
+        switch (spellSort) {
+          case "name-asc":
+            return a.name.localeCompare(b.name);
+          case "name-desc":
+            return b.name.localeCompare(a.name);
+          case "level-asc":
+            return levelOf(a) - levelOf(b) || a.name.localeCompare(b.name);
+          case "level-desc":
+            return levelOf(b) - levelOf(a) || a.name.localeCompare(b.name);
+          case "school":
+            return (
+              (a.school ?? "").localeCompare(b.school ?? "") ||
+              a.name.localeCompare(b.name)
+            );
+          default:
+            return 0;
+        }
+      });
+    }
     return spells;
   }, [
     availableSpells,
@@ -623,6 +654,7 @@ export function SpellPanel({
     sourceFilter,
     schoolFilter,
     damageFilter,
+    spellSort,
   ]);
 
   /** All companions available to the character (all classes, within level). */
@@ -664,6 +696,7 @@ export function SpellPanel({
     setSourceFilter("all");
     setSchoolFilter("all");
     setDamageFilter("all");
+    setSpellSort("default");
   }, []);
 
   const handleTemplateDrag = useCallback(
@@ -1029,9 +1062,27 @@ export function SpellPanel({
         </div>
       )}
 
-      {/* Clear filters / description hint row */}
+      {/* Sort + clear filters row */}
       {activeTab === "spells" && (
         <>
+          <div className={styles.sortRow}>
+            <label className={styles.sortLabel} htmlFor="spell-sort-select">
+              Sort
+            </label>
+            <select
+              id="spell-sort-select"
+              className={styles.sortSelect}
+              value={spellSort}
+              onChange={(e) => setSpellSort(e.target.value as SpellSort)}
+            >
+              <option value="default">Default</option>
+              <option value="level-asc">Level ↑</option>
+              <option value="level-desc">Level ↓</option>
+              <option value="name-asc">Name A→Z</option>
+              <option value="name-desc">Name Z→A</option>
+              <option value="school">School</option>
+            </select>
+          </div>
           {search.trim().length >= 3 && (
             <div className={styles.clearFiltersRow}>
               <span className={styles.searchDescHint}>
@@ -1043,6 +1094,7 @@ export function SpellPanel({
             damageFilter !== "all" ||
             spellLevelFilter !== "all" ||
             sourceFilter !== "all" ||
+            spellSort !== "default" ||
             search.trim()) && (
             <div className={styles.clearFiltersRow}>
               <button
