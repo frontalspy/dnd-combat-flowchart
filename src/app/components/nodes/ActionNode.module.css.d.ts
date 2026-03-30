@@ -36,6 +36,7 @@ declare const attackBonusValue: string;
 declare const higherLevels: string;
 declare const scalesNote: string;
 declare const concentrationBadge: string;
+declare const ritualBadge: string;
 declare const concentrationConflict: string;
 declare const overBudget: string;
 declare const resourceCostRow: string;
@@ -85,6 +86,7 @@ export {
 	higherLevels,
 	scalesNote,
 	concentrationBadge,
+	ritualBadge,
 	concentrationConflict,
 	overBudget,
 	resourceCostRow,
@@ -135,6 +137,7 @@ declare const __default_export__: {
 	higherLevels: typeof higherLevels;
 	scalesNote: typeof scalesNote;
 	concentrationBadge: typeof concentrationBadge;
+	ritualBadge: typeof ritualBadge;
 	concentrationConflict: typeof concentrationConflict;
 	overBudget: typeof overBudget;
 	resourceCostRow: typeof resourceCostRow;

@@ -165,6 +165,8 @@ export interface ActionNodeData extends Record<string, unknown> {
   baseDuration?: string;
   /** Raw V/S/M component string from the spell (e.g. "V, S, M (a tiny bell)"). */
   spellComponents?: string;
+  /** Whether this spell can be cast as a ritual. */
+  ritual?: boolean;
 }
 
 export interface ConditionNodeData extends Record<string, unknown> {

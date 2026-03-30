@@ -31,6 +31,7 @@ import timeIcon from "../../icons/entity/time.svg";
 import spellIcon from "../../icons/game/spell.svg";
 import concentrationIcon from "../../icons/spell/concentration.svg";
 import materialIcon from "../../icons/spell/material.svg";
+import ritualIcon from "../../icons/spell/ritual.svg";
 import somaticIcon from "../../icons/spell/somatic.svg";
 import vocalIcon from "../../icons/spell/vocal.svg";
 import starIcon from "../../icons/util/star.svg";
@@ -281,6 +282,14 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
               title="Concentration spell"
             >
               <Icon src={concentrationIcon} size={10} />
+            </span>
+          )}
+          {data.ritual && (
+            <span
+              className={styles.ritualBadge}
+              title="Can be cast as a ritual"
+            >
+              <Icon src={ritualIcon} size={10} />
             </span>
           )}
           {data.hand === "main" && (

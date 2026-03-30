@@ -153,6 +153,7 @@ export function SpellCard({
     concentration:
       spell.concentration === true ||
       spell.duration?.toLowerCase().includes("concentration") === true,
+    ritual: spell.ritual === true,
   };
 
   const { handleTouchStart, handleTouchEnd } = useTouchDragDrop(

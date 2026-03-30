@@ -301,6 +301,19 @@
   title: "Concentration";
 }
 
+/* Ritual badge — teal-tinted icon in the header badges row */
+.ritualBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(56, 178, 172, 0.15);
+  border: 1px solid rgba(56, 178, 172, 0.55);
+  flex-shrink: 0;
+}
+
 /* Node-level conflict highlight — red glow when two concentration spells share a path */
 .concentrationConflict {
   border-color: #c0392b !important;

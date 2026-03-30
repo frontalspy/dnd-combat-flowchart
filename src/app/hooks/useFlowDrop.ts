@@ -90,6 +90,7 @@ function buildNodeFromItem(
     higherLevels: item.higherLevels as string | undefined,
     hand: item.hand as ActionNodeData["hand"],
     concentration: (item.concentration as boolean | undefined) ?? false,
+    ritual: (item.ritual as boolean | undefined) ?? false,
     notes: "",
     resourceCost,
     spellComponents: item.spellComponents as string | undefined,
