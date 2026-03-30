@@ -125,15 +125,20 @@ function FlowCanvasInner({
   );
 
   // History for undo/redo
-  const { scheduleSnapshot, handleUndo, handleRedo, snapshotTimerRef } =
-    useFlowHistory({
-      initialNodes: initialNodes ?? [DEFAULT_START_NODE],
-      initialEdges: initialEdges ?? [],
-      setNodes,
-      setEdges,
-      getNodes,
-      getEdges,
-    });
+  const {
+    scheduleSnapshot,
+    takeSnapshot,
+    handleUndo,
+    handleRedo,
+    snapshotTimerRef,
+  } = useFlowHistory({
+    initialNodes: initialNodes ?? [DEFAULT_START_NODE],
+    initialEdges: initialEdges ?? [],
+    setNodes,
+    setEdges,
+    getNodes,
+    getEdges,
+  });
 
   // Clipboard for copy/paste
   const { copy: clipCopy, paste: clipPaste } = useClipboard();
@@ -432,6 +437,7 @@ function FlowCanvasInner({
       paste: handlePaste,
       undo: handleUndo,
       redo: handleRedo,
+      takeSnapshot,
       selectAll: handleSelectAll,
       selectNodes,
       focusNodes,
@@ -448,6 +454,7 @@ function FlowCanvasInner({
     handlePaste,
     handleUndo,
     handleRedo,
+    takeSnapshot,
     handleSelectAll,
     dropAtPosition,
   ]);

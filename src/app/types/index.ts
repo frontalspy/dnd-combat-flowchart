@@ -282,6 +282,8 @@ export interface FlowCanvasExports {
   paste: () => void;
   undo: () => void;
   redo: () => void;
+  /** Take an immediate snapshot of the current flow state (for undo of NodeEditor edits). */
+  takeSnapshot: () => void;
   selectAll: () => void;
   selectNodes: (ids: string[]) => void;
   focusNodes: (ids: string[]) => void;

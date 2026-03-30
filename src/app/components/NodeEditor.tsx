@@ -96,6 +96,12 @@ interface NodeEditorProps {
   onRemoveFromGroup?: (nodeId: string, groupId: string) => void;
   onDisbandGroup?: (groupId: string) => void;
   onRenameGroup?: (groupId: string, name: string) => void;
+  /**
+   * Called immediately before a label or notes change is committed so the
+   * caller can take an undo snapshot of the current flow state. Without this
+   * callback, `Ctrl+Z` cannot revert NodeEditor text edits.
+   */
+  onBeforeCommit?: () => void;
   /** When true the panel renders as a bottom-sheet overlay (phone layout). */
   isSheet?: boolean;
 }
@@ -109,6 +115,7 @@ export function NodeEditor({
   onRemoveFromGroup,
   onDisbandGroup,
   onRenameGroup,
+  onBeforeCommit,
   isSheet = false,
 }: NodeEditorProps) {
   const panelRef = useRef<HTMLElement>(null);
@@ -116,6 +123,8 @@ export function NodeEditor({
   const touchStartY = useRef(0);
   const touchCurrentY = useRef(0);
   const [sheetExpanded, setSheetExpanded] = useState(false);
+  /** Set to true when Escape is pressed so the onBlur handler does not commit. */
+  const discardingRef = useRef(false);
 
   const handleDragTouchStart = useCallback((e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY;
@@ -225,13 +234,31 @@ export function NodeEditor({
 
   const handleSaveNotes = useCallback(() => {
     if (!selectedNode) return;
+    if (discardingRef.current) {
+      discardingRef.current = false;
+      return;
+    }
+    const currentNotes = String(
+      (selectedNode.data as Record<string, unknown>).notes ?? ""
+    );
+    if (notes === currentNotes) return;
+    onBeforeCommit?.();
     updateNodeData(selectedNode.id, { notes });
-  }, [selectedNode, notes, updateNodeData]);
+  }, [selectedNode, notes, updateNodeData, onBeforeCommit]);
 
   const handleSaveLabel = useCallback(() => {
     if (!selectedNode) return;
+    if (discardingRef.current) {
+      discardingRef.current = false;
+      return;
+    }
+    const currentLabel = String(
+      (selectedNode.data as Record<string, unknown>).label ?? ""
+    );
+    if (label === currentLabel) return;
+    onBeforeCommit?.();
     updateNodeData(selectedNode.id, { label });
-  }, [selectedNode, label, updateNodeData]);
+  }, [selectedNode, label, updateNodeData, onBeforeCommit]);
 
   const handleDelete = useCallback(() => {
     if (!selectedNode) return;
@@ -415,7 +442,18 @@ export function NodeEditor({
                 onChange={(e) => setLabel(e.target.value)}
                 onBlur={handleSaveLabel}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSaveLabel();
+                  if (e.key === "Enter") {
+                    e.currentTarget.blur();
+                  } else if (e.key === "Escape") {
+                    discardingRef.current = true;
+                    setLabel(
+                      String(
+                        (selectedNode.data as Record<string, unknown>).label ??
+                          ""
+                      )
+                    );
+                    e.currentTarget.blur();
+                  }
                 }}
               />
             </div>
@@ -559,6 +597,17 @@ export function NodeEditor({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               onBlur={handleSaveNotes}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") {
+                  discardingRef.current = true;
+                  setNotes(
+                    String(
+                      (selectedNode.data as Record<string, unknown>).notes ?? ""
+                    )
+                  );
+                  e.currentTarget.blur();
+                }
+              }}
               placeholder="Add personal notes, reminders, or conditions..."
               rows={3}
             />

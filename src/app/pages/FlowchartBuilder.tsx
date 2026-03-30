@@ -513,6 +513,7 @@ export function FlowchartBuilder() {
                 onRemoveFromGroup={removeFromGroup}
                 onDisbandGroup={disbandGroup}
                 onRenameGroup={renameGroup}
+                onBeforeCommit={() => exportFnsRef.current?.takeSnapshot()}
                 isSheet={isPhone}
               />
             )}
