@@ -198,6 +198,8 @@ export function NodeEditor({
   const [rollType, setRollType] = useState<"attack" | "save" | "auto">("auto");
   const [saveAbility, setSaveAbility] = useState("");
   const [saveDCInput, setSaveDCInput] = useState("");
+  const [advantageState, setAdvantageState] = useState<"advantage" | "disadvantage" | "none" | "">("");
+  const [advantageNote, setAdvantageNote] = useState("");
 
   // Reset expanded state when a new node is selected
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally keyed on node id only
@@ -224,6 +226,14 @@ export function NodeEditor({
     // Extract first integer from saveDC value (handles both "DC 15 DEX" and plain "15")
     const rawDC = typeof d.saveDC === "string" ? d.saveDC : "";
     setSaveDCInput(rawDC.match(/(\d+)/)?.[1] ?? "");
+    setAdvantageState(
+      (typeof d.advantageState === "string" ? d.advantageState : "") as
+        | "advantage"
+        | "disadvantage"
+        | "none"
+        | ""
+    );
+    setAdvantageNote(typeof d.advantageNote === "string" ? d.advantageNote : "");
   }, [selectedNode]);
 
   const handleSaveNotes = useCallback(() => {
@@ -659,6 +669,46 @@ export function NodeEditor({
                   />
                 </div>
               </>
+            )}
+          </div>
+        )}
+
+        {/* Advantage / Disadvantage toggle — attack-roll nodes only */}
+        {nodeType === "actionNode" &&
+          (data.rollType === "attack" || data.source === "weapon" || data.rollType === undefined) && (
+          <div className={styles.field}>
+            <label className={styles.fieldLabel}>Adv / Disadv</label>
+            <div className={styles.pillRow}>
+              {(["none", "advantage", "disadvantage"] as const).map((val) => (
+                <button
+                  key={val}
+                  type="button"
+                  className={`${styles.infoPill} ${advantageState === val || (val === "none" && !advantageState) ? styles.infoPillActive : ""}`}
+                  onClick={() => {
+                    if (!selectedNode) return;
+                    const next = val === "none" ? undefined : (advantageState === val ? undefined : val);
+                    setAdvantageState(next ?? "");
+                    updateNodeData(selectedNode.id, { advantageState: next });
+                  }}
+                >
+                  {val === "none" ? "\u2205 None" : val === "advantage" ? "\u25b2 Advantage" : "\u25bc Disadvantage"}
+                </button>
+              ))}
+            </div>
+            {(advantageState === "advantage" || advantageState === "disadvantage") && (
+              <input
+                className={styles.fieldInput}
+                value={advantageNote}
+                onChange={(e) => setAdvantageNote(e.target.value)}
+                onBlur={() => {
+                  if (!selectedNode) return;
+                  updateNodeData(selectedNode.id, { advantageNote: advantageNote || undefined });
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") e.currentTarget.blur();
+                }}
+                placeholder="Why? (e.g. Bless active, target prone)"
+              />
             )}
           </div>
         )}

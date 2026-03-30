@@ -167,6 +167,10 @@ export interface ActionNodeData extends Record<string, unknown> {
   spellComponents?: string;
   /** Whether this spell can be cast as a ritual. */
   ritual?: boolean;
+  /** Advantage / disadvantage state for attack-roll nodes. */
+  advantageState?: "advantage" | "disadvantage" | "none";
+  /** Optional note explaining the source of advantage/disadvantage. */
+  advantageNote?: string;
 }
 
 export type CompanionType =

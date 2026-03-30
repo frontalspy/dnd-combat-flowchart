@@ -26,7 +26,9 @@ import paladinIcon from "../../icons/class/paladin.svg";
 import sorcererIcon from "../../icons/class/sorcerer.svg";
 import warlockIcon from "../../icons/class/warlock.svg";
 import reachIcon from "../../icons/combat/reach.svg";
+import advantageIcon from "../../icons/dice/advantage.svg";
 import d20Icon from "../../icons/dice/d20.svg";
+import disadvantageIcon from "../../icons/dice/disadvantage.svg";
 import timeIcon from "../../icons/entity/time.svg";
 import spellIcon from "../../icons/game/spell.svg";
 import criticalRoleIcon from "../../icons/logo/critical-role.svg";
@@ -319,6 +321,22 @@ export function ActionNode({ id, data, selected }: NodeProps<ActionNodeType>) {
             >
               OH
             </span>
+          )}
+          {data.advantageState === "advantage" && (
+            <div
+              className={styles.advantageBadge}
+              title={data.advantageNote ? `Advantage — ${data.advantageNote}` : "Advantage"}
+            >
+              <Icon src={advantageIcon} size={14} alt="Advantage" />
+            </div>
+          )}
+          {data.advantageState === "disadvantage" && (
+            <div
+              className={styles.disadvantageBadge}
+              title={data.advantageNote ? `Disadvantage — ${data.advantageNote}` : "Disadvantage"}
+            >
+              <Icon src={disadvantageIcon} size={14} alt="Disadvantage" />
+            </div>
           )}
           {(() => {
             const baseLevelRaw = parseInt(data.spellLevel ?? "0", 10);

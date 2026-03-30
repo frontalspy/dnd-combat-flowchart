@@ -47,6 +47,8 @@ declare const castLevelPill: string;
 declare const castLevelPillActive: string;
 declare const upcastBadge: string;
 declare const critBadge: string;
+declare const advantageBadge: string;
+declare const disadvantageBadge: string;
 declare const nodeTooltip: string;
 declare const nodeTooltipHeader: string;
 declare const nodeTooltipName: string;
@@ -98,6 +100,8 @@ export {
 	castLevelPillActive,
 	upcastBadge,
 	critBadge,
+	advantageBadge,
+	disadvantageBadge,
 	nodeTooltip,
 	nodeTooltipHeader,
 	nodeTooltipName,
@@ -150,6 +154,8 @@ declare const __default_export__: {
 	castLevelPillActive: typeof castLevelPillActive;
 	upcastBadge: typeof upcastBadge;
 	critBadge: typeof critBadge;
+	advantageBadge: typeof advantageBadge;
+	disadvantageBadge: typeof disadvantageBadge;
 	nodeTooltip: typeof nodeTooltip;
 	nodeTooltipHeader: typeof nodeTooltipHeader;
 	nodeTooltipName: typeof nodeTooltipName;
